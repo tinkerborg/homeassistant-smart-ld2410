@@ -12,7 +12,7 @@ from homeassistant.components.bluetooth import (
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_ADDRESS
 
-from .const import DOMAIN
+from .const import DOMAIN, LD2410_SERVICE_UUID
 
 
 class SmartLD2410ConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -71,7 +71,7 @@ class SmartLD2410ConfigFlow(ConfigFlow, domain=DOMAIN):
             address = discovery_info.address
             if address in current_addresses or address in self._discovered_devices:
                 continue
-            if not discovery_info.name.startswith("HLK-LD2410"):
+            if LD2410_SERVICE_UUID not in discovery_info.service_uuids:
                 continue
             self._discovered_devices[address] = discovery_info
 

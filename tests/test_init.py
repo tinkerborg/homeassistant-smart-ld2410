@@ -14,7 +14,7 @@ async def test_setup_and_unload(hass: HomeAssistant) -> None:
     """A config entry sets up and unloads cleanly."""
     entry = MockConfigEntry(
         domain=DOMAIN,
-        title="HLK-LD2410B",
+        title="PRP1-RD_6615",
         data={CONF_ADDRESS: "AA:BB:CC:DD:EE:FF"},
         unique_id="AA:BB:CC:DD:EE:FF",
     )

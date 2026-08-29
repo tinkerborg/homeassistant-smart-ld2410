@@ -3,7 +3,8 @@
   "name": "Smart LD2410",
   "bluetooth": [
     {
-      "local_name": "HLK-LD2410*"
+      "service_uuid": "0000af30-0000-1000-8000-00805f9b34fb",
+      "manufacturer_id": 256
     }
   ],
   "codeowners": [
