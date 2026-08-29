@@ -1,0 +1,22 @@
+{
+  "domain": "smart_ld2410",
+  "name": "Smart LD2410",
+  "bluetooth": [
+    {
+      "local_name": "HLK-LD2410*"
+    }
+  ],
+  "codeowners": [
+    "@tinkerborg"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "bluetooth_adapters"
+  ],
+  "documentation": "https://github.com/tinkerborg/homeassistant-smart-ld2410",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/tinkerborg/homeassistant-smart-ld2410/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
