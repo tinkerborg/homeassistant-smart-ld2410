@@ -5,17 +5,108 @@
       "user": {
         "description": "Choose a discovered LD2410 device.",
         "data": {
-          "address": "Device"
+          "address": "Device",
+          "password": "Bluetooth password"
+        },
+        "data_description": {
+          "password": "The device's 6-character bluetooth password. Leave as the default unless it was changed."
         }
       },
       "bluetooth_confirm": {
-        "description": "Do you want to set up {name}?"
+        "description": "Do you want to set up {name}?",
+        "data": {
+          "password": "Bluetooth password"
+        },
+        "data_description": {
+          "password": "The device's 6-character bluetooth password. Leave as the default unless it was changed."
+        }
+      },
+      "reconfigure": {
+        "description": "Update the bluetooth password for this device.",
+        "data": {
+          "password": "Bluetooth password"
+        },
+        "data_description": {
+          "password": "The device's 6-character bluetooth password."
+        }
       }
+    },
+    "error": {
+      "invalid_password_length": "The bluetooth password must be exactly 6 ASCII characters."
     },
     "abort": {
       "already_configured": "Device is already configured",
       "already_in_progress": "Configuration flow is already in progress",
-      "no_devices_found": "No devices found on the network"
+      "no_devices_found": "No devices found on the network",
+      "reconfigure_successful": "Password updated successfully"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "k": "Detection threshold (k)",
+          "baseline_window_hours": "Baseline window",
+          "enter_score": "Enter score",
+          "exit_score": "Exit score",
+          "hold_seconds": "Hold time",
+          "freeze_hold_seconds": "Adaptation freeze time",
+          "support_tau_s": "Neighbour support time constant"
+        },
+        "data_description": {
+          "k": "Per-gate residual (z-score) a gate must reach to count as hot. Lower is more sensitive, higher cuts more false positives.",
+          "baseline_window_hours": "How much history the rolling noise baseline covers. Longer windows adapt more slowly but resist being skewed by one long occupied period.",
+          "enter_score": "Combined score needed to flip from vacant to occupied.",
+          "exit_score": "Combined score that must be sustained under for the hold timer to run out and flip back to vacant. Kept below the enter score to avoid flapping.",
+          "hold_seconds": "How long the score must stay under the exit score, continuously, before occupancy clears.",
+          "freeze_hold_seconds": "How long baseline adaptation stays paused after occupancy clears, so a person's lingering thermal/RF signature doesn't get learned into the noise floor.",
+          "support_tau_s": "Time constant of the neighbour-elevation smoothing used to rescue a single hot gate next to a mildly elevated neighbour. Larger values smooth over more noise but react more slowly."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "adaptation_frozen": {
+        "name": "Adaptation frozen"
+      }
+    },
+    "button": {
+      "set_permissive_thresholds": {
+        "name": "Set permissive thresholds"
+      }
+    },
+    "sensor": {
+      "confidence": {
+        "name": "Confidence"
+      },
+      "active_gate_range": {
+        "name": "Active gate range"
+      },
+      "target_distance": {
+        "name": "Target distance"
+      },
+      "baseline_age": {
+        "name": "Baseline age"
+      },
+      "residual_move_0": { "name": "Move residual, gate 0" },
+      "residual_move_1": { "name": "Move residual, gate 1" },
+      "residual_move_2": { "name": "Move residual, gate 2" },
+      "residual_move_3": { "name": "Move residual, gate 3" },
+      "residual_move_4": { "name": "Move residual, gate 4" },
+      "residual_move_5": { "name": "Move residual, gate 5" },
+      "residual_move_6": { "name": "Move residual, gate 6" },
+      "residual_move_7": { "name": "Move residual, gate 7" },
+      "residual_move_8": { "name": "Move residual, gate 8" },
+      "residual_still_0": { "name": "Still residual, gate 0" },
+      "residual_still_1": { "name": "Still residual, gate 1" },
+      "residual_still_2": { "name": "Still residual, gate 2" },
+      "residual_still_3": { "name": "Still residual, gate 3" },
+      "residual_still_4": { "name": "Still residual, gate 4" },
+      "residual_still_5": { "name": "Still residual, gate 5" },
+      "residual_still_6": { "name": "Still residual, gate 6" },
+      "residual_still_7": { "name": "Still residual, gate 7" },
+      "residual_still_8": { "name": "Still residual, gate 8" }
     }
   }
 }
