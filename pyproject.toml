@@ -9,9 +9,14 @@ requires-python = ">=3.14.2"
 package = false
 
 [dependency-groups]
+lint = [
+  "ruff==0.15.12",
+]
 test = [
   "pytest-homeassistant-custom-component",
   "pytest-cov",
+  "aiousbwatcher==1.1.2",
+  "serialx==1.8.2",
 ]
 
 [tool.pytest.ini_options]

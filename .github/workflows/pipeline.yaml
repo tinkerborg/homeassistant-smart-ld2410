@@ -23,7 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v8.2.0
-      - run: uvx ruff check custom_components tests
+        with:
+          python-version: "3.14"
+      - run: uv run --group lint ruff check custom_components tests
 
   test:
     runs-on: ubuntu-latest
@@ -32,7 +34,7 @@ jobs:
       - uses: astral-sh/setup-uv@v8.2.0
         with:
           python-version: "3.14"
-      - run: uv run --locked --group test pytest --cov-report=xml
+      - run: uv run --group test pytest --cov-report=xml
       - uses: codecov/codecov-action@v5
         with:
           files: coverage.xml
