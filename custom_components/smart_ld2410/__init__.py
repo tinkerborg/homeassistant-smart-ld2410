@@ -8,6 +8,7 @@ import sqlite3
 import time
 from collections.abc import Mapping
 from dataclasses import dataclass
+from functools import partial
 from pathlib import Path
 from typing import Any
 
@@ -31,14 +32,34 @@ from .ble.client import LD2410Client
 from .const import (
     BASELINE_SAVE_INTERVAL,
     BASELINE_STORAGE_VERSION,
+    CONF_ARRIVAL_FRAC,
+    CONF_ARRIVAL_MIN_FRAMES,
     CONF_BASELINE_WINDOW_HOURS,
+    CONF_BOUNDARY_CONFIRM_DAYS,
+    CONF_CEIL_DROP,
+    CONF_CEIL_SAT,
+    CONF_CEILING_ENABLED,
+    CONF_ENERGY_FLOOR,
     CONF_ENTER_SCORE,
     CONF_EXIT_SCORE,
     CONF_FREEZE_HOLD_SECONDS,
     CONF_HOLD_SECONDS,
     CONF_K,
+    CONF_LEAD_WINDOW_S,
+    CONF_MAX_GATE,
+    CONF_N_BLEED_MIN,
+    CONF_N_CEIL_MIN,
+    CONF_N_PORTAL_MIN,
+    CONF_PORTAL_LEAD_FRAC,
+    CONF_RAW_RETENTION_DAYS,
+    CONF_STATS_HALF_LIFE_DAYS,
+    CONF_SUMMARY_RETENTION_DAYS,
     CONF_SUPPORT_TAU_S,
+    CONF_T_BRIEF_S,
+    CONF_T_DWELL_S,
     DEFAULT_PASSWORD,
+    DEFAULT_RAW_RETENTION_DAYS,
+    DEFAULT_SUMMARY_RETENTION_DAYS,
     DOMAIN,
     PLATFORMS,
     STORE_PRUNE_INTERVAL,
@@ -88,15 +109,33 @@ def _shared_store_lock(hass: HomeAssistant) -> asyncio.Lock:
     return lock
 
 
-async def _async_get_shared_store(hass: HomeAssistant) -> FrameStore:
-    """Return the integration's single FrameStore, creating it on first use."""
+async def _async_get_shared_store(
+    hass: HomeAssistant, *, raw_retention_days: int, summary_retention_days: int
+) -> FrameStore:
+    """Return the integration's single FrameStore, creating it on first use.
+
+    ``raw_retention_days``/``summary_retention_days`` only take effect on the
+    entry that actually creates the store; every entry (including this one,
+    on every options update) also pushes its own retention onto the already-
+    created store as plain attribute writes -- see
+    ``_async_setup_entry_with_store`` and ``_async_options_updated`` -- since
+    retention is a store-wide setting shared across config entries rather
+    than a per-entry one.
+    """
     lock = _shared_store_lock(hass)
     async with lock:
         domain_data = hass.data.setdefault(DOMAIN, {})
         shared: _SharedStore | None = domain_data.get(_DATA_SHARED_STORE)
         if shared is None:
             db_path = default_db_path(hass.config.config_dir)
-            store = await hass.async_add_executor_job(FrameStore, db_path)
+            store = await hass.async_add_executor_job(
+                partial(
+                    FrameStore,
+                    db_path,
+                    raw_retention_days=raw_retention_days,
+                    summary_retention_days=summary_retention_days,
+                )
+            )
             await hass.async_add_executor_job(store.start)
 
             async def _async_prune(_now: Any) -> None:
@@ -160,6 +199,7 @@ def _detector_config_from_options(options: Mapping[str, Any]) -> DetectorConfig:
     window_hours = options.get(
         CONF_BASELINE_WINDOW_HOURS, defaults.baseline_window_s / 3600
     )
+    max_gate = options.get(CONF_MAX_GATE)
     return DetectorConfig(
         k=options.get(CONF_K, defaults.k),
         baseline_window_s=window_hours * 3600,
@@ -169,6 +209,40 @@ def _detector_config_from_options(options: Mapping[str, Any]) -> DetectorConfig:
         freeze_hold_s=options.get(CONF_FREEZE_HOLD_SECONDS, defaults.freeze_hold_s),
         min_mad=defaults.min_mad,
         support_tau_s=options.get(CONF_SUPPORT_TAU_S, defaults.support_tau_s),
+        t_dwell_s=options.get(CONF_T_DWELL_S, defaults.t_dwell_s),
+        t_brief_s=options.get(CONF_T_BRIEF_S, defaults.t_brief_s),
+        n_bleed_min=options.get(CONF_N_BLEED_MIN, defaults.n_bleed_min),
+        n_portal_min=options.get(CONF_N_PORTAL_MIN, defaults.n_portal_min),
+        portal_lead_frac=options.get(
+            CONF_PORTAL_LEAD_FRAC, defaults.portal_lead_frac
+        ),
+        lead_window_s=options.get(CONF_LEAD_WINDOW_S, defaults.lead_window_s),
+        stats_half_life_days=options.get(
+            CONF_STATS_HALF_LIFE_DAYS, defaults.stats_half_life_days
+        ),
+        max_gate=int(max_gate) if max_gate is not None else defaults.max_gate,
+        ceiling_enabled=bool(
+            options.get(CONF_CEILING_ENABLED, defaults.ceiling_enabled)
+        ),
+        ceil_drop=options.get(CONF_CEIL_DROP, defaults.ceil_drop),
+        n_ceil_min=options.get(CONF_N_CEIL_MIN, defaults.n_ceil_min),
+        ceil_sat=options.get(CONF_CEIL_SAT, defaults.ceil_sat),
+        boundary_confirm_days=int(
+            options.get(CONF_BOUNDARY_CONFIRM_DAYS, defaults.boundary_confirm_days)
+        ),
+        energy_floor=options.get(CONF_ENERGY_FLOOR, defaults.energy_floor),
+        arrival_frac=options.get(CONF_ARRIVAL_FRAC, defaults.arrival_frac),
+        arrival_min_frames=int(
+            options.get(CONF_ARRIVAL_MIN_FRAMES, defaults.arrival_min_frames)
+        ),
+    )
+
+
+def _retention_from_options(options: Mapping[str, Any]) -> tuple[int, int]:
+    """Read (raw_retention_days, summary_retention_days) from entry.options."""
+    return (
+        int(options.get(CONF_RAW_RETENTION_DAYS, DEFAULT_RAW_RETENTION_DAYS)),
+        int(options.get(CONF_SUMMARY_RETENTION_DAYS, DEFAULT_SUMMARY_RETENTION_DAYS)),
     )
 
 
@@ -210,7 +284,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: SmartLD2410ConfigEntry) 
         model="LD2410",
     )
 
-    store = await _async_get_shared_store(hass)
+    raw_retention_days, summary_retention_days = _retention_from_options(entry.options)
+    store = await _async_get_shared_store(
+        hass,
+        raw_retention_days=raw_retention_days,
+        summary_retention_days=summary_retention_days,
+    )
     try:
         await _async_setup_entry_with_store(
             hass, entry, address, ble_device, device_entry, store
@@ -239,6 +318,13 @@ async def _async_setup_entry_with_store(
         _register_sensor_row, store.db_path, address, entry.title, room
     )
 
+    # Retention is store-wide, not per-entry; this entry's options win over
+    # whatever the store was created (or last updated) with. See
+    # `_async_get_shared_store`.
+    raw_retention_days, summary_retention_days = _retention_from_options(entry.options)
+    store.raw_retention_days = raw_retention_days
+    store.summary_retention_days = summary_retention_days
+
     config = _detector_config_from_options(entry.options)
 
     baseline_store: Store[dict[str, Any]] = Store(
@@ -246,8 +332,9 @@ async def _async_setup_entry_with_store(
     )
     baseline_data = await baseline_store.async_load()
     baseline = _restore_baseline(baseline_data, config)
+    classifier = Detector.classifier_from_state(baseline_data, config)
 
-    detector = Detector(config, baseline=baseline)
+    detector = Detector(config, baseline=baseline, classifier=classifier)
     coordinator = SmartLD2410Coordinator(hass, entry, detector, store, address)
 
     def _lookup_ble_device() -> BLEDevice | None:
@@ -291,7 +378,7 @@ async def _async_setup_entry_with_store(
     )
 
     async def _async_save_baseline(_now: Any = None) -> None:
-        await baseline_store.async_save(detector.baseline.to_dict())
+        await baseline_store.async_save(coordinator.detector.state_to_dict())
 
     entry.async_on_unload(
         async_track_time_interval(hass, _async_save_baseline, BASELINE_SAVE_INTERVAL)
@@ -300,9 +387,14 @@ async def _async_setup_entry_with_store(
     async def _async_options_updated(
         hass: HomeAssistant, entry: SmartLD2410ConfigEntry
     ) -> None:
-        """Rebuild the DetectorConfig in place; the baseline is untouched."""
+        """Rebuild the DetectorConfig and store retention in place; learned state is untouched."""
         coordinator.reconfigure(_detector_config_from_options(entry.options))
-        baseline_store.async_delay_save(lambda: detector.baseline.to_dict(), delay=1.0)
+        raw_days, summary_days = _retention_from_options(entry.options)
+        store.raw_retention_days = raw_days
+        store.summary_retention_days = summary_days
+        baseline_store.async_delay_save(
+            lambda: coordinator.detector.state_to_dict(), delay=1.0
+        )
 
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
 
@@ -320,7 +412,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: SmartLD2410ConfigEntry)
         runtime_data = entry.runtime_data
         await runtime_data.client.stop()
         await runtime_data.baseline_store.async_save(
-            runtime_data.coordinator.detector.baseline.to_dict()
+            runtime_data.coordinator.detector.state_to_dict()
         )
         await _async_release_shared_store(hass)
     return unload_ok

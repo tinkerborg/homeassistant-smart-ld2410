@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -15,8 +17,8 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import SmartLD2410ConfigEntry
 from .algo.types import GATE_COUNT
-from .const import DOMAIN
-from .coordinator import SmartLD2410Coordinator
+from .const import DOMAIN, GATE_SPACING_M
+from .coordinator import SmartLD2410Coordinator, detector_peaks, weighted_centroid_and_span
 
 
 async def async_setup_entry(
@@ -31,6 +33,8 @@ async def async_setup_entry(
         ActiveGateRangeSensor(coordinator),
         TargetDistanceSensor(coordinator),
         BaselineAgeSensor(coordinator),
+        GateClassesSensor(coordinator),
+        BoundaryGateSensor(coordinator),
     ]
     entities.extend(
         ResidualSensor(coordinator, "move", gate) for gate in range(GATE_COUNT)
@@ -94,21 +98,37 @@ class ActiveGateRangeSensor(_SmartLD2410SensorEntity):
 
 
 class TargetDistanceSensor(_SmartLD2410SensorEntity):
-    """Detected target distance, from the latest raw frame."""
+    """Detected target distance, in meters (contract §1.1).
+
+    Once the baseline is learned and something is active, this is derived
+    from the active-band centroid (``centroid_gate * GATE_SPACING_M``); the
+    device's own raw reading (converted from cm) is the fallback whenever
+    there is no active band to derive a centroid from, which includes the
+    whole passthrough (cold-start) period.
+    """
 
     _attr_device_class = SensorDeviceClass.DISTANCE
-    _attr_native_unit_of_measurement = UnitOfLength.CENTIMETERS
+    _attr_native_unit_of_measurement = UnitOfLength.METERS
     _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_suggested_display_precision = 2
 
     def __init__(self, coordinator: SmartLD2410Coordinator) -> None:
         """Initialize the entity."""
         super().__init__(coordinator, "target_distance")
 
     @property
-    def native_value(self) -> int | None:
-        """Return the latest frame's target_distance_cm, if any frame yet."""
+    def native_value(self) -> float | None:
+        """Return the centroid-derived distance, or the device's as a fallback."""
+        data = self.coordinator.data
+        if data.baseline_ready and data.active_gates:
+            centroid_gate, _ = weighted_centroid_and_span(
+                detector_peaks(data), data.active_gates
+            )
+            return centroid_gate * GATE_SPACING_M
         frame = self.coordinator.latest_frame
-        return frame.target_distance_cm if frame is not None else None
+        if frame is None:
+            return None
+        return frame.target_distance_cm / 100.0
 
 
 class BaselineAgeSensor(_SmartLD2410SensorEntity):
@@ -155,3 +175,73 @@ class ResidualSensor(_SmartLD2410SensorEntity):
         data = self.coordinator.data
         residuals = data.residuals_move if self._channel == "move" else data.residuals_still
         return residuals[self._gate]
+
+
+class GateClassesSensor(_SmartLD2410SensorEntity):
+    """Per-gate dwell-character classification, e.g. ``IIIIUPBB``."""
+
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(self, coordinator: SmartLD2410Coordinator) -> None:
+        """Initialize the entity."""
+        super().__init__(coordinator, "gate_classes")
+
+    @property
+    def native_value(self) -> str:
+        """Return DetectorOutput.gate_classes, one I/P/B/U/O letter per gate."""
+        return self.coordinator.data.gate_classes
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Per-gate class and decayed episode counts."""
+        attributes: dict[str, Any] = {}
+        for stat in self.coordinator.detector.classifier.stats:
+            attributes[f"gate_{stat.gate}_class"] = stat.gate_class
+            attributes[f"gate_{stat.gate}_n_sustained"] = round(stat.n_sustained, 2)
+            attributes[f"gate_{stat.gate}_n_brief"] = round(stat.n_brief, 2)
+            attributes[f"gate_{stat.gate}_n_lead"] = round(stat.n_lead, 2)
+            attributes[f"gate_{stat.gate}_n_dead"] = round(stat.n_dead, 2)
+        return attributes
+
+
+class BoundaryGateSensor(_SmartLD2410SensorEntity):
+    """Learned energy-ceiling boundary: last in-room gate (spec 21 §4).
+
+    Published whether or not the ceiling is enabled. That is deliberate: the
+    feature ships disabled (spec 21 §5) precisely so a real install can be
+    watched learning a boundary, on real traffic, before the boundary is
+    allowed to suppress anything. ``ceiling_enabled`` says which mode this is.
+    """
+
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(self, coordinator: SmartLD2410Coordinator) -> None:
+        """Initialize the entity."""
+        super().__init__(coordinator, "boundary_gate")
+
+    @property
+    def native_value(self) -> int | None:
+        """Return the confirmed boundary gate, or None if none is confirmed."""
+        return self.coordinator.data.boundary_gate
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """ceil_profile, confirmed_days, and whether suppression is armed."""
+        config = self.coordinator.detector.config
+        classifier = self.coordinator.detector.classifier
+        half_life_s = config.stats_half_life_s
+        return {
+            "ceil_profile": [
+                None if value is None else round(value, 3)
+                for value in classifier.ceil_profile
+            ],
+            # Read at each gate's own last update rather than at "now": this
+            # is an entity property, and reaching for a wall clock here would
+            # make the same state render differently on a replay.
+            "n_epi": [
+                round(stat.n_epi(stat.updated_ts or 0.0, half_life_s), 2)
+                for stat in classifier.stats
+            ],
+            "confirmed_days": classifier.confirmed_days,
+            "ceiling_enabled": config.ceiling_enabled,
+        }

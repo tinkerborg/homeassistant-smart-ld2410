@@ -30,9 +30,9 @@ TEST_BUCKET_S = 1.0
 TEST_MIN_BUCKETS = 5
 
 
-def make_config(**overrides: float) -> DetectorConfig:
+def make_config(**overrides: float | None) -> DetectorConfig:
     """Return a detector config with a short baseline window for tests."""
-    values: dict[str, float] = {
+    values: dict[str, float | int | None] = {
         "k": 4.5,
         "baseline_window_s": 60.0,
         "enter_score": 3.0,
@@ -173,6 +173,15 @@ class FrameStream:
             )
             for _ in range(count)
         ]
+
+
+def entry_index(config: DetectorConfig) -> int:
+    """Index of the earliest frame of a strong candidate that may be admitted.
+
+    Arrival gating asks for the threshold to be reached in several frames, so
+    even an unambiguous walk-in is admitted a couple of frames in.
+    """
+    return config.arrival_min_frames - 1
 
 
 def feed(detector: Detector, frames: list[Frame]) -> list[DetectorOutput]:

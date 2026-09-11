@@ -10,6 +10,7 @@ from custom_components.smart_ld2410.algo.types import DetectorOutput, Frame
 
 from . import (
     FrameStream,
+    entry_index,
     feed,
     make_config,
     make_detector,
@@ -92,11 +93,12 @@ def test_multi_gate_entry_is_prompt_and_confident() -> None:
 
     outputs = feed(detector, stream.burst(1.0, move={3: 40, 4: 40, 5: 40}))
 
-    assert outputs[0].occupied
-    assert outputs[0].active_gates == (3, 4, 5)
-    assert outputs[0].confidence > 0.5
-    assert outputs[0].score >= detector.config.enter_score
-    assert outputs[0].adaptation_frozen
+    entry = outputs[entry_index(detector.config)]
+    assert entry.occupied
+    assert entry.active_gates == (3, 4, 5)
+    assert entry.confidence > 0.5
+    assert entry.score >= detector.config.enter_score
+    assert entry.adaptation_frozen
 
 
 def test_still_presence_is_retained_and_never_learned() -> None:
@@ -116,7 +118,7 @@ def test_still_presence_is_retained_and_never_learned() -> None:
     assert detector.baseline.ready
     idle_floor = detector.baseline.still[4].floor
 
-    entry = feed(detector, stream.burst(2 * step, move={3: 40, 4: 40, 5: 40},
+    entry = feed(detector, stream.burst(3 * step, move={3: 40, 4: 40, 5: 40},
                                         interval_s=step))
     assert entry[-1].occupied
 
@@ -156,9 +158,9 @@ def test_still_presence_is_retained_and_never_learned() -> None:
     # The still signature never reached the floor, so a repeat is detectable.
     feed(detector, stream.burst(600.0, interval_s=step))
     assert detector.baseline.still[4].floor == pytest.approx(stream.floor, abs=1.0)
-    repeat = feed(detector, stream.burst(2 * step, move={3: 40, 4: 40, 5: 40},
+    repeat = feed(detector, stream.burst(3 * step, move={3: 40, 4: 40, 5: 40},
                                          interval_s=step))
-    assert repeat[0].occupied
+    assert repeat[entry_index(detector.config)].occupied
 
 
 def test_real_hardware_idle_noise_never_enters() -> None:
@@ -200,10 +202,11 @@ def test_sustained_multi_gate_energy_enters_confidently() -> None:
     person = {**idle, 3: 55, 4: 60, 5: 50}
     outputs = feed(detector, stream.burst(20.0, move=person, move_spikes=spikes))
 
-    assert outputs[0].occupied
-    assert outputs[0].confidence > 0.5
-    assert all(output.occupied for output in outputs)
-    assert 4 in outputs[0].active_gates
+    entered = entry_index(detector.config)
+    assert outputs[entered].occupied
+    assert outputs[entered].confidence > 0.5
+    assert all(output.occupied for output in outputs[entered:])
+    assert 4 in outputs[entered].active_gates
 
 
 def test_warmup_contaminated_by_a_person_still_learns_the_noise() -> None:
@@ -214,7 +217,9 @@ def test_warmup_contaminated_by_a_person_still_learns_the_noise() -> None:
     property that lets the baseline be learned in an occupied room.
     """
     stream = FrameStream()
-    detector = make_detector(make_config(baseline_window_s=600.0), bucket_s=10.0)
+    detector = make_detector(
+        make_config(baseline_window_s=600.0, arrival_frac=0.0), bucket_s=10.0
+    )
 
     person = {3: 45, 4: 45}
     for _ in range(10):
@@ -357,7 +362,9 @@ def test_repeated_timestamps_do_not_disturb_state() -> None:
     detector = make_detector()
     feed(detector, warmup_frames(stream))
 
-    frame = stream.next_frame(move={3: 40, 4: 40, 5: 40})
+    hot = {3: 40, 4: 40, 5: 40}
+    feed(detector, stream.burst(1.0, move=hot))
+    frame = stream.next_frame(move=hot)
     first = detector.process(frame)
     repeat = detector.process(frame)
 

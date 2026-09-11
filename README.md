@@ -3,6 +3,8 @@
 [![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://github.com/tinkerborg/homeassistant-smart-ld2410/blob/HEAD/LICENSE)
 
+### WORK IN PROGRESS - don't install this yet!
+
 A Home Assistant integration for the HLK-LD2410 24GHz mmWave presence sensor over Bluetooth.
 
 ## Requirements

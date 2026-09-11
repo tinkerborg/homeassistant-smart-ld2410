@@ -17,6 +17,12 @@ Two tiers keep hours of 10Hz data affordable:
 
 Residuals are ``(energy - floor) / spread``.
 
+The same bucket tier carries one sensor-global quantity, the *move ceiling*:
+the strongest moving-channel level any bucket in the window routinely held.
+It is the reference an arrival is measured against, and it is deliberately
+not per-gate — attenuation is absolute on a 0-100 scale, and a per-gate
+reference would normalise a bleed-only gate into passing its own bleed.
+
 Why a low quantile instead of a median
 --------------------------------------
 A person only ever *adds* energy to a gate. Vacant buckets therefore sit at
@@ -66,14 +72,18 @@ from typing import Any
 
 from .types import GATE_COUNT, DetectorConfig, Frame
 
-SCHEMA_VERSION = 3
-"""Bumped to 3 for the quantile estimator.
+SCHEMA_VERSION = 4
+"""Current persisted-state layout.
 
 Version 1 stored bucket medians, version 2 added per-bucket MADs. Neither
 carries the per-bucket upper-tail spread this estimator divides by, and it
 cannot be reconstructed from summaries that never recorded it, so
 :meth:`BaselineModel.from_dict` refuses both rather than misreading them.
+Version 3 is read as-is: it holds exactly the bucket summaries this estimator
+uses, only without a move ceiling, which simply starts unlearned.
 """
+
+_READABLE_VERSIONS = frozenset({3, SCHEMA_VERSION})
 
 DEFAULT_BUCKET_S = 60.0
 """Width of one accumulation bucket, in seconds of frame time."""
@@ -89,6 +99,9 @@ SPREAD_QUANTILE = 0.25
 
 BUCKET_TAIL_QUANTILE = 0.90
 """Sample quantile within a bucket whose distance above ``q50`` is its spread."""
+
+CEILING_BUCKET_QUANTILE = 0.90
+"""Sample quantile within a bucket that summarises it for the move ceiling."""
 
 _SPREAD_FLOOR = 1e-6
 """Absolute minimum divisor, regardless of the configured minimum.
@@ -110,29 +123,76 @@ def _quantile(ordered: Sequence[float], q: float) -> float:
     return float(ordered[lower] + (ordered[upper] - ordered[lower]) * fraction)
 
 
-class GateBaseline:
+class _BucketedWindow:
+    """Rolls raw samples into fixed frame-time buckets over a bounded window."""
+
+    __slots__ = ("_bucket_s", "_max_buckets", "_open_index", "_open_samples")
+
+    def __init__(self, *, bucket_s: float, max_buckets: int) -> None:
+        self._bucket_s = bucket_s
+        self._max_buckets = max_buckets
+        self._open_index: int | None = None
+        self._open_samples: list[int] = []
+
+    def add_sample(self, ts_utc: float, value: int) -> None:
+        """Accumulate one raw sample, closing the previous bucket if needed."""
+        index = int(ts_utc // self._bucket_s)
+        if self._open_index is None:
+            self._open_index = index
+        elif index != self._open_index:
+            if index - self._open_index > 1:
+                # The open bucket only partly covers time before a gap of
+                # more than one bucket (a BLE dropout, or hours of HA
+                # downtime for a restored open bucket): closing it into the
+                # window would let a fragment stand in for the whole bucket,
+                # so it is discarded instead - matching the rule that gaps
+                # are never back-filled.
+                self.discard_open_bucket()
+            else:
+                self._close_open_bucket()
+            self._open_index = index
+        self._open_samples.append(value)
+
+    def discard_open_bucket(self) -> None:
+        """Throw away the in-progress bucket, which cannot stand in for a whole one."""
+        self._open_index = None
+        self._open_samples.clear()
+
+    def resize(self, max_buckets: int) -> None:
+        """Change the window capacity, truncating the oldest buckets if shrinking."""
+        self._max_buckets = max_buckets
+
+    def _close_open_bucket(self) -> None:
+        if self._open_samples:
+            self._summarise(sorted(self._open_samples))
+        self._open_samples = []
+
+    def _summarise(self, ordered: list[int]) -> None:
+        raise NotImplementedError
+
+    def _open_to_dict(self) -> dict[str, Any]:
+        return {
+            "open_index": self._open_index,
+            "open_samples": list(self._open_samples),
+        }
+
+    def _restore_open(self, data: dict[str, Any]) -> None:
+        open_index = data.get("open_index")
+        self._open_index = None if open_index is None else int(open_index)
+        self._open_samples = [int(value) for value in data.get("open_samples", ())]
+
+
+class GateBaseline(_BucketedWindow):
     """Quantile floor/spread estimator for a single gate channel."""
 
-    __slots__ = (
-        "_bucket_s",
-        "_cache",
-        "_max_buckets",
-        "_min_spread",
-        "_open_index",
-        "_open_samples",
-        "_q50s",
-        "_spreads",
-    )
+    __slots__ = ("_cache", "_min_spread", "_q50s", "_spreads")
 
     def __init__(self, *, bucket_s: float, max_buckets: int, min_spread: float) -> None:
         """Initialise an empty baseline."""
-        self._bucket_s = bucket_s
-        self._max_buckets = max_buckets
+        super().__init__(bucket_s=bucket_s, max_buckets=max_buckets)
         self._min_spread = min_spread
         self._q50s: deque[float] = deque(maxlen=max_buckets)
         self._spreads: deque[float] = deque(maxlen=max_buckets)
-        self._open_index: int | None = None
-        self._open_samples: list[int] = []
         self._cache: tuple[float, float] | None = None
 
     @property
@@ -168,34 +228,6 @@ class GateBaseline:
                 self._cache = (0.0, minimum)
         return self._cache
 
-    def add_sample(self, ts_utc: float, value: int) -> None:
-        """Accumulate one raw sample, closing the previous bucket if needed."""
-        index = int(ts_utc // self._bucket_s)
-        if self._open_index is None:
-            self._open_index = index
-        elif index != self._open_index:
-            if index - self._open_index > 1:
-                # The open bucket only partly covers time before a gap of
-                # more than one bucket (a BLE dropout, or hours of HA
-                # downtime for a restored open bucket): closing it into the
-                # window would let a fragment stand in for the whole bucket,
-                # so it is discarded instead - matching the rule that gaps
-                # are never back-filled.
-                self.discard_open_bucket()
-            else:
-                self._close_open_bucket()
-            self._open_index = index
-        self._open_samples.append(value)
-
-    def discard_open_bucket(self) -> None:
-        """Throw away the in-progress bucket.
-
-        Used when a gap means the accumulated fragment cannot honestly stand
-        in for a whole bucket's worth of time.
-        """
-        self._open_index = None
-        self._open_samples.clear()
-
     def resize(self, max_buckets: int) -> None:
         """Change the window capacity, truncating the oldest buckets if shrinking.
 
@@ -203,30 +235,23 @@ class GateBaseline:
         accumulate; shrinking keeps only the newest ``max_buckets`` of both the
         median and the spread series, which stay index-aligned.
         """
-        self._max_buckets = max_buckets
+        super().resize(max_buckets)
         self._q50s = deque(self._q50s, maxlen=max_buckets)
         self._spreads = deque(self._spreads, maxlen=max_buckets)
         self._cache = None
 
-    def _close_open_bucket(self) -> None:
-        """Move the in-progress bucket's median and tail spread into the window."""
-        if self._open_samples:
-            ordered = sorted(self._open_samples)
-            q50 = _quantile(ordered, 0.5)
-            self._q50s.append(q50)
-            self._spreads.append(
-                max(0.0, _quantile(ordered, BUCKET_TAIL_QUANTILE) - q50)
-            )
-            self._cache = None
-        self._open_samples = []
+    def _summarise(self, ordered: list[int]) -> None:
+        q50 = _quantile(ordered, 0.5)
+        self._q50s.append(q50)
+        self._spreads.append(max(0.0, _quantile(ordered, BUCKET_TAIL_QUANTILE) - q50))
+        self._cache = None
 
     def to_dict(self) -> dict[str, Any]:
         """Return a JSON-safe snapshot of this channel."""
         return {
             "q50s": list(self._q50s),
             "spreads": list(self._spreads),
-            "open_index": self._open_index,
-            "open_samples": list(self._open_samples),
+            **self._open_to_dict(),
         }
 
     def restore(self, data: dict[str, Any]) -> None:
@@ -239,10 +264,54 @@ class GateBaseline:
         )
         if len(self._spreads) != len(self._q50s):
             raise ValueError("baseline channel has mismatched bucket series")
-        open_index = data.get("open_index")
-        self._open_index = None if open_index is None else int(open_index)
-        self._open_samples = [int(value) for value in data.get("open_samples", ())]
+        self._restore_open(data)
         self._cache = None
+
+
+class MoveCeiling(_BucketedWindow):
+    """Sensor-global reference level for arrival-scale moving energy.
+
+    One bucket contributes the level its moving channel routinely reached
+    while it was open; the ceiling is the strongest such level still inside
+    the window, so it converges towards the strongest motion the sensor ever
+    sees and relearns once those buckets age out.
+    """
+
+    __slots__ = ("_levels",)
+
+    def __init__(self, *, bucket_s: float, max_buckets: int) -> None:
+        """Initialise an unlearned ceiling."""
+        super().__init__(bucket_s=bucket_s, max_buckets=max_buckets)
+        self._levels: deque[float] = deque(maxlen=max_buckets)
+
+    @property
+    def learned(self) -> bool:
+        """Whether any bucket has closed, i.e. whether :attr:`value` means anything."""
+        return bool(self._levels)
+
+    @property
+    def value(self) -> float:
+        """The reference level, in raw energy units (0.0 while unlearned)."""
+        return max(self._levels) if self._levels else 0.0
+
+    def resize(self, max_buckets: int) -> None:
+        """Change the window capacity, truncating the oldest buckets if shrinking."""
+        super().resize(max_buckets)
+        self._levels = deque(self._levels, maxlen=max_buckets)
+
+    def _summarise(self, ordered: list[int]) -> None:
+        self._levels.append(_quantile(ordered, CEILING_BUCKET_QUANTILE))
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return a JSON-safe snapshot of the ceiling."""
+        return {"levels": list(self._levels), **self._open_to_dict()}
+
+    def restore(self, data: dict[str, Any]) -> None:
+        """Restore the ceiling from :meth:`to_dict` output."""
+        self._levels = deque(
+            (float(value) for value in data["levels"]), maxlen=self._max_buckets
+        )
+        self._restore_open(data)
 
 
 class BaselineModel:
@@ -253,6 +322,7 @@ class BaselineModel:
         "_min_buckets",
         "_min_spread",
         "_move",
+        "_move_ceiling",
         "_still",
         "_window_s",
     )
@@ -283,6 +353,7 @@ class BaselineModel:
             )
             for _ in range(GATE_COUNT)
         ]
+        self._move_ceiling = MoveCeiling(bucket_s=bucket_s, max_buckets=max_buckets)
 
     @classmethod
     def from_config(
@@ -313,6 +384,16 @@ class BaselineModel:
     def still(self) -> list[GateBaseline]:
         """Per-gate still-channel baselines."""
         return self._still
+
+    @property
+    def move_ceiling(self) -> float:
+        """Raw moving energy level an arrival is measured against."""
+        return self._move_ceiling.value
+
+    @property
+    def move_ceiling_learned(self) -> bool:
+        """Whether :attr:`move_ceiling` has any observation behind it yet."""
+        return self._move_ceiling.learned
 
     @property
     def bucket_s(self) -> float:
@@ -349,6 +430,7 @@ class BaselineModel:
             channel.resize(max_buckets)
         for channel in self._still:
             channel.resize(max_buckets)
+        self._move_ceiling.resize(max_buckets)
 
     def add_frame(self, frame: Frame, *, frozen: bool = False) -> None:
         """Ingest one frame into every channel.
@@ -363,6 +445,7 @@ class BaselineModel:
         for gate in range(GATE_COUNT):
             self._move[gate].add_sample(frame.ts_utc, frame.move_gates[gate])
             self._still[gate].add_sample(frame.ts_utc, frame.still_gates[gate])
+        self._move_ceiling.add_sample(frame.ts_utc, max(frame.move_gates))
 
     def residuals(self, frame: Frame) -> tuple[tuple[float, ...], tuple[float, ...]]:
         """Return signed z-scores ``(energy - floor) / spread`` for all channels."""
@@ -387,20 +470,21 @@ class BaselineModel:
             "min_buckets": self._min_buckets,
             "move": [channel.to_dict() for channel in self._move],
             "still": [channel.to_dict() for channel in self._still],
+            "move_ceiling": self._move_ceiling.to_dict(),
         }
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> BaselineModel:
         """Rebuild a model from :meth:`to_dict` output.
 
-        Any payload that is not exactly :data:`SCHEMA_VERSION` is rejected,
-        older ones included, by raising ``ValueError``. Callers treat that as
-        "no persisted baseline" and relearn, which is correct rather than
-        merely safe: an older snapshot holds summaries from a different
-        estimator and there is no honest way to convert them.
+        Payloads older than the ones in :data:`_READABLE_VERSIONS` are
+        rejected by raising ``ValueError``. Callers treat that as "no
+        persisted baseline" and relearn, which is correct rather than merely
+        safe: such a snapshot holds summaries from a different estimator and
+        there is no honest way to convert them.
         """
         version = int(data["version"])
-        if version != SCHEMA_VERSION:
+        if version not in _READABLE_VERSIONS:
             raise ValueError(f"unsupported baseline schema version {version}")
         model = cls(
             window_s=float(data["window_s"]),
@@ -412,4 +496,7 @@ class BaselineModel:
             channel.restore(channel_data)
         for channel, channel_data in zip(model.still, data["still"], strict=True):
             channel.restore(channel_data)
+        ceiling = data.get("move_ceiling")
+        if ceiling is not None:
+            model._move_ceiling.restore(ceiling)
         return model

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
@@ -14,7 +16,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import SmartLD2410ConfigEntry
 from .const import DOMAIN
-from .coordinator import SmartLD2410Coordinator
+from .coordinator import SmartLD2410Coordinator, detector_mode
 
 
 async def async_setup_entry(
@@ -69,6 +71,20 @@ class OccupancyBinarySensor(_SmartLD2410BinarySensorEntity):
         here.
         """
         return self.coordinator.data.occupied
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """The occupancy attributes the interfaces contract (§1.1) defines."""
+        data = self.coordinator.data
+        active_gates = data.active_gates
+        return {
+            "confidence": data.confidence,
+            "active_gate_min": min(active_gates) if active_gates else None,
+            "active_gate_max": max(active_gates) if active_gates else None,
+            "mode": detector_mode(data),
+            "boundary_gate": data.boundary_gate,
+            "leading_gate": data.leading_gate,
+        }
 
 
 class AdaptationFrozenBinarySensor(_SmartLD2410BinarySensorEntity):

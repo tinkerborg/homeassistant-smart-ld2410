@@ -36,19 +36,19 @@ classification.
 - **Replay harness**: standalone, runs the algorithm core over any recorded
   range, produces identical output to live.
 
-## 4. Detection pipeline (implemented, schema v3)
+## 4. Detection pipeline
 
 ### 4.1 Baseline
 
 Per gate, per channel (move/still):
 
 - 60 s buckets storing sample median and upper-tail spread (q90 − q50). MAD is
-  not used: measured tails are non-Gaussian and MAD underestimated spread ~4×.
+  unsuitable: measured tails are non-Gaussian and MAD underestimates them.
 - Window floor = p25 of bucket medians; spread = p25 of bucket spreads.
 - **Learning is unconditional.** No occupancy-gated freeze: the low-quantile
-  floor means occupants cannot raise it under normal use. (Freeze-gating was
-  removed after producing a failure loop: a false detection froze learning, so
-  the false source was never learned away.)
+  floor means occupants cannot raise it under normal use, and gating learning
+  on detection creates a lock-in loop — a false detection would freeze the
+  very learning that corrects it.
 - Documented limit: a room occupied more than ~75% of the learning window begins
   absorbing the occupant into the floor.
 - Baselines persist across restarts.
@@ -85,8 +85,8 @@ parameters, `support_tau_s`, hysteresis/hold, retention.
 ## 5. Validation (standing)
 
 - Replay regression suite over recorded episodes, including: empty-room false
-  latching (old algorithm: detected 1240/1251 s; current: zero false entries,
-  all real events retained), pass-by rejection, still-presence retention.
+  latching (zero false entries, all real events retained), pass-by rejection,
+  still-presence retention.
 - New recordings that expose failures are added to the suite.
 - Metrics asymmetry: losing still-presence to reduce false positives is a
   regression, not a trade.
@@ -102,10 +102,23 @@ Goal: each sensor learns which gates are in-room without configuration.
   sweeps are bleed/out-of-room. Rare-but-long-dwell zones classify correctly
   from their first sustained event; once a gate is in-room, brief events there
   count. Reclassification is continuous, so furniture moves self-correct.
-- **Energy-ceiling boundary learning.** Walls impose attenuation: in-room gates
-  occasionally approach saturation, through-wall gates never do. Learned
-  per-gate max-energy distributions locate the boundary. Candidate fix for
-  through-wall sustained dwell; requires validation against recordings.
+  Brief episodes are outcome-conditioned — sweeps that reliably precede
+  sustained occupancy mark PORTAL (doorway) gates, which keep entry fast;
+  sweeps that lead nowhere mark BLEED (20 §3a).
+- **Arrival-gated entry (22).** A person entering the room produces
+  moving-channel energy near the sensor's observed ceiling; through-wall
+  activity never does. Entry requires arrival-scale motion against a
+  learned sensor-global ceiling; exit and hold are untouched, so still
+  presence is never at risk.
+- **Energy-ceiling boundary learning.** Walls impose attenuation beyond what
+  range alone explains. Learned per-gate max-energy distributions, measured
+  against the sensor's own range falloff, locate the boundary. Candidate fix
+  for through-wall sustained dwell; requires validation against recordings.
+- **Episode energy floor (23).** Attenuated through-wall activity is
+  uniformly weak across both channels; genuine in-room presence, however
+  still, keeps a channel strong. Entries whose combined move+still peak sits
+  under the floor are suppressed; the surviving weak tail is Phase 3
+  attribution's input.
 - Fallback: manual per-sensor max-range option.
 - Exit criteria: kitchen-through-wall recordings suppressed by learned
   boundaries (or explicitly documented as requiring Phase 3); no regression in
@@ -177,6 +190,8 @@ Detailed implementation specs; each is authoritative for its piece.
 - 10-interfaces.md — contracts between sensor integration, house layer, storage, replay
 - 20-phase2-dwell-boundary.md — dwell-character gate classification
 - 21-phase2-energy-ceiling.md — energy-ceiling boundary learning
+- 22-phase2-arrival-entry.md — arrival-gated entry (through-wall suppression)
+- 23-phase2-energy-floor.md — episode energy floor (through-wall suppression)
 - 30-phase3-tracks-adjacency.md — local tracks, handoffs, learned adjacency
 - 31-phase3-house-estimator.md — house state, conservation, vacancy, suppression
 - 32-phase3-evidence-labeling.md — external evidence, known-vacant windows, label store

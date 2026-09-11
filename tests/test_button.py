@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 from bleak.exc import BleakError
 from homeassistant.config_entries import ConfigEntryState
@@ -11,8 +13,9 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.smart_ld2410.algo.types import GATE_COUNT
+from custom_components.smart_ld2410.algo.types import GATE_COUNT, Frame
 from custom_components.smart_ld2410.const import DOMAIN, PERMISSIVE_SENSITIVITY
+from custom_components.smart_ld2410.coordinator import detector_mode
 
 from .conftest import TEST_ADDRESS, FakeLD2410Client
 
@@ -41,6 +44,37 @@ def _entity_id(hass: HomeAssistant) -> str | None:
     return registry.async_get_entity_id(
         "button", DOMAIN, f"{TEST_ADDRESS}_set_permissive_thresholds"
     )
+
+
+def _reset_entity_id(hass: HomeAssistant) -> str | None:
+    registry = er.async_get(hass)
+    return registry.async_get_entity_id(
+        "button", DOMAIN, f"{TEST_ADDRESS}_reset_learning"
+    )
+
+
+def _frame(
+    ts: float,
+    *,
+    move: dict[int, int] | None = None,
+    still: dict[int, int] | None = None,
+) -> Frame:
+    """Build a Frame with all-zero gates except the ones overridden."""
+    move = move or {}
+    still = still or {}
+    return Frame(
+        ts_utc=ts,
+        ts_mono=ts,
+        move_gates=tuple(move.get(gate, 0) for gate in range(GATE_COUNT)),
+        still_gates=tuple(still.get(gate, 0) for gate in range(GATE_COUNT)),
+        target_distance_cm=150,
+        device_occupancy=False,
+    )
+
+
+def _warmup_frames(start: float = 0.0, count: int = 7) -> list[Frame]:
+    """Idle frames spanning enough 60s buckets for the baseline to go ready."""
+    return [_frame(start + i * 60.0) for i in range(count)]
 
 
 async def test_press_writes_permissive_thresholds_to_every_gate(
@@ -82,3 +116,91 @@ async def test_press_failure_raises_home_assistant_error(hass: HomeAssistant) ->
             blocking=True,
         )
     await hass.async_block_till_done()
+
+
+async def test_reset_learning_replaces_detector_and_clears_store(
+    hass: HomeAssistant, hass_storage: dict[str, Any]
+) -> None:
+    """Pressing reset swaps in a fresh detector and wipes the baseline store."""
+    entry, client = await _setup_entry(hass)
+    coordinator = entry.runtime_data.coordinator
+    baseline_store = entry.runtime_data.baseline_store
+    old_detector = coordinator.detector
+    entity_id = _reset_entity_id(hass)
+    assert entity_id is not None
+
+    for frame in _warmup_frames():
+        client.on_frame(frame)
+    await hass.async_block_till_done()
+    assert coordinator.detector.baseline.ready
+
+    # Simulate the periodic save that would normally have persisted this
+    # learned state by now.
+    await baseline_store.async_save(coordinator.detector.state_to_dict())
+    assert baseline_store.key in hass_storage
+
+    await hass.services.async_call(
+        "button",
+        "press",
+        {ATTR_ENTITY_ID: entity_id},
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+
+    assert coordinator.detector is not old_detector
+    assert not coordinator.detector.baseline.ready
+    assert baseline_store.key not in hass_storage
+
+
+async def test_reset_learning_returns_to_passthrough(hass: HomeAssistant) -> None:
+    """After a reset, occupancy mode reads passthrough until warmup completes again."""
+    entry, client = await _setup_entry(hass)
+    coordinator = entry.runtime_data.coordinator
+    entity_id = _reset_entity_id(hass)
+    assert entity_id is not None
+
+    for frame in _warmup_frames():
+        client.on_frame(frame)
+    await hass.async_block_till_done()
+    assert detector_mode(coordinator.data) == "learned"
+
+    await hass.services.async_call(
+        "button",
+        "press",
+        {ATTR_ENTITY_ID: entity_id},
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+
+    client.on_frame(_frame(0.0))
+    await hass.async_block_till_done()
+    assert detector_mode(coordinator.data) == "passthrough"
+
+
+async def test_reset_learning_frames_keep_flowing_and_rewarm(
+    hass: HomeAssistant,
+) -> None:
+    """Frames after a reset are still processed and warmup completes again."""
+    entry, client = await _setup_entry(hass)
+    coordinator = entry.runtime_data.coordinator
+    entity_id = _reset_entity_id(hass)
+    assert entity_id is not None
+
+    for frame in _warmup_frames():
+        client.on_frame(frame)
+    await hass.async_block_till_done()
+
+    await hass.services.async_call(
+        "button",
+        "press",
+        {ATTR_ENTITY_ID: entity_id},
+        blocking=True,
+    )
+    await hass.async_block_till_done()
+
+    for frame in _warmup_frames(start=100_000.0):
+        client.on_frame(frame)
+    await hass.async_block_till_done()
+
+    assert coordinator.detector.baseline.ready
+    assert detector_mode(coordinator.data) == "learned"

@@ -16,7 +16,11 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.smart_ld2410.algo.types import GATE_COUNT, Frame
+from custom_components.smart_ld2410.algo.types import (
+    GATE_COUNT,
+    DetectorConfig,
+    Frame,
+)
 from custom_components.smart_ld2410.const import DOMAIN
 
 from .conftest import TEST_ADDRESS, FakeLD2410Client
@@ -28,9 +32,14 @@ ENTITY_KEYS = (
     ("sensor", "active_gate_range"),
     ("sensor", "target_distance"),
     ("sensor", "baseline_age"),
+    ("sensor", "gate_classes"),
     *(("sensor", f"residual_move_{gate}") for gate in range(GATE_COUNT)),
     *(("sensor", f"residual_still_{gate}") for gate in range(GATE_COUNT)),
 )
+
+
+_ARRIVAL_FRAMES = DetectorConfig().arrival_min_frames
+"""Frames of arrival-scale motion an entry needs before it is admitted."""
 
 
 def _frame(
@@ -140,14 +149,16 @@ async def test_occupancy_flip(hass: HomeAssistant) -> None:
     assert entry.runtime_data.coordinator.data.baseline_ready
 
     warm_ts = 7 * 60.0
-    client.on_frame(_frame(warm_ts, move={3: 50, 4: 50}))
+    for step in range(_ARRIVAL_FRAMES):
+        client.on_frame(_frame(warm_ts + step * 0.1, move={3: 50, 4: 50}))
     await hass.async_block_till_done()
     assert hass.states.get(occupancy_entity_id).state == "on"
 
     # First calm frame starts the hold countdown; a second one, timestamped
     # past hold_s later, lets it expire in a single step.
-    client.on_frame(_frame(warm_ts + 0.1))
-    client.on_frame(_frame(warm_ts + 0.1 + 31.0))
+    calm_ts = warm_ts + _ARRIVAL_FRAMES * 0.1
+    client.on_frame(_frame(calm_ts))
+    client.on_frame(_frame(calm_ts + 31.0))
     await hass.async_block_till_done()
     assert hass.states.get(occupancy_entity_id).state == "off"
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from bleak.exc import BleakError
 
@@ -12,9 +13,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import SmartLD2410ConfigEntry
+from .algo.detector import Detector
 from .algo.types import GATE_COUNT
 from .ble.client import LD2410Client
 from .const import DOMAIN, PERMISSIVE_SENSITIVITY
@@ -34,7 +37,10 @@ async def async_setup_entry(
         [
             SetPermissiveThresholdsButton(
                 runtime_data.coordinator, runtime_data.client
-            )
+            ),
+            ResetLearningButton(
+                runtime_data.coordinator, runtime_data.baseline_store
+            ),
         ]
     )
 
@@ -87,4 +93,34 @@ class SetPermissiveThresholdsButton(
             self.coordinator.address,
             params.move_sensitivities,
             params.still_sensitivities,
+        )
+
+
+class ResetLearningButton(CoordinatorEntity[SmartLD2410Coordinator], ButtonEntity):
+    """Wipes a sensor's persisted learning and swaps in a fresh detector."""
+
+    _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.CONFIG
+    _attr_translation_key = "reset_learning"
+
+    def __init__(
+        self,
+        coordinator: SmartLD2410Coordinator,
+        baseline_store: Store[dict[str, Any]],
+    ) -> None:
+        """Initialize the entity."""
+        super().__init__(coordinator)
+        self._baseline_store = baseline_store
+        self._attr_unique_id = f"{coordinator.address}_reset_learning"
+        self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, coordinator.address)})
+
+    async def async_press(self) -> None:
+        """Discard persisted learning, then swap in a fresh detector."""
+        await self._baseline_store.async_remove()
+        self.coordinator.detector = Detector(self.coordinator.detector.config)
+
+        _LOGGER.info(
+            "%s: Reset learning; occupancy is in passthrough until the new "
+            "baseline warms up",
+            self.coordinator.address,
         )

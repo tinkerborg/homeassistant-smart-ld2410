@@ -40,11 +40,20 @@ async def test_options_flow_updates_config(hass: HomeAssistant) -> None:
             "hold_seconds": 30,
             "freeze_hold_seconds": 60,
             "support_tau_s": 1.0,
+            "diagnostic": {
+                "t_dwell_s": 60,
+                "t_brief_s": 10,
+                "n_bleed_min": 20,
+                "stats_half_life_days": 30,
+                "raw_retention_days": 7,
+                "summary_retention_days": 365,
+            },
         },
     )
     await hass.async_block_till_done()
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert entry.options["k"] == DEFAULT_K + 1.0
+    assert entry.options["t_dwell_s"] == 60
 
 
 async def test_reconfigure_rejects_wrong_length_password_then_accepts(

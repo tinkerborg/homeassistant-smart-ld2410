@@ -61,6 +61,51 @@
           "hold_seconds": "How long the score must stay under the exit score, continuously, before occupancy clears.",
           "freeze_hold_seconds": "How long baseline adaptation stays paused after occupancy clears, so a person's lingering thermal/RF signature doesn't get learned into the noise floor.",
           "support_tau_s": "Time constant of the neighbour-elevation smoothing used to rescue a single hot gate next to a mildly elevated neighbour. Larger values smooth over more noise but react more slowly."
+        },
+        "sections": {
+          "diagnostic": {
+            "name": "Diagnostic settings",
+            "data": {
+              "t_dwell_s": "Sustained dwell time",
+              "t_brief_s": "Brief episode time",
+              "n_bleed_min": "Bleed episode count",
+              "n_portal_min": "Portal lead count",
+              "portal_lead_frac": "Portal lead fraction",
+              "lead_window_s": "Lead window",
+              "stats_half_life_days": "Gate class decay half-life",
+              "max_gate": "Manual gate cap",
+              "ceiling_enabled": "Use the learned room boundary",
+              "ceil_drop": "Boundary energy drop",
+              "n_ceil_min": "Boundary episode minimum",
+              "ceil_sat": "Boundary saturation level",
+              "boundary_confirm_days": "Boundary confirmation days",
+              "energy_floor": "Entry energy floor",
+              "arrival_frac": "Arrival motion fraction",
+              "arrival_min_frames": "Arrival frame count",
+              "raw_retention_days": "Raw frame retention",
+              "summary_retention_days": "Summary retention"
+            },
+            "data_description": {
+              "t_dwell_s": "Minimum duration, in seconds, of a still-dominant gate episode for it to count as a genuine dwell (in-room evidence).",
+              "t_brief_s": "Maximum duration, in seconds, of a gate episode for it to count as a brief sweep (bleed evidence).",
+              "n_bleed_min": "Decayed brief-episode count a gate must reach, with no recent sustained episode, before it is classified as bleed.",
+              "n_portal_min": "Decayed count of brief episodes that were followed by a dwell before a gate is classified as a doorway (portal).",
+              "portal_lead_frac": "Share of a gate's brief episodes that must be followed by a dwell for it to read as a doorway rather than a pass-by.",
+              "lead_window_s": "How long, in seconds, after a brief episode a dwell may start and still count as having been led to by it.",
+              "stats_half_life_days": "Half-life, in days, of the decayed per-gate episode counts that drive gate classification.",
+              "max_gate": "Hard-cap gate classification at OUT beyond this gate index. Leave blank unless a through-wall dwell is being misclassified as in-room.",
+              "ceiling_enabled": "Let the learned room boundary suppress gates beyond it. The boundary is always learned and shown on the diagnostic sensor; this only decides whether it acts. Off by default until it has been validated on your own sensors.",
+              "ceil_drop": "How far a gate's peak energy must fall below what the sensor's own range falloff predicts for it, before that gate and everything beyond it read as through-wall. Higher values place the boundary closer in.",
+              "n_ceil_min": "How many episodes a gate needs before it can take part in the boundary decision, so an unvisited gate never invents a wall.",
+              "ceil_sat": "Peak energy at or above which a gate counts as clipped by the sensor's scale, so it is left out of the range-falloff fit the boundary is measured against.",
+              "boundary_confirm_days": "How many consecutive daily evaluations must agree on the same boundary before it takes effect.",
+              "energy_floor": "Raw move-plus-still energy a candidate must reach somewhere before it may turn occupancy on, which is what rejects the uniformly faint activity a wall attenuates. It never affects an occupancy that is already on. Set to 0 to disable.",
+              "arrival_frac": "Share of the strongest movement this sensor has learned to expect that a candidate's moving channel must reach before it may turn occupancy on. Someone walking in reaches it; activity behind a wall is attenuated too far to. It never affects an occupancy that is already on, and does nothing until the sensor has learned a reference. Set to 0 to disable.",
+              "arrival_min_frames": "How many frames of a candidate must reach the arrival level, so a single noisy sample cannot admit an entry.",
+              "raw_retention_days": "How many days of raw per-frame data are kept before deletion.",
+              "summary_retention_days": "How many days of per-minute rollup summaries are kept before deletion."
+            }
+          }
         }
       }
     }
@@ -74,6 +119,14 @@
     "button": {
       "set_permissive_thresholds": {
         "name": "Set permissive thresholds"
+      },
+      "reset_learning": {
+        "name": "Reset learning"
+      }
+    },
+    "select": {
+      "label": {
+        "name": "Label"
       }
     },
     "sensor": {
@@ -88,6 +141,12 @@
       },
       "baseline_age": {
         "name": "Baseline age"
+      },
+      "gate_classes": {
+        "name": "Gate classes"
+      },
+      "boundary_gate": {
+        "name": "Boundary gate"
       },
       "residual_move_0": { "name": "Move residual, gate 0" },
       "residual_move_1": { "name": "Move residual, gate 1" },
