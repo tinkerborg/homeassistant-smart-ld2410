@@ -16,6 +16,8 @@ A Home Assistant integration for the HLK-LD2410 24GHz mmWave presence sensor ove
 
 ### HACS (recommended)
 
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=tinkerborg&repository=homeassistsant-smart-ld2410&category=integration)
+
 1. Add this repository as a custom repository in HACS (category: Integration).
 2. Search for **Smart LD2410** and install it.
 3. Restart Home Assistant.
