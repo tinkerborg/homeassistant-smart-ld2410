@@ -114,6 +114,18 @@ CONF_ENERGY_FLOOR = "energy_floor"
 CONF_ARRIVAL_FRAC = "arrival_frac"
 CONF_ARRIVAL_MIN_FRAMES = "arrival_min_frames"
 
+# Phase 2.5 leading-edge entry and still-presence retention (spec 24 §4),
+# diagnostic-tier.
+CONF_LEAD_GATE_MAX = "lead_gate_max"
+CONF_RETENTION_ON = "retention_on"
+CONF_RETENTION_OFF = "retention_off"
+CONF_TAU_FAST = "tau_fast"
+CONF_TAU_SLOW = "tau_slow"
+CONF_TAU_PEAK = "tau_peak"
+CONF_QUIET_S = "quiet_s"
+CONF_CROSS_N = "cross_n"
+CONF_GRACE_S = "grace_s"
+
 # Retention knobs (contract §2), diagnostic-tier. Defaults sourced from
 # store.py so it stays the single source of truth for retention defaults.
 CONF_RAW_RETENTION_DAYS = "raw_retention_days"
@@ -147,3 +159,12 @@ DEFAULT_BOUNDARY_CONFIRM_DAYS = _DETECTOR_DEFAULTS.boundary_confirm_days
 DEFAULT_ENERGY_FLOOR = _DETECTOR_DEFAULTS.energy_floor
 DEFAULT_ARRIVAL_FRAC = _DETECTOR_DEFAULTS.arrival_frac
 DEFAULT_ARRIVAL_MIN_FRAMES = _DETECTOR_DEFAULTS.arrival_min_frames
+DEFAULT_LEAD_GATE_MAX = _DETECTOR_DEFAULTS.lead_gate_max
+DEFAULT_RETENTION_ON = _DETECTOR_DEFAULTS.retention_on
+DEFAULT_RETENTION_OFF = _DETECTOR_DEFAULTS.retention_off
+DEFAULT_TAU_FAST = _DETECTOR_DEFAULTS.tau_fast
+DEFAULT_TAU_SLOW = _DETECTOR_DEFAULTS.tau_slow
+DEFAULT_TAU_PEAK = _DETECTOR_DEFAULTS.tau_peak
+DEFAULT_QUIET_S = _DETECTOR_DEFAULTS.quiet_s
+DEFAULT_CROSS_N = _DETECTOR_DEFAULTS.cross_n
+DEFAULT_GRACE_S = _DETECTOR_DEFAULTS.grace_s

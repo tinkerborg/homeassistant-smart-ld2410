@@ -192,6 +192,7 @@ Detailed implementation specs; each is authoritative for its piece.
 - 21-phase2-energy-ceiling.md — energy-ceiling boundary learning
 - 22-phase2-arrival-entry.md — arrival-gated entry (through-wall suppression)
 - 23-phase2-energy-floor.md — episode energy floor (through-wall suppression)
+- 24-phase2.5-entry-edge-retention.md — leading-edge entry, still-presence retention
 - 30-phase3-tracks-adjacency.md — local tracks, handoffs, learned adjacency
 - 31-phase3-house-estimator.md — house state, conservation, vacancy, suppression
 - 32-phase3-evidence-labeling.md — external evidence, known-vacant windows, label store

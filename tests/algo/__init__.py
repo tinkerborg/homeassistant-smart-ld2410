@@ -31,7 +31,12 @@ TEST_MIN_BUCKETS = 5
 
 
 def make_config(**overrides: float | None) -> DetectorConfig:
-    """Return a detector config with a short baseline window for tests."""
+    """Return a detector config with a short baseline window for tests.
+
+    The leading-edge rule is off unless a test asks for it: the synthetic
+    bands the other rules are exercised with sit wherever those rules need
+    them, which is rarely at the entry gates.
+    """
     values: dict[str, float | int | None] = {
         "k": 4.5,
         "baseline_window_s": 60.0,
@@ -40,6 +45,7 @@ def make_config(**overrides: float | None) -> DetectorConfig:
         "hold_s": 30.0,
         "freeze_hold_s": 60.0,
         "min_mad": 1.0,
+        "lead_gate_max": -1,
     }
     values.update(overrides)
     return DetectorConfig(**values)

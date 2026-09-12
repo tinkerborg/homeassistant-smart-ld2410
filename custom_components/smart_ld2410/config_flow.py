@@ -38,24 +38,33 @@ from .const import (
     CONF_CEIL_DROP,
     CONF_CEILING_ENABLED,
     CONF_CEIL_SAT,
+    CONF_CROSS_N,
     CONF_ENERGY_FLOOR,
     CONF_ENTER_SCORE,
     CONF_EXIT_SCORE,
     CONF_FREEZE_HOLD_SECONDS,
+    CONF_GRACE_S,
     CONF_HOLD_SECONDS,
     CONF_K,
+    CONF_LEAD_GATE_MAX,
     CONF_MAX_GATE,
     CONF_LEAD_WINDOW_S,
     CONF_N_BLEED_MIN,
     CONF_N_PORTAL_MIN,
     CONF_PORTAL_LEAD_FRAC,
     CONF_N_CEIL_MIN,
+    CONF_QUIET_S,
     CONF_RAW_RETENTION_DAYS,
+    CONF_RETENTION_OFF,
+    CONF_RETENTION_ON,
     CONF_STATS_HALF_LIFE_DAYS,
     CONF_SUMMARY_RETENTION_DAYS,
     CONF_SUPPORT_TAU_S,
     CONF_T_BRIEF_S,
     CONF_T_DWELL_S,
+    CONF_TAU_FAST,
+    CONF_TAU_PEAK,
+    CONF_TAU_SLOW,
     DEFAULT_ARRIVAL_FRAC,
     DEFAULT_ARRIVAL_MIN_FRAMES,
     DEFAULT_BASELINE_WINDOW_HOURS,
@@ -66,21 +75,30 @@ from .const import (
     DEFAULT_ENERGY_FLOOR,
     DEFAULT_ENTER_SCORE,
     DEFAULT_EXIT_SCORE,
+    DEFAULT_CROSS_N,
     DEFAULT_FREEZE_HOLD_SECONDS,
+    DEFAULT_GRACE_S,
     DEFAULT_HOLD_SECONDS,
     DEFAULT_K,
+    DEFAULT_LEAD_GATE_MAX,
     DEFAULT_LEAD_WINDOW_S,
     DEFAULT_N_BLEED_MIN,
     DEFAULT_N_PORTAL_MIN,
     DEFAULT_PORTAL_LEAD_FRAC,
     DEFAULT_N_CEIL_MIN,
     DEFAULT_PASSWORD,
+    DEFAULT_QUIET_S,
     DEFAULT_RAW_RETENTION_DAYS,
+    DEFAULT_RETENTION_OFF,
+    DEFAULT_RETENTION_ON,
     DEFAULT_STATS_HALF_LIFE_DAYS,
     DEFAULT_SUMMARY_RETENTION_DAYS,
     DEFAULT_SUPPORT_TAU_S,
     DEFAULT_T_BRIEF_S,
     DEFAULT_T_DWELL_S,
+    DEFAULT_TAU_FAST,
+    DEFAULT_TAU_PEAK,
+    DEFAULT_TAU_SLOW,
     DOMAIN,
     LD2410_SERVICE_UUID,
     PASSWORD_LENGTH,
@@ -343,6 +361,58 @@ def _diagnostic_options_schema(options: Mapping[str, Any]) -> vol.Schema:
                 ),
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=100, step=1, mode=NumberSelectorMode.BOX)
+            ),
+            vol.Optional(
+                CONF_LEAD_GATE_MAX,
+                default=options.get(CONF_LEAD_GATE_MAX, DEFAULT_LEAD_GATE_MAX),
+            ): NumberSelector(
+                NumberSelectorConfig(
+                    min=-1, max=GATE_COUNT - 1, step=1, mode=NumberSelectorMode.BOX
+                )
+            ),
+            vol.Optional(
+                CONF_RETENTION_ON,
+                default=options.get(CONF_RETENTION_ON, DEFAULT_RETENTION_ON),
+            ): NumberSelector(
+                NumberSelectorConfig(min=1, max=200, step=1, mode=NumberSelectorMode.BOX)
+            ),
+            vol.Optional(
+                CONF_RETENTION_OFF,
+                default=options.get(CONF_RETENTION_OFF, DEFAULT_RETENTION_OFF),
+            ): NumberSelector(
+                NumberSelectorConfig(min=0, max=200, step=1, mode=NumberSelectorMode.BOX)
+            ),
+            vol.Optional(
+                CONF_TAU_FAST, default=options.get(CONF_TAU_FAST, DEFAULT_TAU_FAST)
+            ): NumberSelector(
+                NumberSelectorConfig(
+                    min=0.5, max=30, step=0.5, mode=NumberSelectorMode.BOX
+                )
+            ),
+            vol.Optional(
+                CONF_TAU_SLOW, default=options.get(CONF_TAU_SLOW, DEFAULT_TAU_SLOW)
+            ): NumberSelector(
+                NumberSelectorConfig(min=5, max=600, step=1, mode=NumberSelectorMode.BOX)
+            ),
+            vol.Optional(
+                CONF_TAU_PEAK, default=options.get(CONF_TAU_PEAK, DEFAULT_TAU_PEAK)
+            ): NumberSelector(
+                NumberSelectorConfig(min=0, max=600, step=1, mode=NumberSelectorMode.BOX)
+            ),
+            vol.Optional(
+                CONF_QUIET_S, default=options.get(CONF_QUIET_S, DEFAULT_QUIET_S)
+            ): NumberSelector(
+                NumberSelectorConfig(min=1, max=300, step=1, mode=NumberSelectorMode.BOX)
+            ),
+            vol.Optional(
+                CONF_CROSS_N, default=options.get(CONF_CROSS_N, DEFAULT_CROSS_N)
+            ): NumberSelector(
+                NumberSelectorConfig(min=1, max=200, step=1, mode=NumberSelectorMode.BOX)
+            ),
+            vol.Optional(
+                CONF_GRACE_S, default=options.get(CONF_GRACE_S, DEFAULT_GRACE_S)
+            ): NumberSelector(
+                NumberSelectorConfig(min=0, max=600, step=1, mode=NumberSelectorMode.BOX)
             ),
             vol.Optional(
                 CONF_RAW_RETENTION_DAYS,

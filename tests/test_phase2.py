@@ -23,7 +23,16 @@ from custom_components.smart_ld2410.const import (
     CONF_CEIL_DROP,
     CONF_CEILING_ENABLED,
     CONF_CEIL_SAT,
+    CONF_CROSS_N,
+    CONF_GRACE_S,
+    CONF_LEAD_GATE_MAX,
     CONF_MAX_GATE,
+    CONF_QUIET_S,
+    CONF_RETENTION_OFF,
+    CONF_RETENTION_ON,
+    CONF_TAU_FAST,
+    CONF_TAU_PEAK,
+    CONF_TAU_SLOW,
     CONF_N_CEIL_MIN,
     CONF_RAW_RETENTION_DAYS,
     CONF_SUMMARY_RETENTION_DAYS,
@@ -106,12 +115,12 @@ async def test_episode_lands_in_store_and_fires_bus_event(hass: HomeAssistant) -
         client.on_frame(frame)
     await hass.async_block_till_done()
 
-    # Same shape as the occupancy-flip scenario: one strong two-gate frame
+    # Same shape as the occupancy-flip scenario: a strong walk-in band
     # enters occupancy and opens gate/detection episodes; the sustained idle
     # gap that follows exits occupancy and closes both.
     warm_ts = 7 * 60.0
     for step in range(_ARRIVAL_FRAMES):
-        client.on_frame(_frame(warm_ts + step * 0.1, move={3: 50, 4: 50}))
+        client.on_frame(_frame(warm_ts + step * 0.1, move={1: 50, 2: 50, 3: 50, 4: 50}))
     calm_ts = warm_ts + _ARRIVAL_FRAMES * 0.1
     client.on_frame(_frame(calm_ts))
     client.on_frame(_frame(calm_ts + 31.0))
@@ -344,6 +353,38 @@ async def test_arrival_options_round_trip(hass: HomeAssistant) -> None:
     config = entry.runtime_data.coordinator.detector.config
     assert config.arrival_frac == 0.75
     assert config.arrival_min_frames == 7
+
+
+async def test_leading_edge_options_round_trip(hass: HomeAssistant) -> None:
+    """The spec 24 §4 knobs reach the DetectorConfig."""
+    entry, _client = await _setup_entry(hass)
+
+    hass.config_entries.async_update_entry(
+        entry,
+        options={
+            CONF_LEAD_GATE_MAX: 2,
+            CONF_RETENTION_ON: 25,
+            CONF_RETENTION_OFF: 12,
+            CONF_TAU_FAST: 3.0,
+            CONF_TAU_SLOW: 45.0,
+            CONF_TAU_PEAK: 120.0,
+            CONF_QUIET_S: 15.0,
+            CONF_CROSS_N: 30,
+            CONF_GRACE_S: 90.0,
+        },
+    )
+    await hass.async_block_till_done()
+
+    config = entry.runtime_data.coordinator.detector.config
+    assert config.lead_gate_max == 2
+    assert config.retention_on == 25
+    assert config.retention_off == 12
+    assert config.tau_fast == 3.0
+    assert config.tau_slow == 45.0
+    assert config.tau_peak == 120.0
+    assert config.quiet_s == 15.0
+    assert config.cross_n == 30
+    assert config.grace_s == 90.0
 
 
 async def test_retention_options_reach_the_store(hass: HomeAssistant) -> None:
