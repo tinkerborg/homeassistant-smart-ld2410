@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import sqlite3
 import threading
 from unittest.mock import patch
@@ -239,6 +238,10 @@ async def test_residual_sensors_disabled_by_default(hass: HomeAssistant) -> None
 
 async def test_concurrent_entry_setup_shares_one_store(hass: HomeAssistant) -> None:
     """Two entries set up concurrently share a single FrameStore."""
+    # Both entries are already registered, so this one async_setup call
+    # drives Home Assistant's domain bootstrap, which sets up every entry of
+    # the domain together -- the real source of the concurrency under test.
+
     entries = []
     for suffix in ("11", "22"):
         address = f"AA:BB:CC:DD:EE:{suffix}"
@@ -251,12 +254,9 @@ async def test_concurrent_entry_setup_shares_one_store(hass: HomeAssistant) -> N
         entry.add_to_hass(hass)
         entries.append(entry)
 
-    results = await asyncio.gather(
-        *(hass.config_entries.async_setup(entry.entry_id) for entry in entries)
-    )
+    assert await hass.config_entries.async_setup(entries[0].entry_id)
     await hass.async_block_till_done()
 
-    assert all(results)
     assert all(entry.state is ConfigEntryState.LOADED for entry in entries)
 
     shared = hass.data[DOMAIN]["shared_store"]
