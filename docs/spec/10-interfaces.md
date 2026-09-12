@@ -10,7 +10,9 @@ against its internals.
 - `binary_sensor.<name>_occupancy` — derived occupancy. Attributes:
   `confidence` (0–1), `active_gate_min`, `active_gate_max`, `mode`
   (`passthrough` | `learned`), `boundary_gate` (int | null, Phase 2),
-  `leading_gate` (int | null, Phase 2).
+  `leading_gate` (int | null, Phase 2), `ownership`
+  (`armed` | `disarmed` | null, Phase 2.5), `retention_max` (float,
+  Phase 2.5).
 - `sensor.<name>_confidence` — 0–1 float, updated with occupancy.
 - `sensor.<name>_target_distance` — meters, from active-band centroid.
 - Diagnostics (default-disabled): per-gate residuals, baseline age, bucket
@@ -71,6 +73,7 @@ episodes(id INTEGER PRIMARY KEY, sensor_id TEXT, t0 REAL, t1 REAL,
        still_frac REAL,                   -- fraction of episode still-dominant
        result TEXT,                       -- entered|rejected_coherence|rejected_hysteresis
                                           --   |rejected_energy_floor|rejected_arrival
+                                          --   |rejected_leading_edge
        gate_peaks BLOB,                   -- peak raw move energy per gate, 9 bytes
        leading_gate INT,                  -- nearest gate above its learned quiet level
        label TEXT, label_source TEXT, label_conf REAL);  -- Phase 3+ writes labels

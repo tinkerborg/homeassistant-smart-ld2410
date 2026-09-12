@@ -138,7 +138,7 @@ async def test_cold_start_passes_through_device_occupancy(hass: HomeAssistant) -
 
 
 async def test_occupancy_flip(hass: HomeAssistant) -> None:
-    """A strong two-gate signal enters occupancy; a sustained calm period exits it."""
+    """A strong walk-in band enters occupancy; a sustained calm period exits it."""
     entry, client = await _setup_entry(hass)
     occupancy_entity_id = _entity_id(hass, "binary_sensor", "occupancy")
     assert occupancy_entity_id is not None
@@ -150,7 +150,7 @@ async def test_occupancy_flip(hass: HomeAssistant) -> None:
 
     warm_ts = 7 * 60.0
     for step in range(_ARRIVAL_FRAMES):
-        client.on_frame(_frame(warm_ts + step * 0.1, move={3: 50, 4: 50}))
+        client.on_frame(_frame(warm_ts + step * 0.1, move={1: 50, 2: 50, 3: 50, 4: 50}))
     await hass.async_block_till_done()
     assert hass.states.get(occupancy_entity_id).state == "on"
 

@@ -39,24 +39,33 @@ from .const import (
     CONF_CEIL_DROP,
     CONF_CEIL_SAT,
     CONF_CEILING_ENABLED,
+    CONF_CROSS_N,
     CONF_ENERGY_FLOOR,
     CONF_ENTER_SCORE,
     CONF_EXIT_SCORE,
     CONF_FREEZE_HOLD_SECONDS,
+    CONF_GRACE_S,
     CONF_HOLD_SECONDS,
     CONF_K,
+    CONF_LEAD_GATE_MAX,
     CONF_LEAD_WINDOW_S,
     CONF_MAX_GATE,
     CONF_N_BLEED_MIN,
     CONF_N_CEIL_MIN,
     CONF_N_PORTAL_MIN,
     CONF_PORTAL_LEAD_FRAC,
+    CONF_QUIET_S,
     CONF_RAW_RETENTION_DAYS,
+    CONF_RETENTION_OFF,
+    CONF_RETENTION_ON,
     CONF_STATS_HALF_LIFE_DAYS,
     CONF_SUMMARY_RETENTION_DAYS,
     CONF_SUPPORT_TAU_S,
     CONF_T_BRIEF_S,
     CONF_T_DWELL_S,
+    CONF_TAU_FAST,
+    CONF_TAU_PEAK,
+    CONF_TAU_SLOW,
     DEFAULT_PASSWORD,
     DEFAULT_RAW_RETENTION_DAYS,
     DEFAULT_SUMMARY_RETENTION_DAYS,
@@ -235,6 +244,15 @@ def _detector_config_from_options(options: Mapping[str, Any]) -> DetectorConfig:
         arrival_min_frames=int(
             options.get(CONF_ARRIVAL_MIN_FRAMES, defaults.arrival_min_frames)
         ),
+        lead_gate_max=int(options.get(CONF_LEAD_GATE_MAX, defaults.lead_gate_max)),
+        retention_on=options.get(CONF_RETENTION_ON, defaults.retention_on),
+        retention_off=options.get(CONF_RETENTION_OFF, defaults.retention_off),
+        tau_fast=options.get(CONF_TAU_FAST, defaults.tau_fast),
+        tau_slow=options.get(CONF_TAU_SLOW, defaults.tau_slow),
+        tau_peak=options.get(CONF_TAU_PEAK, defaults.tau_peak),
+        quiet_s=options.get(CONF_QUIET_S, defaults.quiet_s),
+        cross_n=int(options.get(CONF_CROSS_N, defaults.cross_n)),
+        grace_s=options.get(CONF_GRACE_S, defaults.grace_s),
     )
 
 
@@ -333,8 +351,11 @@ async def _async_setup_entry_with_store(
     baseline_data = await baseline_store.async_load()
     baseline = _restore_baseline(baseline_data, config)
     classifier = Detector.classifier_from_state(baseline_data, config)
+    retention = Detector.retention_from_state(baseline_data, config)
 
-    detector = Detector(config, baseline=baseline, classifier=classifier)
+    detector = Detector(
+        config, baseline=baseline, classifier=classifier, retention=retention
+    )
     coordinator = SmartLD2410Coordinator(hass, entry, detector, store, address)
 
     def _lookup_ble_device() -> BLEDevice | None:

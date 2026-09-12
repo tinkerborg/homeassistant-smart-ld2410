@@ -27,6 +27,15 @@ RESULT_REJECTED_ENERGY_FLOOR = "rejected_energy_floor"
 RESULT_REJECTED_ARRIVAL = "rejected_arrival"
 """Episode outcome: it scored, but never showed arrival-scale motion."""
 
+RESULT_REJECTED_LEADING_EDGE = "rejected_leading_edge"
+"""Episode outcome: it scored, but never led at the room's entry gates."""
+
+OWNERSHIP_DISARMED = "disarmed"
+"""Ownership state: the occupant has not yet re-crossed the entry gates."""
+
+OWNERSHIP_ARMED = "armed"
+"""Ownership state: a departure crossing has been seen; release is permitted."""
+
 SCOPE_GATE = "gate"
 """Episode scope: one gate's own activation interval (drives classification)."""
 
@@ -144,6 +153,28 @@ class DetectorConfig:
     # 0 disables the rule.
     arrival_frac: float = 0.55
     arrival_min_frames: int = 1
+
+    # -- Phase 2.5: leading-edge entry and still-presence retention (spec 24) --
+    # Nearest gate a candidate's suppressed moving residual may lead at and
+    # still be admitted. A person walking in lights the near gates; activity
+    # behind an intervening wall physically cannot. -1 disables the rule, and
+    # with it ownership: entry then behaves per 22/23 alone.
+    lead_gate_max: int = 1
+    # Normalized signed retention that refreshes hold at the occupancy's gates
+    # while ownership is disarmed, and the lower level it must fall under for
+    # the whole hold window before an owned room releases. 0 for retention_off
+    # disables retention release-gating.
+    retention_on: float = 20.0
+    retention_off: float = 10.0
+    tau_fast: float = 2.0
+    tau_slow: float = 60.0
+    tau_peak: float = 90.0
+    # Near-band quiet the entry walk-in must settle into before a fresh burst
+    # of cross_n near-band frames can arm release, and how long after near-band
+    # activity scored evidence still counts as the occupant's own.
+    quiet_s: float = 10.0
+    cross_n: int = 20
+    grace_s: float = 60.0
 
     @property
     def s_gate_on(self) -> float:
@@ -284,6 +315,10 @@ class DetectorOutput:
     """
     leading_gate: int | None = None
     """Nearest gate elevated above its learned quiet level in the open activity."""
+    ownership: str | None = None
+    """:data:`OWNERSHIP_ARMED` / :data:`OWNERSHIP_DISARMED`, or ``None`` if unowned."""
+    retention_max: float = 0.0
+    """Highest normalized still-presence retention at the occupancy's gates."""
     episodes: tuple[Episode, ...] = ()
     gate_transitions: tuple[GateTransition, ...] = ()
     boundary_transitions: tuple[BoundaryTransition, ...] = ()
