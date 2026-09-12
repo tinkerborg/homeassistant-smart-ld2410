@@ -235,29 +235,29 @@ def _diagnostic_options_schema(options: Mapping[str, Any]) -> vol.Schema:
     """Build the collapsed diagnostic-tier section: spec 20 §6 + retention (§2)."""
     return vol.Schema(
         {
-            vol.Required(
+            vol.Optional(
                 CONF_T_DWELL_S, default=options.get(CONF_T_DWELL_S, DEFAULT_T_DWELL_S)
             ): NumberSelector(
                 NumberSelectorConfig(min=5, max=600, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_T_BRIEF_S, default=options.get(CONF_T_BRIEF_S, DEFAULT_T_BRIEF_S)
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=120, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_N_BLEED_MIN,
                 default=options.get(CONF_N_BLEED_MIN, DEFAULT_N_BLEED_MIN),
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=200, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_N_PORTAL_MIN,
                 default=options.get(CONF_N_PORTAL_MIN, DEFAULT_N_PORTAL_MIN),
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=200, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_PORTAL_LEAD_FRAC,
                 default=options.get(CONF_PORTAL_LEAD_FRAC, DEFAULT_PORTAL_LEAD_FRAC),
             ): NumberSelector(
@@ -265,13 +265,13 @@ def _diagnostic_options_schema(options: Mapping[str, Any]) -> vol.Schema:
                     min=0.05, max=1.0, step=0.05, mode=NumberSelectorMode.BOX
                 )
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_LEAD_WINDOW_S,
                 default=options.get(CONF_LEAD_WINDOW_S, DEFAULT_LEAD_WINDOW_S),
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=60, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_STATS_HALF_LIFE_DAYS,
                 default=options.get(
                     CONF_STATS_HALF_LIFE_DAYS, DEFAULT_STATS_HALF_LIFE_DAYS
@@ -291,30 +291,30 @@ def _diagnostic_options_schema(options: Mapping[str, Any]) -> vol.Schema:
             # are live regardless - the statistics and the published boundary
             # are what the validation watches - but only this switch lets the
             # boundary suppress anything.
-            vol.Required(
+            vol.Optional(
                 CONF_CEILING_ENABLED,
                 default=options.get(CONF_CEILING_ENABLED, DEFAULT_CEILING_ENABLED),
             ): BooleanSelector(),
-            vol.Required(
+            vol.Optional(
                 CONF_CEIL_DROP, default=options.get(CONF_CEIL_DROP, DEFAULT_CEIL_DROP)
             ): NumberSelector(
                 NumberSelectorConfig(
                     min=0.05, max=0.95, step=0.05, mode=NumberSelectorMode.BOX
                 )
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_N_CEIL_MIN,
                 default=options.get(CONF_N_CEIL_MIN, DEFAULT_N_CEIL_MIN),
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=500, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_CEIL_SAT,
                 default=options.get(CONF_CEIL_SAT, DEFAULT_CEIL_SAT),
             ): NumberSelector(
                 NumberSelectorConfig(min=50, max=100, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_BOUNDARY_CONFIRM_DAYS,
                 default=options.get(
                     CONF_BOUNDARY_CONFIRM_DAYS, DEFAULT_BOUNDARY_CONFIRM_DAYS
@@ -322,13 +322,13 @@ def _diagnostic_options_schema(options: Mapping[str, Any]) -> vol.Schema:
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=30, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_ENERGY_FLOOR,
                 default=options.get(CONF_ENERGY_FLOOR, DEFAULT_ENERGY_FLOOR),
             ): NumberSelector(
                 NumberSelectorConfig(min=0, max=200, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_ARRIVAL_FRAC,
                 default=options.get(CONF_ARRIVAL_FRAC, DEFAULT_ARRIVAL_FRAC),
             ): NumberSelector(
@@ -336,7 +336,7 @@ def _diagnostic_options_schema(options: Mapping[str, Any]) -> vol.Schema:
                     min=0, max=1, step=0.05, mode=NumberSelectorMode.BOX
                 )
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_ARRIVAL_MIN_FRAMES,
                 default=options.get(
                     CONF_ARRIVAL_MIN_FRAMES, DEFAULT_ARRIVAL_MIN_FRAMES
@@ -344,13 +344,13 @@ def _diagnostic_options_schema(options: Mapping[str, Any]) -> vol.Schema:
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=100, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_RAW_RETENTION_DAYS,
                 default=options.get(CONF_RAW_RETENTION_DAYS, DEFAULT_RAW_RETENTION_DAYS),
             ): NumberSelector(
                 NumberSelectorConfig(min=1, max=90, step=1, mode=NumberSelectorMode.BOX)
             ),
-            vol.Required(
+            vol.Optional(
                 CONF_SUMMARY_RETENTION_DAYS,
                 default=options.get(
                     CONF_SUMMARY_RETENTION_DAYS, DEFAULT_SUMMARY_RETENTION_DAYS
