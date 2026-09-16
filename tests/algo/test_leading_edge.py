@@ -1,8 +1,8 @@
 """Tests for the leading-edge entry condition (spec 24 §1).
 
 The synthetic sensor idles at :data:`NOISE_FLOOR`; a band raised by ``e`` reads
-as raw ``NOISE_FLOOR + e``. Arrival gating is off throughout, so what admits or
-refuses an entry here is the leading edge alone.
+as raw ``NOISE_FLOOR + e``. The leading edge is the only entry rule in the
+pipeline here, so it alone admits or refuses an entry.
 """
 
 from __future__ import annotations
@@ -33,9 +33,22 @@ SETTLE_S = 40.0
 QUIET_SIGMA = 0.5
 
 
-def _config(**overrides: float | None) -> DetectorConfig:
+LEADING_EDGE_STAGES = (
+    "quantile_floor",
+    "tail_spread",
+    "run_score",
+    "lone_gate_suppression",
+    "leading_edge",
+    "ownership",
+    "crossing_arming",
+    "score_hold",
+)
+"""The scoring core, the leading edge, and the ownership it confers."""
+
+
+def _config(**overrides: object) -> DetectorConfig:
     """A config whose only live entry rule is the leading edge."""
-    values: dict[str, float | None] = {"arrival_frac": 0.0, "lead_gate_max": 1}
+    values: dict[str, object] = {"stages": LEADING_EDGE_STAGES, "lead_gate_max": 1}
     values.update(overrides)
     return make_config(**values)
 

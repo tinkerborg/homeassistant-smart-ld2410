@@ -12,7 +12,7 @@ import json
 
 from custom_components.smart_ld2410.algo.baseline import (
     SCHEMA_VERSION,
-    BaselineModel,
+    Baseline,
 )
 from custom_components.smart_ld2410.algo.detector import Detector
 from custom_components.smart_ld2410.algo.types import (
@@ -45,6 +45,23 @@ WARMUP_S = 10.0
 TEACH_S = 3.0
 SETTLE_S = 40.0
 """Long enough after the teaching burst for occupancy to release again."""
+
+
+ARRIVAL_STAGES = (
+    "quantile_floor",
+    "tail_spread",
+    "move_ceiling",
+    "run_score",
+    "lone_gate_suppression",
+    "arrival",
+    "score_hold",
+)
+"""The scoring core, the move ceiling, and the arrival gate measured against it."""
+
+
+def _config(**overrides: object) -> DetectorConfig:
+    """A config whose only live entry rule is the arrival gate."""
+    return make_config(stages=ARRIVAL_STAGES, **overrides)
 
 
 def _elevate(elevation: int, band: tuple[int, ...] = BAND) -> dict[int, int]:
@@ -86,7 +103,7 @@ def _learned_detector(stream: FrameStream, config: DetectorConfig) -> Detector:
 def test_the_move_ceiling_reaches_arrival_scale_motion() -> None:
     """Teaching burst included, the exemplars sit either side of the threshold."""
     stream = _stream()
-    detector = _learned_detector(stream, make_config())
+    detector = _learned_detector(stream, _config())
 
     threshold = detector.config.arrival_frac * detector.baseline.move_ceiling
 
@@ -98,7 +115,7 @@ def test_the_move_ceiling_reaches_arrival_scale_motion() -> None:
 def test_arrival_scale_motion_enters() -> None:
     """A second walk-in is admitted, within the frames the rule asks for."""
     stream = _stream()
-    config = make_config()
+    config = _config()
     detector = _learned_detector(stream, config)
 
     outputs = feed(detector, stream.burst(5.0, move=_elevate(ARRIVAL_MOVE)))
@@ -110,7 +127,7 @@ def test_arrival_scale_motion_enters() -> None:
 def test_sub_arrival_activity_is_suppressed_and_recorded() -> None:
     """Activity that never reaches arrival scale stays out, and says why."""
     stream = _stream()
-    detector = _learned_detector(stream, make_config())
+    detector = _learned_detector(stream, _config())
 
     outputs = feed(detector, stream.burst(12.0, move=_elevate(THROUGH_WALL_MOVE)))
 
@@ -126,7 +143,7 @@ def test_sub_arrival_activity_is_suppressed_and_recorded() -> None:
 def test_an_unlearned_ceiling_admits_the_same_candidate() -> None:
     """A sensor that has never seen strong motion is never tightened by the rule."""
     stream = _stream()
-    detector = _warm_detector(stream, make_config())
+    detector = _warm_detector(stream, _config())
 
     outputs = feed(detector, stream.burst(12.0, move=_elevate(THROUGH_WALL_MOVE)))
 
@@ -135,7 +152,7 @@ def test_an_unlearned_ceiling_admits_the_same_candidate() -> None:
 
 def test_a_fresh_baseline_has_no_ceiling() -> None:
     """Nothing has been observed, so there is nothing to measure an arrival against."""
-    baseline = make_baseline()
+    baseline = make_baseline(_config())
 
     assert not baseline.move_ceiling_learned
     assert baseline.move_ceiling == 0.0
@@ -144,7 +161,7 @@ def test_a_fresh_baseline_has_no_ceiling() -> None:
 def test_arrival_scale_motion_must_last_the_required_frames() -> None:
     """Reaching the threshold in too few frames does not admit an entry."""
     stream = _stream()
-    detector = _learned_detector(stream, make_config(arrival_min_frames=50))
+    detector = _learned_detector(stream, _config(arrival_min_frames=50))
 
     outputs = feed(detector, stream.burst(2.0, move=_elevate(ARRIVAL_MOVE)))
 
@@ -155,7 +172,7 @@ def test_arrival_scale_motion_must_last_the_required_frames() -> None:
 def test_zero_arrival_frac_disables_the_rule() -> None:
     """The same sub-arrival candidate enters once the rule is turned off."""
     stream = _stream()
-    detector = _learned_detector(stream, make_config(arrival_frac=0.0))
+    detector = _learned_detector(stream, _config(arrival_frac=0.0))
 
     outputs = feed(detector, stream.burst(12.0, move=_elevate(THROUGH_WALL_MOVE)))
 
@@ -165,7 +182,7 @@ def test_zero_arrival_frac_disables_the_rule() -> None:
 def test_occupancy_survives_motion_decaying_below_arrival_scale() -> None:
     """Exit stays score-driven: entry gating never releases an occupancy."""
     stream = _stream()
-    detector = _learned_detector(stream, make_config())
+    detector = _learned_detector(stream, _config())
 
     entry = feed(detector, stream.burst(5.0, move=_elevate(ARRIVAL_MOVE)))
     assert entry[-1].occupied
@@ -178,7 +195,7 @@ def test_occupancy_survives_motion_decaying_below_arrival_scale() -> None:
 def test_leading_gate_reports_the_nearest_elevated_gate() -> None:
     """Activity confined to the far gates leads there, and says so on its episodes."""
     stream = _stream()
-    detector = _learned_detector(stream, make_config())
+    detector = _learned_detector(stream, _config())
 
     outputs = feed(
         detector, stream.burst(12.0, move=_elevate(THROUGH_WALL_MOVE, FAR_BAND))
@@ -197,7 +214,7 @@ def test_leading_gate_reports_the_nearest_elevated_gate() -> None:
 def test_state_round_trip_preserves_the_move_ceiling() -> None:
     """A restored sensor keeps gating on what it had already learned."""
     stream = _stream()
-    model = make_baseline()
+    model = make_baseline(_config())
     for frame in [
         *stream.burst(WARMUP_S),
         *stream.burst(TEACH_S, move=_elevate(ARRIVAL_MOVE)),
@@ -206,7 +223,7 @@ def test_state_round_trip_preserves_the_move_ceiling() -> None:
 
     payload = json.loads(json.dumps(model.to_dict()))
     assert payload["version"] == SCHEMA_VERSION
-    restored = BaselineModel.from_dict(payload)
+    restored = Baseline.from_dict(payload, _config())
 
     assert model.move_ceiling_learned
     assert restored.move_ceiling_learned
@@ -216,7 +233,7 @@ def test_state_round_trip_preserves_the_move_ceiling() -> None:
 def test_state_without_a_ceiling_loads_with_it_unlearned() -> None:
     """Persisted state from before the ceiling existed relearns it, keeping the rest."""
     stream = _stream()
-    model = make_baseline()
+    model = make_baseline(_config())
     for frame in stream.burst(25.0):
         model.add_frame(frame)
 
@@ -224,8 +241,8 @@ def test_state_without_a_ceiling_loads_with_it_unlearned() -> None:
     del payload["move_ceiling"]
     payload["version"] = SCHEMA_VERSION - 1
 
-    restored = BaselineModel.from_dict(payload)
+    restored = Baseline.from_dict(payload, _config())
 
     assert not restored.move_ceiling_learned
     assert restored.bucket_count == model.bucket_count
-    assert restored.move[0].floor == model.move[0].floor
+    assert restored.floor(0) == model.floor(0)

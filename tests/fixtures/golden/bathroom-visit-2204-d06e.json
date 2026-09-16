@@ -1,0 +1,36 @@
+{
+  "D0:6E:81:D2:5D:A6": [
+    {
+      "ts": 1789178100.133022,
+      "kind": "occupied",
+      "confidence": 0.5,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789178430.3023016,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789178641.4440627,
+      "kind": "occupied",
+      "confidence": 1.0,
+      "score": 43.25925925925926,
+      "active_gates": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "ts": 1789178803.3996875,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    }
+  ]
+}

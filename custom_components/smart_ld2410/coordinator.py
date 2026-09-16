@@ -99,7 +99,7 @@ def edge_band(active_gates: tuple[int, ...], last_in_room_gate: int | None) -> s
     """near/far/none: whether the active band touches an edge (contract §1.2).
 
     ``near`` if it touches gate 0-1; ``far`` if it reaches the last in-room
-    gate (:attr:`GateClassifier.last_in_room_gate`, not the spec 21 learned
+    gate (:attr:`GateModel.last_in_room_gate`, not the spec 21 learned
     boundary - handoff cares about how far presence has actually been seen);
     ``none`` otherwise, including when nothing is active.
     """

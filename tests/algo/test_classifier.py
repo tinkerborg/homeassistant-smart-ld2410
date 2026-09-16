@@ -12,7 +12,7 @@ from math import log2
 
 import pytest
 
-from custom_components.smart_ld2410.algo.classifier import GateClassifier
+from custom_components.smart_ld2410.algo.gates import GateModel
 from custom_components.smart_ld2410.algo.detector import Detector
 from custom_components.smart_ld2410.algo.types import (
     CLASS_BLEED,
@@ -26,7 +26,7 @@ from custom_components.smart_ld2410.algo.types import (
     Episode,
 )
 
-from . import FrameStream, feed, make_config, make_detector
+from . import FrameStream, feed, make_config, make_detector, make_gates
 
 SWEEP_GATES = (6, 7, 8)
 """Far gates used as the through-wall hallway in these tests."""
@@ -36,6 +36,19 @@ SWEEP = dict.fromkeys(SWEEP_GATES, 40)
 
 DWELL = {6: 8, 7: 25}
 """A person settling at gate 7: still-channel energy with a little spill."""
+
+
+CLASSIFIER_STAGES = (
+    "quantile_floor",
+    "tail_spread",
+    "run_score",
+    "lone_gate_suppression",
+    "dwell_class",
+    "portal_class",
+    "gate_exclusion",
+    "score_hold",
+)
+"""The scoring core plus the gate classifiers and the exclusion they drive."""
 
 
 def _stream() -> FrameStream:
@@ -49,7 +62,7 @@ def _stream() -> FrameStream:
     return FrameStream(sigma=2.0)
 
 
-def _detector(**overrides: float | None) -> Detector:
+def _detector(**overrides: object) -> Detector:
     """A detector whose baseline window can outlast a minute-long dwell.
 
     The shared test default is a 60 s window, so a 60 s dwell is a quarter of
@@ -61,7 +74,11 @@ def _detector(**overrides: float | None) -> Detector:
     their pass-bys eight seconds apart, so it is short enough for each one to
     close on its own.
     """
-    values: dict[str, float | None] = {"baseline_window_s": 3600.0, "hold_s": 2.0}
+    values: dict[str, object] = {
+        "stages": CLASSIFIER_STAGES,
+        "baseline_window_s": 3600.0,
+        "hold_s": 2.0,
+    }
     values.update(overrides)
     return make_detector(make_config(**values), bucket_s=60.0)
 
@@ -114,7 +131,7 @@ def test_repeated_pass_bys_reach_bleed_and_are_then_rejected_at_entry() -> None:
     # learned yet, and the permissive default is the point.
     first = _sweep(stream, detector, passes=1)
     assert any(output.occupied for output in first)
-    assert detector.classifier.classes == "U" * 9
+    assert detector.gates.classes == "U" * 9
 
     outputs = _sweep(stream, detector, passes=30)
 
@@ -125,9 +142,9 @@ def test_repeated_pass_bys_reach_bleed_and_are_then_rejected_at_entry() -> None:
             episode.duration_s <= detector.config.t_brief_s for episode in episodes
         )
         assert all(episode.still_frac < 0.5 for episode in episodes)
-        assert detector.classifier.gate_class(gate) == CLASS_BLEED
-    assert detector.classifier.classes == "UUUUUUBBB"
-    assert detector.classifier.last_in_room_gate is None
+        assert detector.gates.gate_class(gate) == CLASS_BLEED
+    assert detector.gates.classes == "UUUUUUBBB"
+    assert detector.gates.last_in_room_gate is None
     # The demotions were reported for the caller to log.
     demotions = [
         transition
@@ -156,7 +173,7 @@ def test_a_single_sustained_dwell_classifies_a_rare_zone_in_room() -> None:
     stream = _stream()
     detector = _detector()
     _warm(stream, detector)
-    assert detector.classifier.gate_class(7) == CLASS_UNKNOWN
+    assert detector.gates.gate_class(7) == CLASS_UNKNOWN
 
     # Somebody sits down in the rarely-used corner: still-channel energy on
     # gate 7 with a little spill, for two minutes.
@@ -168,9 +185,9 @@ def test_a_single_sustained_dwell_classifies_a_rare_zone_in_room() -> None:
     assert len(episodes) == 1
     assert episodes[0].duration_s >= detector.config.t_dwell_s
     assert episodes[0].still_frac > 0.5
-    assert detector.classifier.gate_class(7) == CLASS_IN_ROOM
-    assert detector.classifier.last_in_room_gate == 7
-    assert detector.classifier.stats[7].n_sustained == 1.0
+    assert detector.gates.gate_class(7) == CLASS_IN_ROOM
+    assert detector.gates.last_in_room_gate == 7
+    assert detector.gates.stats[7].n_sustained == 1.0
 
     # And from then on brief events there count toward occupancy, which is the
     # half of the rare-zone requirement that bleed classification would break.
@@ -197,8 +214,8 @@ def test_a_move_dominated_dwell_still_promotes_at_the_dwell_time() -> None:
     assert episodes[0].still_frac < 0.1
     assert episodes[0].duration_s >= detector.config.t_dwell_s
     assert episodes[0].active_frac == pytest.approx(1.0, abs=0.05)
-    assert detector.classifier.gate_class(7) == CLASS_IN_ROOM
-    assert detector.classifier.stats[7].n_sustained == 1.0
+    assert detector.gates.gate_class(7) == CLASS_IN_ROOM
+    assert detector.gates.stats[7].n_sustained == 1.0
 
 
 def test_an_entered_detection_episode_closes_when_occupancy_releases() -> None:
@@ -252,7 +269,7 @@ def test_a_stalled_stream_closes_episodes_at_the_last_frame_before_the_gap() -> 
         < detector.config.t_dwell_s + 20.0
     )
     # The classifier sees the bounded episode, and it is enough to promote.
-    assert detector.classifier.gate_class(7) == CLASS_IN_ROOM
+    assert detector.gates.gate_class(7) == CLASS_IN_ROOM
 
 
 def test_a_dip_inside_a_dwell_does_not_split_it() -> None:
@@ -270,7 +287,7 @@ def test_a_dip_inside_a_dwell_does_not_split_it() -> None:
     assert len(episodes) == 1
     assert episodes[0].duration_s >= detector.config.t_dwell_s
     assert episodes[0].active_frac >= detector.config.active_frac_min
-    assert detector.classifier.gate_class(7) == CLASS_IN_ROOM
+    assert detector.gates.gate_class(7) == CLASS_IN_ROOM
 
 
 def test_chained_pass_bys_inside_the_gap_do_not_stack_into_a_dwell() -> None:
@@ -289,8 +306,8 @@ def test_chained_pass_bys_inside_the_gap_do_not_stack_into_a_dwell() -> None:
     assert len(episodes) == 1
     assert episodes[0].duration_s >= detector.config.t_dwell_s
     assert episodes[0].active_frac < detector.config.active_frac_min
-    assert detector.classifier.stats[7].n_sustained == 0.0
-    assert detector.classifier.gate_class(7) == CLASS_UNKNOWN
+    assert detector.gates.stats[7].n_sustained == 0.0
+    assert detector.gates.gate_class(7) == CLASS_UNKNOWN
 
 
 def test_through_wall_sustained_dwell_classifies_in_room() -> None:
@@ -309,7 +326,7 @@ def test_through_wall_sustained_dwell_classifies_in_room() -> None:
     feed(detector, stream.burst(120.0, still={7: 8, 8: 25}))
     feed(detector, stream.burst(20.0))
 
-    assert detector.classifier.gate_class(8) == CLASS_IN_ROOM
+    assert detector.gates.gate_class(8) == CLASS_IN_ROOM
 
 
 def test_max_gate_override_forces_out_and_excludes_from_scoring() -> None:
@@ -317,7 +334,7 @@ def test_max_gate_override_forces_out_and_excludes_from_scoring() -> None:
     stream = _stream()
     detector = _detector(max_gate=5)
     _warm(stream, detector)
-    assert detector.classifier.classes == "UUUUUUOOO"
+    assert detector.gates.classes == "UUUUUUOOO"
 
     # The same sustained dwell that classified in-room above.
     dwell = feed(detector, stream.burst(120.0, still={7: 8, 8: 25}))
@@ -325,15 +342,19 @@ def test_max_gate_override_forces_out_and_excludes_from_scoring() -> None:
 
     assert not any(output.occupied for output in dwell)
     assert all(output.score == 0.0 for output in dwell)
-    assert detector.classifier.gate_class(8) == CLASS_OUT
-    assert detector.classifier.last_in_room_gate is None
+    assert detector.gates.gate_class(8) == CLASS_OUT
+    assert detector.gates.last_in_room_gate is None
     # The evidence was still collected - dropping the cap must re-enable the
     # gate without relearning it from scratch.
-    assert detector.classifier.stats[8].n_sustained == 1.0
+    assert detector.gates.stats[8].n_sustained == 1.0
 
-    detector.reconfigure(make_config(baseline_window_s=3600.0, max_gate=None))
-    detector.classifier.evaluate(stream.ts)
-    assert detector.classifier.gate_class(8) == CLASS_IN_ROOM
+    detector.reconfigure(
+        make_config(
+            stages=CLASSIFIER_STAGES, baseline_window_s=3600.0, max_gate=None
+        )
+    )
+    detector.gates.evaluate(stream.ts)
+    assert detector.gates.gate_class(8) == CLASS_IN_ROOM
 
 
 def test_bleed_demotion_follows_the_statistics_half_life() -> None:
@@ -354,14 +375,14 @@ def test_bleed_demotion_follows_the_statistics_half_life() -> None:
     _warm(stream, detector)
     _sweep(stream, detector, passes=45, duration_s=1.5, quiet_s=5.0)
 
-    stats = detector.classifier.stats[7]
-    at_peak = stats.decayed(stream.ts, half_life_s)[1]
+    stats = detector.gates.stats[7]
+    at_peak = stats.decayed(stream.ts)[1]
     assert at_peak >= detector.config.n_bleed_min
-    assert detector.classifier.gate_class(7) == CLASS_BLEED
+    assert detector.gates.gate_class(7) == CLASS_BLEED
 
     def idle(seconds: float) -> float:
         feed(detector, stream.burst(seconds))
-        return stats.decayed(stream.ts, half_life_s)[1]
+        return stats.decayed(stream.ts)[1]
 
     # Time for the decayed count to fall to the bleed threshold, from the
     # half-life alone. Nothing else may move it: no new episodes, no clock.
@@ -373,7 +394,7 @@ def test_bleed_demotion_follows_the_statistics_half_life() -> None:
         at_peak * 0.5 ** (expiry_s * 0.6 / half_life_s), rel=1e-3
     )
     assert early > detector.config.n_bleed_min
-    assert detector.classifier.gate_class(7) == CLASS_BLEED
+    assert detector.gates.gate_class(7) == CLASS_BLEED
 
     late = idle(expiry_s * 0.6)
     assert late == pytest.approx(
@@ -384,7 +405,7 @@ def test_bleed_demotion_follows_the_statistics_half_life() -> None:
     # Decay alone demotes, so the demotion lands on the periodic
     # re-evaluation rather than on an episode close.
     idle(detector.config.class_eval_interval_s)
-    assert detector.classifier.gate_class(7) == CLASS_UNKNOWN
+    assert detector.gates.gate_class(7) == CLASS_UNKNOWN
 
     # Demotion is a return to permissive: the gate can enter the room again.
     assert any(output.occupied for output in _sweep(stream, detector, passes=1))
@@ -400,14 +421,14 @@ def test_classifier_state_survives_a_serialisation_round_trip() -> None:
     feed(detector, stream.burst(20.0))
 
     state = json.loads(json.dumps(detector.state_to_dict()))
-    restored = Detector.classifier_from_state(state, detector.config)
+    restored = Detector.gates_from_state(state, detector.config)
 
     assert restored is not None
-    assert restored.classes == detector.classifier.classes
-    assert restored.last_in_room_gate == detector.classifier.last_in_room_gate
-    assert restored.boundary_gate == detector.classifier.boundary_gate
+    assert restored.classes == detector.gates.classes
+    assert restored.last_in_room_gate == detector.gates.last_in_room_gate
+    assert restored.boundary_gate == detector.gates.boundary_gate
     for gate in range(9):
-        before = detector.classifier.stats[gate]
+        before = detector.gates.stats[gate]
         after = restored.stats[gate]
         assert after.n_brief == before.n_brief
         assert after.n_sustained == before.n_sustained
@@ -418,7 +439,7 @@ def test_classifier_state_survives_a_serialisation_round_trip() -> None:
     revived = Detector(
         detector.config,
         baseline=detector.baseline,
-        classifier=restored,
+        gates=restored,
         bucket_s=60.0,
         min_buckets=5,
     )
@@ -428,11 +449,11 @@ def test_classifier_state_survives_a_serialisation_round_trip() -> None:
 
 def test_state_without_gate_stats_restores_as_permissive() -> None:
     """Baseline state written before this phase loads with every gate unknown."""
-    detector = make_detector()
+    detector = make_detector(make_config(stages=CLASSIFIER_STAGES))
     legacy = detector.baseline.to_dict()
 
-    assert Detector.classifier_from_state(legacy, detector.config) is None
-    assert GateClassifier(detector.config).classes == "U" * 9
+    assert Detector.gates_from_state(legacy, detector.config) is None
+    assert make_gates(detector.config).classes == "U" * 9
 
 
 def test_detection_scope_episode_carries_the_band_and_centroid() -> None:
@@ -467,11 +488,11 @@ DOOR = dict.fromkeys(DOOR_GATES, 40)
 """A body's worth of move energy on the doorway gates."""
 
 
-def _classifier(**overrides: float | None) -> GateClassifier:
+def _classifier(**overrides: object) -> GateModel:
     """A classifier whose bleed threshold is out of reach unless asked for."""
-    values: dict[str, float | None] = {"n_bleed_min": 100.0}
+    values: dict[str, object] = {"stages": CLASSIFIER_STAGES, "n_bleed_min": 100.0}
     values.update(overrides)
-    return GateClassifier(make_config(**values))
+    return make_gates(make_config(**values))
 
 
 def _episode(gate: int, t0: float, t1: float) -> Episode:
@@ -491,10 +512,9 @@ def _episode(gate: int, t0: float, t1: float) -> Episode:
     )
 
 
-def _outcomes(classifier: GateClassifier, gate: int, ts: float) -> tuple[float, float]:
+def _outcomes(classifier: GateModel, gate: int, ts: float) -> tuple[float, float]:
     """Decayed ``(n_lead, n_dead)`` for ``gate`` as of ``ts``."""
-    half_life_s = classifier._config.stats_half_life_s  # noqa: SLF001
-    return classifier.stats[gate].decayed_outcomes(ts, half_life_s)
+    return classifier.stats[gate].decayed_outcomes(ts)
 
 
 def test_a_brief_episode_stays_unresolved_until_its_lead_window_expires() -> None:
@@ -568,10 +588,10 @@ def test_a_doorway_classifies_portal_and_still_enters_the_room() -> None:
         feed(detector, stream.burst(30.0, still=DWELL))
         feed(detector, stream.burst(20.0))
 
-    assert detector.classifier.gate_class(2) == CLASS_PORTAL
-    assert detector.classifier.stats[2].n_brief >= 5.0
-    assert detector.classifier.stats[2].n_dead == 0.0
-    assert "P" in detector.classifier.classes
+    assert detector.gates.gate_class(2) == CLASS_PORTAL
+    assert detector.gates.stats[2].n_brief >= 5.0
+    assert detector.gates.stats[2].n_dead == 0.0
+    assert "P" in detector.gates.classes
 
     entering = feed(detector, stream.burst(2.0, move=DOOR))
     assert any(output.occupied for output in entering)
@@ -587,11 +607,11 @@ def test_pass_by_sweeps_with_no_follow_up_stay_bleed() -> None:
     _sweep(stream, detector, passes=12)
     feed(detector, stream.burst(30.0))
 
-    stats = detector.classifier.stats[7]
+    stats = detector.gates.stats[7]
     assert stats.n_lead == 0.0
     assert stats.n_dead >= 5.0
-    assert detector.classifier.gate_class(7) == CLASS_BLEED
-    assert "P" not in detector.classifier.classes
+    assert detector.gates.gate_class(7) == CLASS_BLEED
+    assert "P" not in detector.gates.classes
 
 
 def test_outcome_counts_survive_a_round_trip_and_older_payloads_load() -> None:
@@ -606,7 +626,7 @@ def test_outcome_counts_survive_a_round_trip_and_older_payloads_load() -> None:
     assert classifier.gate_class(2) == CLASS_PORTAL
 
     state = json.loads(json.dumps(classifier.to_dict()))
-    restored = GateClassifier.from_dict(state, classifier._config)  # noqa: SLF001
+    restored = GateModel.from_dict(state, classifier._config)  # noqa: SLF001
     assert restored.classes == classifier.classes
     for gate in range(9):
         assert restored.stats[gate].n_lead == classifier.stats[gate].n_lead
@@ -617,7 +637,7 @@ def test_outcome_counts_survive_a_round_trip_and_older_payloads_load() -> None:
     for gate_state in older["gates"]:
         del gate_state["n_lead"]
         del gate_state["n_dead"]
-    legacy = GateClassifier.from_dict(older, classifier._config)  # noqa: SLF001
+    legacy = GateModel.from_dict(older, classifier._config)  # noqa: SLF001
     assert legacy.stats[2].n_lead == 0.0
     assert legacy.stats[2].n_dead == 0.0
     assert legacy.stats[2].n_brief == classifier.stats[2].n_brief

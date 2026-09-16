@@ -44,22 +44,26 @@ never do. Ownership is what separates "evidence from the occupant" from
 "evidence from a neighbor" after entry, when their per-frame signatures
 are indistinguishable.
 
-- Ownership begins at a qualifying entry and ends at release. It begins
-  DISARMED: while disarmed, retention (§2) refreshes hold, so a still
-  occupant can never be released — there is no way out of the room that
-  does not produce motion.
-- Departure arming: once near-band activity has been absent for
+- Ownership begins at a qualifying entry and ends at release. While
+  owned, retention (§2) refreshes hold, so a still occupant can never be
+  released — there is no way out of the room that does not produce
+  motion.
+- Departure crossing: once near-band activity has been absent for
   `quiet_s` (default 10, the entry walk-in has settled), a fresh burst of
-  at least `cross_n` (default 20) near-band frames within 20 s arms
-  release — the occupant has demonstrably re-crossed the room's entry
-  gates. While armed, only attributed evidence (score above exit AND a
-  near-band lead within `grace_s`, default 60) refreshes the release
-  countdown; evidence leading beyond the entry band never does. A
-  neighbor cannot light the near band, so it can neither arm nor block.
-- Retention decay (§2) remains the release path when no re-crossing ever
+  at least `cross_n` (default 20) near-band frames within 20 s marks a
+  crossing of the room's entry gates — someone left, but not necessarily
+  everyone. The crossing does not release: it clamps the retention
+  statistic to zero until near-band activity has been absent `clamp_s`
+  (default 60 s), forcing presence to re-prove itself. A room that still
+  holds someone re-lifts retention within the clamp window and stays
+  held; an emptied room cannot, and releases through the ordinary hold
+  path. Evidence leading beyond the entry band never refreshes the
+  release countdown during the clamp (a neighbor cannot fake the near
+  band in either direction).
+- Retention decay (§2) remains the release path when no crossing ever
   occurs.
-- Without ownership (entry admitted by fallback in a no-separation room),
-  retention and arming play no part; hold behaves per 20 §4.
+- Without ownership (entry admitted by fallback), retention and crossing
+  handling play no part; hold behaves per 20 §4.
 
 ## 2. Still-presence retention
 
@@ -105,7 +109,7 @@ Hardware facts the statistics honor:
 
 `lead_gate_max` (−1 disables the leading-edge rule), `retention_on`,
 `retention_off` (0 disables retention release-gating), `tau_fast`,
-`tau_slow`, `tau_peak`, `quiet_s`, `cross_n`, `grace_s`; all
+`tau_slow`, `tau_peak`, `quiet_s`, `cross_n`, `clamp_s`, `grace_s`; all
 diagnostic-tier, one global default each, tuned only by validation
 evidence.
 
@@ -131,10 +135,10 @@ evidence.
 7. Ownership interplay: the seated still-occupant recording releases only
    at the occupant's true exit (retention decay), never mid-visit; the
    neighbor's evidence never refreshes an owned room's release countdown.
-8. Separation learning: per sensor, the confirmed-vs-fizzled leading-gate
-   histograms and the resulting enable/disable decision are reported; a
-   sensor without proven separation runs fallback behavior and shows no
-   regression against pre-24 replay.
+8. Bleed pressure: the per-sensor orphan-episode ratio (score-hot episodes
+   with no near-band frame within ±120 s, ≥60 s long, per near-band-episode
+   second) is computed and exposed as a diagnostic; it separates
+   through-wall-pressured rooms from quiet ones without labels.
 
 Measured against the recorded corpus and label events in
 `validation/24-v1-entry-edge-retention.md`.

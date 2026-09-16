@@ -1,0 +1,18 @@
+{
+  "D0:6E:81:D2:5D:A6": [
+    {
+      "ts": 1789116900.0182955,
+      "kind": "occupied",
+      "confidence": 0.5,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789117230.156302,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    }
+  ]
+}

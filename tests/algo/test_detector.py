@@ -6,7 +6,12 @@ from itertools import pairwise
 
 import pytest
 
-from custom_components.smart_ld2410.algo.types import DetectorOutput, Frame
+from custom_components.smart_ld2410.algo.types import (
+    CHANNEL_STILL,
+    DEFAULT_STAGES,
+    DetectorOutput,
+    Frame,
+)
 
 from . import (
     FrameStream,
@@ -17,6 +22,9 @@ from . import (
     warmup_frames,
 )
 
+
+HOLD_STAGES = (*DEFAULT_STAGES, "score_hold")
+"""The default detector plus the score-driven hold the hysteresis rules need."""
 
 def _transitions(outputs: list[DetectorOutput]) -> int:
     """Count occupancy edges in a run of outputs."""
@@ -111,12 +119,12 @@ def test_still_presence_is_retained_and_never_learned() -> None:
     empty room.
     """
     stream = FrameStream()
-    config = make_config(baseline_window_s=12 * 3600.0)
+    config = make_config(baseline_window_s=12 * 3600.0, stages=HOLD_STAGES)
     detector = make_detector(config, bucket_s=60.0)
     step = 10.0
     feed(detector, stream.burst(6 * 3600.0, interval_s=step))
     assert detector.baseline.ready
-    idle_floor = detector.baseline.still[4].floor
+    idle_floor = detector.baseline.floor(4, CHANNEL_STILL)
 
     entry = feed(detector, stream.burst(3 * step, move={3: 40, 4: 40, 5: 40},
                                         interval_s=step))
@@ -139,7 +147,7 @@ def test_still_presence_is_retained_and_never_learned() -> None:
     scored = sum(1 for output in outputs if output.score >= detector.config.exit_score)
     assert scored / len(outputs) > 0.99
     # Two hours of it went into the window - and left the floor where it was.
-    assert detector.baseline.still[4].floor == pytest.approx(idle_floor, abs=0.5)
+    assert detector.baseline.floor(4, CHANNEL_STILL) == pytest.approx(idle_floor, abs=0.5)
 
     # The person leaves: hold expires, then the reported freeze window.
     after = feed(detector, stream.burst(400.0, interval_s=step))
@@ -157,7 +165,7 @@ def test_still_presence_is_retained_and_never_learned() -> None:
 
     # The still signature never reached the floor, so a repeat is detectable.
     feed(detector, stream.burst(600.0, interval_s=step))
-    assert detector.baseline.still[4].floor == pytest.approx(stream.floor, abs=1.0)
+    assert detector.baseline.floor(4, CHANNEL_STILL) == pytest.approx(stream.floor, abs=1.0)
     repeat = feed(detector, stream.burst(3 * step, move={3: 40, 4: 40, 5: 40},
                                          interval_s=step))
     assert repeat[entry_index(detector.config)].occupied
@@ -187,8 +195,8 @@ def test_real_hardware_idle_noise_never_enters() -> None:
     assert _transitions(outputs) == 0
     assert max(output.score for output in outputs) < detector.config.enter_score
     # The gates really are the noisy ones, and their residuals stay ordinary.
-    assert detector.baseline.move[0].floor > 10.0
-    assert detector.baseline.move[0].spread > 2 * detector.config.min_mad
+    assert detector.baseline.floor(0) > 10.0
+    assert detector.baseline.spread(0) > 2 * detector.config.min_mad
 
 
 def test_sustained_multi_gate_energy_enters_confidently() -> None:
@@ -217,9 +225,7 @@ def test_warmup_contaminated_by_a_person_still_learns_the_noise() -> None:
     property that lets the baseline be learned in an occupied room.
     """
     stream = FrameStream()
-    detector = make_detector(
-        make_config(baseline_window_s=600.0, arrival_frac=0.0), bucket_s=10.0
-    )
+    detector = make_detector(make_config(baseline_window_s=600.0), bucket_s=10.0)
 
     person = {3: 45, 4: 45}
     for _ in range(10):
@@ -230,7 +236,7 @@ def test_warmup_contaminated_by_a_person_still_learns_the_noise() -> None:
     # The person's gates were busy for 60% of warm-up, yet their floors were
     # learned from the quiet 40%.
     for gate in (3, 4):
-        assert detector.baseline.move[gate].floor == pytest.approx(
+        assert detector.baseline.floor(gate) == pytest.approx(
             stream.floor, abs=1.0
         )
 
@@ -271,7 +277,7 @@ def test_new_noise_source_is_absorbed_without_a_death_spiral() -> None:
     assert not settled[-1].occupied
     tail = settled[-1200:]
     assert not any(output.occupied for output in tail)
-    assert detector.baseline.move[0].floor > stream.floor + 8
+    assert detector.baseline.floor(0) > stream.floor + 8
 
     # It has not gone blind: a real body elsewhere in the array still enters.
     person = {**noisy, 4: 50, 5: 50, 6: 50}
@@ -281,7 +287,7 @@ def test_new_noise_source_is_absorbed_without_a_death_spiral() -> None:
 def test_hysteresis_holds_through_short_dips() -> None:
     """Spec item 6: only a dip longer than hold_s releases occupancy."""
     stream = FrameStream()
-    config = make_config()
+    config = make_config(stages=HOLD_STAGES)
     detector = make_detector(config)
     feed(detector, warmup_frames(stream))
 
@@ -310,7 +316,7 @@ def test_hysteresis_holds_through_short_dips() -> None:
 def test_gap_in_frames_is_tolerated() -> None:
     """Spec item 7: a ten-minute BLE dropout elapses timers, nothing else."""
     stream = FrameStream()
-    detector = make_detector()
+    detector = make_detector(make_config(stages=HOLD_STAGES))
     feed(detector, warmup_frames(stream))
 
     present = {3: 40, 4: 40, 5: 40}
@@ -468,7 +474,7 @@ def test_reconfigure_resizes_the_live_baseline_window() -> None:
     for frame in stream.burst(5.0):
         detector.baseline.add_frame(frame)
     assert detector.baseline.ready
-    mixed_floor = detector.baseline.move[0].floor
+    mixed_floor = detector.baseline.floor(0)
 
     smaller = make_config(baseline_window_s=5.0)
     detector.reconfigure(smaller)
@@ -476,8 +482,8 @@ def test_reconfigure_resizes_the_live_baseline_window() -> None:
     assert detector.config is smaller
     assert detector.baseline.ready
     assert detector.baseline.bucket_count == 5
-    assert detector.baseline.move[0].floor == pytest.approx(stream.floor, abs=1.0)
-    assert detector.baseline.move[0].floor != pytest.approx(mixed_floor, abs=1.0)
+    assert detector.baseline.floor(0) == pytest.approx(stream.floor, abs=1.0)
+    assert detector.baseline.floor(0) != pytest.approx(mixed_floor, abs=1.0)
 
     larger = make_config(baseline_window_s=60.0)
     detector.reconfigure(larger)

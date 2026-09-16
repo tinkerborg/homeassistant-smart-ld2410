@@ -1,42 +1,27 @@
-"""Occupancy detection on baseline residuals.
+"""Occupancy decision over a pipeline of stages.
 
 The detector replaces the LD2410's own occupancy decision. Every frame is
 turned into per-channel z-scores against the learned noise baseline, hot gates
-are grouped into spatially contiguous runs, and a hysteresis state machine
-converts the strongest run's score into an occupancy bit.
+are grouped into spatially contiguous runs (:mod:`.coherence`), and a
+hysteresis state machine converts the strongest run's score into an occupancy
+bit: entry at ``enter_score``, release only after the score has stayed under
+the lower ``exit_score`` for ``hold_s`` continuously, which stops noise grazing
+a threshold from flapping the output.
 
-Two failure modes drive the design:
+What sits around that state machine is composed rather than hard-coded. The
+stages named by ``DetectorConfig.stages`` are built into a :class:`.Pipeline`
+and answer two questions: entry filters say whether a candidate may become an
+occupancy, and hold refreshers say whether this frame's evidence keeps one
+alive. The state they share - baseline residuals, per-gate statistics, the
+candidate's accumulated evidence, the classifier, and the retention/ownership
+tracker - lives in :class:`~.context.DetectorContext`.
 
-* A single hot gate with quiet neighbours is physical nonsense for a person, so
-  it is suppressed. That kills the "stuck gate 0" case that pins occupancy on
-  for hours.
-* Occupancy is entered at ``enter_score`` but only released after the score has
-  stayed under the lower ``exit_score`` for ``hold_s`` continuously, which stops
-  noise grazing a threshold from flapping the output.
-
-Layered on top of that, the detector segments each gate's smoothed residual
+Alongside the decision, the detector segments each gate's smoothed residual
 into episodes and feeds them to the dwell-character classifier (see
 :mod:`.episodes` and :mod:`.classifier`). Gates the classifier has learned are
-bleed - only ever brief sweeps, never a dwell - stop counting toward *entry*,
-which is what rejects a hallway pass-by seen through a wall before hysteresis
-ever has to. They keep counting toward holding: once someone is in the room,
-every gate helps keep them there. The same exclusion carries the spec 21
-energy-ceiling boundary once it is both confirmed and enabled.
-
-Entry is gated once more by the candidate's own raw energy: attenuated
-through-wall activity is weak in the move *and* still channels at once, while
-genuine presence keeps one of them strong however motionless it gets.
-
-A further entry test asks for arrival-scale motion: someone walking into the
-room drives the moving channel near whatever ceiling that sensor has learned,
-and a wall attenuates activity too far to reach it. Both energy tests are
-entry-only for the same reason the exclusion is.
-
-The last test asks where the activity *began*: a person entering walks through
-the near gates, and activity originating beyond an intervening wall physically
-cannot light them. Clearing it is also what earns the occupancy its ownership -
-the claim that this room's own occupant is the one being seen - which is what
-:class:`~.retention.OwnershipRetention` then holds and releases the room on.
+bleed stop counting toward *entry*, which is what rejects a hallway pass-by
+seen through a wall before hysteresis ever has to; they keep counting toward
+holding, because once someone is in the room every gate helps keep them there.
 
 All timing is derived from frame timestamps (``ts_mono`` for intervals,
 ``ts_utc`` for baseline bucketing, episode boundaries and statistics decay);
@@ -48,16 +33,16 @@ from __future__ import annotations
 from math import exp
 from typing import Any
 
-from .baseline import (
+from .baseline import Baseline
+from .context import ZERO_RESIDUALS, DetectorContext
+from .episodes import EpisodeTracker
+from .gates import GateModel
+from .pipeline import build_pipeline
+from .presence import Presence
+from .roles import StageEnv
+from .types import (
     DEFAULT_BUCKET_S,
     DEFAULT_MIN_BUCKETS,
-    BaselineModel,
-)
-from .classifier import GateClassifier
-from .episodes import EpisodeTracker
-from .retention import OwnershipRetention
-from .types import (
-    GATE_COUNT,
     DetectorConfig,
     DetectorOutput,
     Frame,
@@ -67,8 +52,6 @@ from .types import (
 _CONFIDENCE_SLOPE = 4.0
 """Logistic slope factor; see :meth:`Detector._confidence`."""
 
-_ZERO_RESIDUALS: tuple[float, ...] = (0.0,) * GATE_COUNT
-
 GATE_STATS_KEY = "gate_stats"
 """Key the classifier state occupies inside the persisted detector state."""
 
@@ -76,74 +59,59 @@ RETENTION_KEY = "retention"
 """Key the retention/ownership state occupies inside the persisted state."""
 
 
-def _never_excluded(gate: int) -> bool:
-    """Exclusion predicate for the unmasked (holding) scoring pass."""
-    del gate
-    return False
-
-
 class Detector:
-    """Frame-driven occupancy state machine over a :class:`BaselineModel`."""
+    """Frame-driven occupancy state machine over a configured stage pipeline."""
 
     __slots__ = (
-        "_arrival_frames",
-        "_baseline",
-        "_classifier",
-        "_combo_peak",
         "_config",
+        "_context",
         "_episodes",
-        "_frame_leading_gate",
         "_freeze_until_mono",
         "_hold_until_mono",
-        "_last_mono",
-        "_leading_gate",
         "_occupied",
-        "_ownership",
-        "_support",
+        "_pipeline",
     )
 
     def __init__(
         self,
         config: DetectorConfig | None = None,
         *,
-        baseline: BaselineModel | None = None,
-        classifier: GateClassifier | None = None,
-        retention: OwnershipRetention | None = None,
+        baseline: Baseline | None = None,
+        gates: GateModel | None = None,
+        presence: Presence | None = None,
         bucket_s: float = DEFAULT_BUCKET_S,
         min_buckets: int = DEFAULT_MIN_BUCKETS,
     ) -> None:
         """Create a detector, optionally over restored learned state."""
         self._config = config or DetectorConfig()
-        self._baseline = baseline or BaselineModel.from_config(
-            self._config, bucket_s=bucket_s, min_buckets=min_buckets
-        )
-        self._classifier = classifier or GateClassifier(self._config)
         self._episodes = EpisodeTracker(self._config)
-        self._ownership = retention or OwnershipRetention(self._config)
+        self._pipeline = build_pipeline(
+            StageEnv(self._config, bucket_s=bucket_s, min_buckets=min_buckets),
+            baseline=baseline,
+            gates=gates,
+            presence=presence,
+        )
+        self._context = DetectorContext(
+            self._config, pipeline=self._pipeline, episodes=self._episodes
+        )
         self._occupied = False
         self._hold_until_mono: float | None = None
         self._freeze_until_mono: float | None = None
-        self._support = [0.0] * GATE_COUNT
-        self._last_mono: float | None = None
-        self._combo_peak = 0.0
-        self._arrival_frames = 0
-        self._leading_gate: int | None = None
-        self._frame_leading_gate: int | None = None
 
     @property
-    def baseline(self) -> BaselineModel:
+    def baseline(self) -> Baseline:
         """The baseline model this detector owns."""
-        return self._baseline
+        return self._pipeline.baseline
 
     @property
-    def classifier(self) -> GateClassifier:
-        """The dwell-character gate classifier this detector owns."""
-        return self._classifier
+    def gates(self) -> GateModel:
+        """What this detector has learned about each gate."""
+        return self._pipeline.gates
 
     @property
-    def retention(self) -> OwnershipRetention:
-        """The still-presence retention and ownership state this detector owns."""
-        return self._ownership
+    def presence(self) -> Presence:
+        """The retention, ownership and arming state this detector owns."""
+        return self._pipeline.presence
 
     @property
     def config(self) -> DetectorConfig:
@@ -159,104 +127,53 @@ class Detector:
         """Swap tuning knobs in place, keeping the baseline and hysteresis state.
 
         Lets HA options updates apply without a restart or a baseline reset.
-        A changed ``baseline_window_s`` resizes the live :class:`BaselineModel`
+        A changed ``baseline_window_s`` resizes the live :class:`~.baseline.Baseline`
         so what later gets persisted always carries the new window. Note
         ``min_mad`` - the lower bound on the residual divisor - is read from
         the model built at construction time, so changing it takes effect on
         the next restart rather than immediately.
         """
         if config.baseline_window_s != self._config.baseline_window_s:
-            self._baseline.resize_window(config.baseline_window_s)
+            self.baseline.resize_window(config.baseline_window_s)
         self._config = config
-        self._classifier.reconfigure(config)
+        self._context.reconfigure(config)
         self._episodes.reconfigure(config)
-        self._ownership.reconfigure(config)
+        self._pipeline.reconfigure(config)
 
     def process(self, frame: Frame) -> DetectorOutput:
         """Consume one frame and return the resulting decision."""
-        self._rebase_on_backwards_mono(frame.ts_mono)
-        alpha = self._support_alpha(frame.ts_mono)
-        self._ownership.update(frame.ts_mono, frame.still_gates)
+        context = self._context
+        if context.timebase_restarted(frame.ts_mono):
+            context.rebase()
+            self._rebase_deadlines(frame.ts_mono)
+        context.begin_frame(frame)
 
-        if not self._baseline.ready:
-            # Cold start: a fresh install must not sit blind for hours, so the
-            # device's own bit is passed through at neutral confidence while
-            # the baseline fills.
-            self._occupied = frame.device_occupancy
-            self._hold_until_mono = None
-            self._freeze_until_mono = None
-            self._decay_support(alpha)
-            self._baseline.add_frame(frame)
-            return DetectorOutput(
-                occupied=frame.device_occupancy,
-                confidence=0.5,
-                score=0.0,
-                active_gates=(),
-                residuals_move=_ZERO_RESIDUALS,
-                residuals_still=_ZERO_RESIDUALS,
-                adaptation_frozen=False,
-                baseline_age_s=self._baseline.age_s,
-                baseline_ready=False,
-                gate_classes=self._classifier.classes,
-                boundary_gate=self._classifier.boundary_gate,
-                last_in_room_gate=self._classifier.last_in_room_gate,
-            )
+        if not self.baseline.ready:
+            return self._passthrough(frame)
 
-        residuals_move, residuals_still = self._baseline.residuals(frame)
-        # Negative residuals mean "quieter than the noise floor"; they carry no
-        # evidence of presence, so they clamp to zero for scoring while the
-        # signed values stay in the output for diagnostics.
-        peaks = tuple(
-            max(0.0, residuals_move[gate], residuals_still[gate])
-            for gate in range(GATE_COUNT)
-        )
-        for gate in range(GATE_COUNT):
-            self._support[gate] += alpha * (peaks[gate] - self._support[gate])
-        # Entry is scored over in-room gates only; holding is scored over all
-        # of them (spec 20 §4). Masking on ``not occupied`` is exactly that
-        # rule: a bleed gate can never help enter the room, and can always
-        # help keep it occupied.
-        score, active_gates = self._score(peaks, masked=not self._occupied)
-        self._track_candidate(frame, active_gates, residuals_move)
-        self._ownership.observe_lead(frame.ts_mono, self._frame_leading_gate)
-        below_floor = self._below_energy_floor(active_gates)
-        arrival_suppressed = not below_floor and self._below_arrival_threshold(
-            active_gates
-        )
-        lead_suppressed = (
-            not below_floor
-            and not arrival_suppressed
-            and self._beyond_leading_edge(active_gates)
-        )
-        entry_suppressed = below_floor or arrival_suppressed or lead_suppressed
-        self._advance(
-            score,
-            frame.ts_mono,
-            active_gates,
-            entry_suppressed=entry_suppressed,
-        )
+        context.measure(occupied=self._occupied)
+        verdict = self._pipeline.entry_verdict(context)
+        self._advance(frame.ts_mono, admitted=verdict.admitted)
 
         episodes = self._episodes.process(
             ts=frame.ts_utc,
-            peaks=peaks,
-            support=self._support,
-            residuals_move=residuals_move,
-            residuals_still=residuals_still,
+            peaks=context.peaks,
+            support=context.support,
+            residuals_move=context.residuals_move,
+            residuals_still=context.residuals_still,
             move_raw=frame.move_gates,
-            active_gates=active_gates,
+            active_gates=context.active_gates,
             occupied=self._occupied,
-            entry_suppressed=entry_suppressed,
-            arrival_suppressed=arrival_suppressed,
-            lead_suppressed=lead_suppressed,
-            leading_gate=self._leading_gate,
+            rejection=verdict.reason,
+            leading_gate=context.leading_gate,
         )
         transitions: list[GateTransition] = []
         for episode in episodes:
-            transitions.extend(self._classifier.observe(episode))
+            transitions.extend(self.gates.observe(episode))
         # The tracker is asked for its open gates *after* this frame's closes
         # have been applied, so a boundary retreat blocked by an episode is
         # unblocked on the same frame that episode ends.
-        ticked, boundary_transitions = self._classifier.tick(
+        ticked, boundary_transitions = self.gates.tick(
             frame.ts_utc,
             open_gates=self._episodes.open_gates,
             open_starts=self._episodes.open_starts,
@@ -266,26 +183,26 @@ class Detector:
         # The baseline learns unconditionally. ``frozen`` is still computed and
         # reported - it is what the adaptation_frozen entity shows, and the
         # hold/freeze state machine it comes from is unchanged - but it no
-        # longer gates learning; see the BaselineModel module docstring.
+        # longer gates learning; see the baseline package docstring.
         frozen = self._is_frozen(frame.ts_mono)
-        self._baseline.add_frame(frame)
+        self.baseline.add_frame(frame)
 
         return DetectorOutput(
             occupied=self._occupied,
-            confidence=self._confidence(score),
-            score=score,
-            active_gates=active_gates,
-            residuals_move=residuals_move,
-            residuals_still=residuals_still,
+            confidence=self._confidence(context.score),
+            score=context.score,
+            active_gates=context.active_gates,
+            residuals_move=context.residuals_move,
+            residuals_still=context.residuals_still,
             adaptation_frozen=frozen,
-            baseline_age_s=self._baseline.age_s,
+            baseline_age_s=self.baseline.age_s,
             baseline_ready=True,
-            gate_classes=self._classifier.classes,
-            boundary_gate=self._classifier.boundary_gate,
-            last_in_room_gate=self._classifier.last_in_room_gate,
-            leading_gate=self._leading_gate,
-            ownership=self._ownership.state,
-            retention_max=self._ownership.level,
+            gate_classes=self.gates.classes,
+            boundary_gate=self.gates.boundary_gate,
+            last_in_room_gate=self.gates.last_in_room_gate,
+            leading_gate=context.leading_gate,
+            ownership=self.presence.state,
+            retention_max=self.presence.level,
             episodes=episodes,
             gate_transitions=tuple(transitions),
             boundary_transitions=boundary_transitions,
@@ -294,7 +211,7 @@ class Detector:
     def state_to_dict(self) -> dict[str, Any]:
         """Return everything this detector has learned, JSON-safe.
 
-        Deliberately a superset of :meth:`BaselineModel.to_dict` rather than a
+        Deliberately a superset of :meth:`Baseline.to_dict` rather than a
         new envelope around it: the classifier state rides along under
         :data:`GATE_STATS_KEY`, so a payload written by this version still
         loads in an older one (which ignores the extra key), and a payload
@@ -304,32 +221,32 @@ class Detector:
         method.
         """
         return {
-            **self._baseline.to_dict(),
-            GATE_STATS_KEY: self._classifier.to_dict(),
-            RETENTION_KEY: self._ownership.to_dict(),
+            **self.baseline.to_dict(),
+            GATE_STATS_KEY: self.gates.to_dict(),
+            RETENTION_KEY: self.presence.to_dict(),
         }
 
     @staticmethod
-    def retention_from_state(
+    def presence_from_state(
         data: dict[str, Any] | None, config: DetectorConfig
-    ) -> OwnershipRetention | None:
-        """Rebuild the retention/ownership tracker out of :meth:`state_to_dict`.
+    ) -> Presence | None:
+        """Rebuild the presence stages out of :meth:`state_to_dict` output.
 
         Returns ``None`` when the payload predates this phase, which starts the
         statistic from the live stream again.
         """
         if not data:
             return None
-        retention = data.get(RETENTION_KEY)
-        if not retention:
+        presence = data.get(RETENTION_KEY)
+        if not presence:
             return None
-        return OwnershipRetention.from_dict(retention, config)
+        return Presence.from_dict(presence, config)
 
     @staticmethod
-    def classifier_from_state(
+    def gates_from_state(
         data: dict[str, Any] | None, config: DetectorConfig
-    ) -> GateClassifier | None:
-        """Rebuild the classifier out of :meth:`state_to_dict` output.
+    ) -> GateModel | None:
+        """Rebuild the gate model out of :meth:`state_to_dict` output.
 
         Returns ``None`` when the payload carries no classification, which is
         the case for state written before this phase existed.
@@ -339,253 +256,75 @@ class Detector:
         gate_stats = data.get(GATE_STATS_KEY)
         if not gate_stats:
             return None
-        return GateClassifier.from_dict(gate_stats, config)
+        return GateModel.from_dict(gate_stats, config)
 
-    def _score(
-        self, peaks: tuple[float, ...], *, masked: bool
-    ) -> tuple[float, tuple[int, ...]]:
-        """Score the strongest spatially coherent run of hot gates.
+    def _passthrough(self, frame: Frame) -> DetectorOutput:
+        """Publish the device's own bit while the baseline fills.
 
-        With ``masked`` set, gates the classifier has learned are bleed (or
-        that the manual ``max_gate`` override has capped out) are invisible:
-        they neither carry score themselves nor lend a lone neighbour the
-        partial elevation that would rescue it.
+        A fresh install must not sit blind for hours, so the device's decision
+        stands at neutral confidence until residuals mean something.
         """
-        k = self._config.k
-        partial = k / 2.0
-        excluded = self._classifier.excluded if masked else _never_excluded
-        best_score = 0.0
-        best_run: tuple[int, ...] = ()
-
-        run: list[int] = []
-        for gate in range(GATE_COUNT + 1):
-            hot = gate < GATE_COUNT and peaks[gate] >= k and not excluded(gate)
-            if hot:
-                run.append(gate)
-                continue
-            if not run:
-                continue
-            if len(run) == 1:
-                # An isolated hot gate is only credible if a neighbour shows at
-                # least partial elevation — a still person concentrates energy
-                # in one gate but always spills a little into the next.
-                #
-                # The neighbour test runs on time-smoothed elevation, not the
-                # raw frame: a person's spill is sustained, whereas a single
-                # noisy sample crossing k/2 would otherwise be enough to rescue
-                # a permanently stuck gate ten times a minute.
-                only = run[0]
-                left = (
-                    self._support[only - 1]
-                    if only > 0 and not excluded(only - 1)
-                    else 0.0
-                )
-                right = (
-                    self._support[only + 1]
-                    if only + 1 < GATE_COUNT and not excluded(only + 1)
-                    else 0.0
-                )
-                if left < partial and right < partial:
-                    run = []
-                    continue
-            run_score = sum(peaks[index] for index in run) / k
-            if run_score > best_score:
-                best_score = run_score
-                best_run = tuple(run)
-            run = []
-
-        return best_score, best_run
-
-    def _track_candidate(
-        self,
-        frame: Frame,
-        active_gates: tuple[int, ...],
-        residuals_move: tuple[float, ...],
-    ) -> None:
-        """Fold this frame into the entry evidence of the activity in progress.
-
-        Energy is read over the entry-scored gates only, so an excluded gate
-        can never lift a candidate past a threshold, and it accumulates over
-        the whole candidate rather than one frame: a person's strongest return
-        is a single moment of a dwell.
-
-        The leading edge outlives the candidate window on purpose - it stays
-        readable for the whole visit it opened, and only a fully quiet band
-        clears it.
-        """
-        activity = bool(active_gates or self._episodes.open_gates)
-        if self._occupied or not activity:
-            self._combo_peak = 0.0
-            self._arrival_frames = 0
-        if not activity:
-            self._leading_gate = None
-
-        arrival = self._config.arrival_frac * self._baseline.move_ceiling
-        reached_arrival = False
-        for gate in active_gates:
-            combo = float(frame.move_gates[gate] + frame.still_gates[gate])
-            self._combo_peak = max(self._combo_peak, combo)
-            reached_arrival |= frame.move_gates[gate] >= arrival
-        self._arrival_frames += int(reached_arrival)
-
-        leading = self._suppressed_leading_gate(residuals_move)
-        self._frame_leading_gate = leading
-        if leading is not None and (
-            self._leading_gate is None or leading < self._leading_gate
-        ):
-            self._leading_gate = leading
-
-    def _suppressed_leading_gate(
-        self, residuals_move: tuple[float, ...]
-    ) -> int | None:
-        """Nearest moving-channel gate that survives isolated-gate suppression.
-
-        The same neighbour-support rule :meth:`_score` applies, so a lone spike
-        at a near gate cannot claim the leading edge, and read unmasked: a gate
-        the classifier has learned is bleed still says where the activity
-        began.
-        """
-        k = self._config.k
-        partial = k / 2.0
-        run: list[int] = []
-        for gate in range(GATE_COUNT + 1):
-            if gate < GATE_COUNT and residuals_move[gate] >= k:
-                run.append(gate)
-                continue
-            if not run:
-                continue
-            if len(run) > 1:
-                return run[0]
-            only = run[0]
-            left = self._support[only - 1] if only > 0 else 0.0
-            right = self._support[only + 1] if only + 1 < GATE_COUNT else 0.0
-            if left >= partial or right >= partial:
-                return only
-            run = []
-        return None
-
-    def _below_energy_floor(self, active_gates: tuple[int, ...]) -> bool:
-        """Whether the candidate is still too faint in both channels to enter."""
-        floor = self._config.energy_floor
-        return (
-            bool(active_gates)
-            and not self._occupied
-            and floor > 0.0
-            and self._combo_peak < floor
+        self._occupied = frame.device_occupancy
+        self._hold_until_mono = None
+        self._freeze_until_mono = None
+        self._context.decay_support()
+        self.baseline.add_frame(frame)
+        return DetectorOutput(
+            occupied=frame.device_occupancy,
+            confidence=0.5,
+            score=0.0,
+            active_gates=(),
+            residuals_move=ZERO_RESIDUALS,
+            residuals_still=ZERO_RESIDUALS,
+            adaptation_frozen=False,
+            baseline_age_s=self.baseline.age_s,
+            baseline_ready=False,
+            gate_classes=self.gates.classes,
+            boundary_gate=self.gates.boundary_gate,
+            last_in_room_gate=self.gates.last_in_room_gate,
         )
 
-    def _below_arrival_threshold(self, active_gates: tuple[int, ...]) -> bool:
-        """Whether the candidate has yet to show arrival-scale motion.
+    def _rebase_deadlines(self, ts_mono: float) -> None:
+        """Restart the hold and freeze countdowns in a fresh timebase.
 
-        An unlearned ceiling leaves the rule inactive: it may only ever
-        tighten a sensor that has seen what strong motion looks like, never
-        block a fresh install.
+        ``ts_mono`` is a per-process monotonic clock, not wall time. A recorded
+        dataset that spans an HA restart replays a ``ts_mono`` that drops back
+        near zero partway through. Left alone, any active deadline - an
+        absolute value in the old timebase - becomes unreachable, wedging the
+        detector in its current occupancy state and freezing baseline
+        adaptation forever. Restarting both countdowns from the new timebase is
+        the conservative, bounded fix: it never extends a deadline beyond one
+        full hold/freeze period from the jump.
         """
-        return (
-            bool(active_gates)
-            and not self._occupied
-            and self._config.arrival_frac > 0.0
-            and self._baseline.move_ceiling_learned
-            and self._arrival_frames < self._config.arrival_min_frames
-        )
-
-    def _beyond_leading_edge(self, active_gates: tuple[int, ...]) -> bool:
-        """Whether the candidate began too far out to be an entry to this room."""
-        lead_gate_max = self._config.lead_gate_max
-        leading_gate = self._leading_gate
-        return (
-            bool(active_gates)
-            and not self._occupied
-            and lead_gate_max >= 0
-            and (leading_gate is None or leading_gate > lead_gate_max)
-        )
-
-    def _rebase_on_backwards_mono(self, ts_mono: float) -> None:
-        """Rebase hold/freeze deadlines if ``ts_mono`` jumped backwards.
-
-        ``ts_mono`` is a per-process monotonic clock, not wall time. A
-        recorded dataset that spans an HA restart replays a ``ts_mono`` that
-        drops back near zero partway through. Left alone, any active hold or
-        freeze deadline - an absolute value in the old timebase - becomes
-        unreachable, wedging the detector in its current occupancy state and
-        freezing baseline adaptation forever. Restarting both countdowns from
-        the new timebase is the conservative, bounded fix: it never extends a
-        deadline beyond one full hold/freeze period from the jump.
-
-        ``_last_mono`` itself needs no explicit reset here: ``_support_alpha``
-        unconditionally overwrites it with this frame's ``ts_mono`` right
-        after this runs, and a negative elapsed time there already yields a
-        zero smoothing weight instead of corrupting the support estimate.
-        """
-        previous = self._last_mono
-        if previous is None or ts_mono >= previous:
-            return
-        self._ownership.rebase()
         if self._hold_until_mono is not None:
             self._hold_until_mono = ts_mono + self._config.hold_s
         if self._freeze_until_mono is not None:
             self._freeze_until_mono = ts_mono + self._config.freeze_hold_s
 
-    def _support_alpha(self, ts_mono: float) -> float:
-        """Return the EMA weight for this frame, derived from the frame gap.
-
-        Deriving alpha from the elapsed frame time rather than a fixed
-        per-frame constant keeps the smoothing identical under 10Hz streaming
-        and under a gappy or decimated replay.
-        """
-        previous = self._last_mono
-        self._last_mono = ts_mono
-        tau = self._config.support_tau_s
-        if previous is None or tau <= 0.0:
-            return 1.0
-        elapsed = ts_mono - previous
-        if elapsed <= 0.0:
-            return 0.0
-        return 1.0 - exp(-elapsed / tau)
-
-    def _decay_support(self, alpha: float) -> None:
-        """Relax the neighbour-support estimate towards zero."""
-        for gate in range(GATE_COUNT):
-            self._support[gate] -= alpha * self._support[gate]
-
-    def _advance(
-        self,
-        score: float,
-        ts_mono: float,
-        active_gates: tuple[int, ...],
-        *,
-        entry_suppressed: bool = False,
-    ) -> None:
+    def _advance(self, ts_mono: float, *, admitted: bool) -> None:
         """Step the hysteresis state machine using frame time only.
 
-        ``entry_suppressed`` reads as "this frame did not score" for entry, and
-        is deliberately ignored once occupied: exit stays score-driven so a
-        person decaying to faint stillness is never dropped. An owned occupancy
-        asks a harder question than the score alone - see
-        :class:`~.retention.OwnershipRetention`.
+        A rejected candidate reads as "this frame did not score" for entry, and
+        entry filters are deliberately not consulted once occupied: exit stays
+        score-driven so a person decaying to faint stillness is never dropped.
+        An owned occupancy asks a harder question than the score alone - see
+        :mod:`.presence`.
         """
         config = self._config
-        ownership = self._ownership
+        context = self._context
+        presence = self.presence
         if not self._occupied:
-            if score >= config.enter_score and not entry_suppressed:
+            if context.score >= config.enter_score and admitted:
                 self._occupied = True
                 self._hold_until_mono = None
-                leading_gate = self._leading_gate
-                if (
-                    config.lead_gate_max >= 0
-                    and leading_gate is not None
-                    and leading_gate <= config.lead_gate_max
-                ):
-                    ownership.enter(active_gates)
+                presence.claim(context.active_gates, context.leading_gate)
             return
 
-        if ownership.owned:
-            ownership.include(active_gates)
-            refreshed = ownership.refreshes_hold(ts_mono, score >= config.exit_score)
-        else:
-            refreshed = score >= config.exit_score
+        if presence.owned:
+            presence.include(context.active_gates)
+            presence.step_arming(ts_mono)
 
-        if refreshed:
+        if self._pipeline.refreshes_hold(context):
             # Recovered during the countdown: cancel it entirely.
             self._hold_until_mono = None
         elif self._hold_until_mono is None:
@@ -594,13 +333,13 @@ class Detector:
             self._occupied = False
             self._hold_until_mono = None
             self._freeze_until_mono = ts_mono + config.freeze_hold_s
-            ownership.release()
+            presence.release()
 
     def _is_frozen(self, ts_mono: float) -> bool:
         """Whether the detector is inside its occupied-plus-cooldown period.
 
         Reported as ``DetectorOutput.adaptation_frozen``. It no longer stops
-        the baseline learning - see :class:`~.baseline.BaselineModel` - but the
+        the baseline learning - see :class:`~.baseline.Baseline` - but the
         state machine and the entity it feeds are unchanged.
         """
         if self._occupied:
@@ -617,8 +356,8 @@ class Detector:
 
         ``confidence = 1 / (1 + exp(-a * (score - enter_score)))`` with
         ``a = 4 / enter_score``. It is continuous and strictly increasing,
-        reads 0.5 exactly at ``enter_score`` — so anything short of entry sits
-        in 0..0.5 — and saturates towards 1 for strong evidence.
+        reads 0.5 exactly at ``enter_score`` - so anything short of entry sits
+        in 0..0.5 - and saturates towards 1 for strong evidence.
         """
         enter = self._config.enter_score
         slope = _CONFIDENCE_SLOPE / enter if enter > 0.0 else _CONFIDENCE_SLOPE

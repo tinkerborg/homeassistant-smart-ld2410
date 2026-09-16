@@ -1,0 +1,175 @@
+{
+  "D0:6E:81:D2:5D:A6": [
+    {
+      "ts": 1789003009.1626592,
+      "kind": "occupied",
+      "confidence": 0.5,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789003290.1513321,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789003461.562953,
+      "kind": "occupied",
+      "confidence": 0.9999999989720016,
+      "score": 18.52173913043478,
+      "active_gates": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "ts": 1789003560.841415,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789003816.942482,
+      "kind": "occupied",
+      "confidence": 1.0,
+      "score": 32.0,
+      "active_gates": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "ts": 1789004232.429193,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789004286.856052,
+      "kind": "occupied",
+      "confidence": 0.7382778959158074,
+      "score": 3.7777777777777777,
+      "active_gates": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "ts": 1789004526.112661,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789005491.447339,
+      "kind": "occupied",
+      "confidence": 0.6771578146021657,
+      "score": 3.5555555555555554,
+      "active_gates": [
+        6,
+        7
+      ]
+    },
+    {
+      "ts": 1789006576.055639,
+      "kind": "vacant",
+      "confidence": 0.999999824487528,
+      "score": 14.666666666666666,
+      "active_gates": [
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "ts": 1789006876.4945002,
+      "kind": "occupied",
+      "confidence": 0.9999999999997158,
+      "score": 24.666666666666668,
+      "active_gates": [
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "ts": 1789008230.557958,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789009774.9747672,
+      "kind": "occupied",
+      "confidence": 1.0,
+      "score": 42.22222222222222,
+      "active_gates": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "ts": 1789010325.2768052,
+      "kind": "vacant",
+      "confidence": 1.0,
+      "score": 38.0,
+      "active_gates": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "ts": 1789010337.974677,
+      "kind": "occupied",
+      "confidence": 1.0,
+      "score": 68.66666666666667,
+      "active_gates": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "ts": 1789010667.502561,
+      "kind": "vacant",
+      "confidence": 1.0,
+      "score": 38.22222222222222,
+      "active_gates": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "ts": 1789011263.732712,
+      "kind": "occupied",
+      "confidence": 0.9999999999999989,
+      "score": 28.88888888888889,
+      "active_gates": [
+        2,
+        3,
+        4
+      ]
+    }
+  ]
+}

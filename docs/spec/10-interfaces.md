@@ -85,12 +85,31 @@ indefinitely.
 
 ## 3. Replay harness
 
+Command line, per-frame decisions to stdout:
+
 `python -m smart_ld2410.replay --db PATH --sensor ID --from TS --to TS
 [--params overrides.json] [--emit episodes|states|frames]`
 
+Library (`algo.harness`, pure Python), shared by the regression suite and the
+experiments under `docs/research/experiments`:
+
+- `sensor_ids(db)`, `frames(db, sensor_id)` — a recording may hold several
+  sensors.
+- `run(db, sensor_id, *, config=None, stages=None)` — every frame with the
+  `DetectorOutput` it produced.
+- `replay(db, sensor_id, *, config=None, stages=None)` — the occupancy timeline
+  that configuration produces, as `OccupancyEvent(ts, occupied, confidence,
+  score, active_gates)`. `stages` overrides `config.stages` (00 §4.3).
+- `label_spans(db, room=…, person=…)` — ground-truth spans from a recording's
+  `labels(person, room, ts_start, ts_end, note)` table, where it has one.
+- `score_timeline(timeline, spans)` — entries, false entries, spans detected
+  and missed, entry latency, and overlapping/false/missed seconds.
+
 - Consumes `frames`; runs the identical algorithm core; emits decisions.
 - Determinism requirement: identical DB + params ⇒ byte-identical output.
-- Regression suite = recorded episode set + expected outputs, run in CI.
+- Regression suite = the corpus timelines under `tests/fixtures/golden` (one
+  file per recording, keyed by sensor) plus the recorded episode set, run in
+  CI; any stage list is measured against them.
 
 ## 4. House layer → consumers (Phase 3)
 

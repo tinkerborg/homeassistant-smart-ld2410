@@ -64,18 +64,92 @@ Per gate, per channel (move/still):
   rejected with no per-room configuration).
 - Confidence published alongside the binary.
 
-### 4.3 Bootstrap
+### 4.3 Stage composition
+
+The detector is the ordered list of stages its config names (`stages`), built
+into a pipeline. Each mechanism is one stage in one file, under the directory
+named for what consumes it, and fills one role.
+
+**`baseline/`** — what residuals are taken against:
+
+- `quantile_floor` (floor.py) — the empty-room level per gate and channel: the
+  25th percentile of the bucket medians (§4.1).
+- `tail_spread` (spread.py) — the residual divisor: the 25th percentile of the
+  buckets' `q90 − q50`.
+- `move_ceiling` (ceiling.py) — the sensor-global arrival reference (22 §1).
+
+**`scoring/`** — how per-gate elevations become one decision:
+
+- `run_score` (runs.py) — the strongest contiguous run of hot gates, and the
+  nearest run's first gate (the leading edge).
+- `lone_gate_suppression` (suppression.py) — a single-gate run counts only
+  when a neighbour is partly elevated (§4.2).
+
+**`gates/`** — what each gate is:
+
+- `dwell_class` (dwell.py) — decayed sustained/brief counts, and the IN_ROOM
+  and BLEED rules over them (20 §2–3).
+- `portal_class` (portal.py) — brief-episode outcomes and PORTAL (20 §3a);
+  needs `dwell_class`.
+- `energy_ceiling` (boundary.py) — the learned energy-ceiling boundary (21).
+- `gate_exclusion` (exclusion.py) — the manual `max_gate` cap, and the mask
+  barring BLEED/OUT gates from entry scoring and neighbour support (20 §4).
+
+**`entry/`** — admit a candidate, or reject it with the reason its episode
+records:
+
+- `energy_floor` (23), `arrival` (22 §2; needs `move_ceiling`), `leading_edge`
+  (24 §1; needs `run_score`).
+
+**`presence/`** — what is known about an occupant already being held:
+
+- `retention` (retention.py) — the signed still-presence statistic (24 §2).
+- `ownership` (ownership.py) — the claim a qualifying entry earns (24 §1a);
+  needs `run_score`.
+- `crossing_arming` (arming.py) — the quiet-then-crossing sequence that arms
+  release (24 §1a); needs `ownership`.
+
+**`hold/`** — whether this frame keeps the occupancy alive:
+
+- `score_hold` (20 §4), `attributed_hold` (24 §1a; needs `ownership` and
+  `crossing_arming`), `retention_hold` (24 §2; needs `retention`, `ownership`
+  and `crossing_arming`).
+
+Release needs no role of its own: an occupancy ends when the hold window
+expires with nothing refreshing it, so refusing to release is refreshing.
+
+Default order: `quantile_floor`, `tail_spread`, `run_score`,
+`lone_gate_suppression`, `energy_floor`.
+
+Available order — every stage a config may name, in the order the pipeline
+evaluates them: `quantile_floor`, `tail_spread`, `move_ceiling`, `run_score`,
+`lone_gate_suppression`, `dwell_class`, `portal_class`, `energy_ceiling`,
+`gate_exclusion`, `energy_floor`, `arrival`, `leading_edge`, `retention`,
+`ownership`, `crossing_arming`, `score_hold`, `attributed_hold`,
+`retention_hold`.
+
+Order within a role decides precedence: entry filters stop at the first
+rejection, so the earlier rule is the one an episode records, and hold
+refreshers are consulted until one refreshes. A stage another stage needs is
+declared and checked when the pipeline is built, and a list that leaves it out
+is refused by name; a stage nothing depends on can be left out, and the
+detector then does without that mechanism. Every stage reads one shared
+context — baseline residuals, per-gate statistics, the candidate's own
+evidence, the gate classes, and the presence state — so state two stages share
+exists once, whatever is composed.
+
+### 4.4 Bootstrap
 
 Until the baseline is ready, the published occupancy mirrors the device's own
 occupancy bit (passthrough). Handover is per-sensor on baseline readiness.
 
-### 4.4 Device thresholds
+### 4.5 Device thresholds
 
 A button entity writes permissive thresholds to the device. Device thresholds
 have no effect on the pipeline; the native bit is retained only for passthrough
 and logged comparison.
 
-### 4.5 Entities
+### 4.6 Entities
 
 Per sensor: derived occupancy (binary, device class occupancy), confidence,
 active gate range, target distance; diagnostics — baseline age/readiness,
@@ -193,6 +267,7 @@ Detailed implementation specs; each is authoritative for its piece.
 - 22-phase2-arrival-entry.md — arrival-gated entry (through-wall suppression)
 - 23-phase2-energy-floor.md — episode energy floor (through-wall suppression)
 - 24-phase2.5-entry-edge-retention.md — leading-edge entry, still-presence retention
+- 25-phase2.5-histogram-baseline.md — distribution-shape floor and spread
 - 30-phase3-tracks-adjacency.md — local tracks, handoffs, learned adjacency
 - 31-phase3-house-estimator.md — house state, conservation, vacancy, suppression
 - 32-phase3-evidence-labeling.md — external evidence, known-vacant windows, label store
