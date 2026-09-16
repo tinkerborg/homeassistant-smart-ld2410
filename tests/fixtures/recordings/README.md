@@ -78,6 +78,30 @@ near-band approach is visible for the entry. Watch/Bermuda reported
 bathroom entered 19:24:20 (correct) and had not released by 19:32;
 kitchen 19:25:41–19:27:14.
 
+## overnight-2026-09-16.db
+
+2026-09-15 23:00 – 2026-09-16 07:00, all five sensors (bathroom D0:6E,
+kitchen B3:26, living room FD:68, dining 99:CD, mud room 20:4C), with a
+`labels` table. Ground truth (per user): both humans in bed upstairs the
+whole night, so every downstairs detection is the cat or a false
+positive. Twenty-two occupancy episodes, all 15–77 s, in clusters:
+23:03–23:10 (dining→mud→mud→dining, move 100 at gates 1–2), 23:31–23:39
+(dining/mud/living, weak), 02:06–02:28 (living/dining/mud ×8, mixed),
+06:06–06:14 (dining ×4, move 100 at gates 1–2), plus two lone bathroom
+blips at 04:03 and 05:27 (move ≤46, still 100 at gate 3, 3–4 hot frames
+each, no other sensor active within ±5 min). Cause unconfirmed: the user
+recalls possibly using an upstairs bathroom around 04:00 and his wife
+around 05:30, so through-ceiling bleed from the floor above is one
+candidate; a still-channel artifact on that unit is another. The
+clusters read as the cat doing rounds; whether 06:06–06:14 involved a
+human is unconfirmed.
+The kitchen sensor never entered: it saw only four faint brushes at gate
+1 (move 31–38, still 69–84) coinciding with the clusters. Mounting
+explains it — dining and mud-room sensors sit at standard outlet height,
+the kitchen sensor is at counter height with the counter between it and
+the floor, so a floor-level cat is largely shielded while a standing
+human is in-beam.
+
 ## cat-kitchen-0915.db
 
 2026-09-15 19:30–19:51, kitchen (B3:26) and bathroom (D0:6E), with a

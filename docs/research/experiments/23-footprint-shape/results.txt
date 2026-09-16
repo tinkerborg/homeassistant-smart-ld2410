@@ -1,0 +1,108 @@
+baseline21_projection
+  labeled-loop-0915 IN=99.486521 TW=7.741935 EMPTY=0.000000
+    visit frames=779 missing=0.005135 dropout_runs=1 longest_dropout_s=0.307863 entry=0.3849833011627197 exit=6.858537673950195
+  labeled-walk-0915 IN=95.961995 TW=2.626970 EMPTY=--
+    visit frames=190 missing=0.089474 dropout_runs=1 longest_dropout_s=1.533623 entry=1.6932103633880615 exit=0.9700160026550293
+    visit frames=231 missing=0.000000 dropout_runs=0 longest_dropout_s=0.000000 entry=0.015818357467651367 exit=0.5668082237243652
+  labeled-sessions-0909-d06e IN=47.493036 TW=8.040593 EMPTY=0.000000
+    visit frames=287 missing=0.000000 dropout_runs=0 longest_dropout_s=0.000000 entry=0.08351707458496094 exit=None
+    visit frames=4021 missing=0.562547 dropout_runs=8 longest_dropout_s=92.571756 entry=0.05877566337585449 exit=0.017613887786865234
+  throughwall-morning-d06e IN=-- TW=14.140792 EMPTY=0.000000
+  bathroom-visit-2204-d06e IN=49.629630 TW=-- EMPTY=0.000000
+    visit frames=1620 missing=0.503704 dropout_runs=2 longest_dropout_s=81.029732 entry=0.4440627098083496 exit=0.02279210090637207
+  stove-case-0913-d06e IN=79.211862 TW=9.066955 EMPTY=--
+    visit frames=749 missing=0.074766 dropout_runs=2 longest_dropout_s=3.526673 entry=3.79567813873291 exit=0.028366804122924805
+    visit frames=9300 missing=0.218602 dropout_runs=6 longest_dropout_s=81.095710 entry=0.07568860054016113 exit=0.034655094146728516
+  livingroom-reset-seated-fd68 IN=9.577609 TW=-- EMPTY=0.602564
+    visit frames=8700 missing=0.941609 dropout_runs=7 longest_dropout_s=261.660380 entry=252.65324568748474 exit=0.021448373794555664
+    visit frames=8914 missing=0.867736 dropout_runs=8 longest_dropout_s=255.810278 entry=15.309678792953491 exit=0.021790027618408203
+amplitude_only_fraction0.4_guard1
+  labeled-loop-0915 IN=99.486521 TW=8.064516 EMPTY=0.000000
+    visit frames=779 missing=0.005135 dropout_runs=1 longest_dropout_s=0.307863 entry=0.3849833011627197 exit=7.062140941619873
+  labeled-walk-0915 IN=95.961995 TW=18.038529 EMPTY=--
+    visit frames=190 missing=0.089474 dropout_runs=1 longest_dropout_s=1.533623 entry=1.6932103633880615 exit=1.2773685455322266
+    visit frames=231 missing=0.000000 dropout_runs=0 longest_dropout_s=0.000000 entry=0.015818357467651367 exit=1.1851422786712646
+  labeled-sessions-0909-d06e IN=61.304550 TW=74.785324 EMPTY=10.330912
+    visit frames=287 missing=0.000000 dropout_runs=0 longest_dropout_s=0.000000 entry=0.08351707458496094 exit=None
+    visit frames=4021 missing=0.414573 dropout_runs=23 longest_dropout_s=39.322931 entry=0.05877566337585449 exit=0.017613887786865234
+  throughwall-morning-d06e IN=-- TW=19.615231 EMPTY=0.000000
+  bathroom-visit-2204-d06e IN=54.691358 TW=-- EMPTY=0.000000
+    visit frames=1620 missing=0.453086 dropout_runs=5 longest_dropout_s=32.973663 entry=0.4440627098083496 exit=0.02279210090637207
+  stove-case-0913-d06e IN=81.610110 TW=31.538410 EMPTY=--
+    visit frames=749 missing=0.082777 dropout_runs=2 longest_dropout_s=3.617202 entry=3.8610825538635254 exit=0.028366804122924805
+    visit frames=9300 missing=0.192043 dropout_runs=16 longest_dropout_s=81.095710 entry=0.07568860054016113 exit=0.034655094146728516
+  livingroom-reset-seated-fd68 IN=8.691950 TW=-- EMPTY=3.641026
+    visit frames=8700 missing=0.980920 dropout_runs=4 longest_dropout_s=261.660380 entry=252.93777799606323 exit=0.021448373794555664
+    visit frames=8914 missing=0.846870 dropout_runs=18 longest_dropout_s=245.759804 entry=17.88005304336548 exit=0.021790027618408203
+shape_cos0.75_guard1
+  labeled-loop-0915 IN=99.486521 TW=77.258065 EMPTY=1.688139
+    visit frames=779 missing=0.005135 dropout_runs=1 longest_dropout_s=0.307863 entry=0.3849833011627197 exit=None
+  labeled-walk-0915 IN=95.961995 TW=44.483363 EMPTY=--
+    visit frames=190 missing=0.089474 dropout_runs=1 longest_dropout_s=1.533623 entry=1.6932103633880615 exit=5.377757787704468
+    visit frames=231 missing=0.000000 dropout_runs=0 longest_dropout_s=0.000000 entry=0.015818357467651367 exit=None
+  labeled-sessions-0909-d06e IN=57.265552 TW=41.295863 EMPTY=0.000000
+    visit frames=287 missing=0.000000 dropout_runs=0 longest_dropout_s=0.000000 entry=0.08351707458496094 exit=None
+    visit frames=4021 missing=0.457846 dropout_runs=39 longest_dropout_s=49.049781 entry=0.05877566337585449 exit=0.017613887786865234
+  throughwall-morning-d06e IN=-- TW=33.759646 EMPTY=1.178563
+  bathroom-visit-2204-d06e IN=71.913580 TW=-- EMPTY=0.000000
+    visit frames=1620 missing=0.280864 dropout_runs=9 longest_dropout_s=30.123352 entry=0.4440627098083496 exit=0.02279210090637207
+  stove-case-0913-d06e IN=85.222410 TW=55.374637 EMPTY=--
+    visit frames=749 missing=0.113485 dropout_runs=2 longest_dropout_s=4.608155 entry=3.8610825538635254 exit=0.028366804122924805
+    visit frames=9300 missing=0.150538 dropout_runs=4 longest_dropout_s=81.095710 entry=0.07568860054016113 exit=0.034655094146728516
+  livingroom-reset-seated-fd68 IN=3.775406 TW=-- EMPTY=0.525641
+    visit frames=8700 missing=0.981034 dropout_runs=4 longest_dropout_s=261.757544 entry=252.65324568748474 exit=0.021448373794555664
+    visit frames=8914 missing=0.943908 dropout_runs=15 longest_dropout_s=369.493952 entry=17.88005304336548 exit=0.021790027618408203
+shape_cos0.90_guard1
+  labeled-loop-0915 IN=95.250321 TW=15.645161 EMPTY=0.133274
+    visit frames=779 missing=0.047497 dropout_runs=2 longest_dropout_s=2.862954 entry=0.71340012550354 exit=3.274003028869629
+  labeled-walk-0915 IN=92.636580 TW=7.355517 EMPTY=--
+    visit frames=190 missing=0.157895 dropout_runs=2 longest_dropout_s=1.688624 entry=1.743429183959961 exit=0.04911375045776367
+    visit frames=231 missing=0.004329 dropout_runs=1 longest_dropout_s=0.000000 entry=0.11765599250793457 exit=3.2296440601348877
+  labeled-sessions-0909-d06e IN=43.570102 TW=7.259953 EMPTY=0.000000
+    visit frames=287 missing=0.055749 dropout_runs=1 longest_dropout_s=1.536518 entry=0.08351707458496094 exit=None
+    visit frames=4021 missing=0.600597 dropout_runs=38 longest_dropout_s=49.870150 entry=0.05877566337585449 exit=0.017613887786865234
+  throughwall-morning-d06e IN=-- TW=29.093149 EMPTY=0.000000
+  bathroom-visit-2204-d06e IN=51.666667 TW=-- EMPTY=0.000000
+    visit frames=1620 missing=0.483333 dropout_runs=18 longest_dropout_s=40.279084 entry=0.4440627098083496 exit=0.02279210090637207
+  stove-case-0913-d06e IN=70.086576 TW=51.523546 EMPTY=--
+    visit frames=749 missing=0.556742 dropout_runs=15 longest_dropout_s=8.600753 entry=3.8610825538635254 exit=0.028366804122924805
+    visit frames=9300 missing=0.278387 dropout_runs=20 longest_dropout_s=96.239780 entry=0.07568860054016113 exit=0.034655094146728516
+  livingroom-reset-seated-fd68 IN=1.856478 TW=-- EMPTY=0.435897
+    visit frames=8700 missing=0.991724 dropout_runs=6 longest_dropout_s=423.138722 entry=423.35141587257385 exit=0.021448373794555664
+    visit frames=8914 missing=0.971393 dropout_runs=14 longest_dropout_s=372.566521 entry=18.397370100021362 exit=0.021790027618408203
+shape_cos0.75_guard5
+  labeled-loop-0915 IN=99.486521 TW=70.967742 EMPTY=0.000000
+    visit frames=779 missing=0.005135 dropout_runs=1 longest_dropout_s=0.307863 entry=0.3849833011627197 exit=None
+  labeled-walk-0915 IN=95.961995 TW=41.155867 EMPTY=--
+    visit frames=190 missing=0.089474 dropout_runs=1 longest_dropout_s=1.533623 entry=1.6932103633880615 exit=3.7349531650543213
+    visit frames=231 missing=0.000000 dropout_runs=0 longest_dropout_s=0.000000 entry=0.015818357467651367 exit=None
+  labeled-sessions-0909-d06e IN=56.545961 TW=41.295863 EMPTY=0.000000
+    visit frames=287 missing=0.000000 dropout_runs=0 longest_dropout_s=0.000000 entry=0.08351707458496094 exit=None
+    visit frames=4021 missing=0.465556 dropout_runs=40 longest_dropout_s=49.049781 entry=0.05877566337585449 exit=0.017613887786865234
+  throughwall-morning-d06e IN=-- TW=26.205572 EMPTY=0.000000
+  bathroom-visit-2204-d06e IN=69.444444 TW=-- EMPTY=0.000000
+    visit frames=1620 missing=0.305556 dropout_runs=4 longest_dropout_s=30.123352 entry=0.4440627098083496 exit=0.02279210090637207
+  stove-case-0913-d06e IN=85.222410 TW=47.983244 EMPTY=--
+    visit frames=749 missing=0.113485 dropout_runs=2 longest_dropout_s=4.608155 entry=3.8610825538635254 exit=0.028366804122924805
+    visit frames=9300 missing=0.150538 dropout_runs=4 longest_dropout_s=81.095710 entry=0.07568860054016113 exit=0.034655094146728516
+  livingroom-reset-seated-fd68 IN=3.707278 TW=-- EMPTY=0.512821
+    visit frames=8700 missing=0.981609 dropout_runs=4 longest_dropout_s=261.757544 entry=252.72149538993835 exit=0.021448373794555664
+    visit frames=8914 missing=0.944694 dropout_runs=15 longest_dropout_s=369.493952 entry=17.88005304336548 exit=0.021790027618408203
+shape_cos0.90_guard5
+  labeled-loop-0915 IN=95.250321 TW=13.548387 EMPTY=0.000000
+    visit frames=779 missing=0.047497 dropout_runs=2 longest_dropout_s=2.862954 entry=0.71340012550354 exit=3.274003028869629
+  labeled-walk-0915 IN=92.636580 TW=7.355517 EMPTY=--
+    visit frames=190 missing=0.157895 dropout_runs=2 longest_dropout_s=1.688624 entry=1.743429183959961 exit=0.04911375045776367
+    visit frames=231 missing=0.004329 dropout_runs=1 longest_dropout_s=0.000000 entry=0.11765599250793457 exit=3.2296440601348877
+  labeled-sessions-0909-d06e IN=43.129062 TW=7.259953 EMPTY=0.000000
+    visit frames=287 missing=0.055749 dropout_runs=1 longest_dropout_s=1.536518 entry=0.08351707458496094 exit=None
+    visit frames=4021 missing=0.605322 dropout_runs=39 longest_dropout_s=49.870150 entry=0.05877566337585449 exit=0.017613887786865234
+  throughwall-morning-d06e IN=-- TW=25.654868 EMPTY=0.000000
+  bathroom-visit-2204-d06e IN=51.543210 TW=-- EMPTY=0.000000
+    visit frames=1620 missing=0.484568 dropout_runs=17 longest_dropout_s=40.279084 entry=0.4440627098083496 exit=0.02279210090637207
+  stove-case-0913-d06e IN=70.086576 TW=46.300926 EMPTY=--
+    visit frames=749 missing=0.556742 dropout_runs=15 longest_dropout_s=8.600753 entry=3.8610825538635254 exit=0.028366804122924805
+    visit frames=9300 missing=0.278387 dropout_runs=20 longest_dropout_s=96.239780 entry=0.07568860054016113 exit=0.034655094146728516
+  livingroom-reset-seated-fd68 IN=1.850800 TW=-- EMPTY=0.423077
+    visit frames=8700 missing=0.991724 dropout_runs=6 longest_dropout_s=423.138722 entry=423.35141587257385 exit=0.021448373794555664
+    visit frames=8914 missing=0.971505 dropout_runs=13 longest_dropout_s=372.566521 entry=18.397370100021362 exit=0.021790027618408203

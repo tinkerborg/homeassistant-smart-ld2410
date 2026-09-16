@@ -1,0 +1,69 @@
+TRAIN old n=59660 IN=15977 TW=43683 full_thr=0.2999 amp_thr=0.3951
+
+labeled-loop-0915.db D0 frames=6152 dt_med=0.102 gaps>.55=0
+labeled-loop-0915.db train-all-old segments
+  LIVING_ROOM  amp  n= 2500 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  LIVING_ROOM  full n= 2500 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  HALL         amp  n=  100 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  HALL         full n=  100 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  IN           amp  n=  779 positive=  762 frame= 97.8% runs= 1 max= 76.1s run_span_min= 1.27 conf_runs= 4 conf_max= 26.6s conf_span_min= 1.25 lag_raw= 1.81s lag_conf= 1.91s pre=False
+  IN           full n=  779 positive=  753 frame= 96.7% runs= 1 max= 75.3s run_span_min= 1.25 conf_runs= 4 conf_max= 25.7s conf_span_min= 1.23 lag_raw= 2.63s lag_conf= 2.84s pre=False
+  TW           amp  n=  620 positive=   44 frame=  7.1% runs= 1 max=  4.3s run_span_min= 0.07 conf_runs= 1 conf_max=  4.3s conf_span_min= 0.07 lag_raw= 0.04s lag_conf= 0.04s pre=True
+  TW           full n=  620 positive=   33 frame=  5.3% runs= 4 max=  2.6s run_span_min= 0.05 conf_runs= 2 conf_max=  2.6s conf_span_min= 0.04 lag_raw= 0.04s lag_conf= 0.04s pre=True
+  HALL         amp  n=  130 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  HALL         full n=  130 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  LIVING_ROOM  amp  n= 2002 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  LIVING_ROOM  full n= 2002 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  labeled-loop-0915.db amp known AUC=0.979 n=1399
+  labeled-loop-0915.db full known AUC=0.976 n=1399
+  labeled-loop-0915.db amp IN missed=0.022
+  labeled-loop-0915.db full IN missed=0.033
+
+labeled-walk-0915.db D0 frames=14958 dt_med=0.102 gaps>.55=4
+labeled-walk-0915.db train-all-old segments
+  TW           amp  n=  120 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  TW           full n=  120 positive=   86 frame= 71.7% runs= 2 max=  8.4s run_span_min= 0.14 conf_runs= 1 conf_max=  8.2s conf_span_min= 0.14 lag_raw= 3.30s lag_conf= 3.71s pre=False
+  IN           amp  n=  190 positive=  173 frame= 91.1% runs= 1 max= 17.3s run_span_min= 0.29 conf_runs= 1 conf_max= 17.1s conf_span_min= 0.29 lag_raw= 1.69s lag_conf= 1.85s pre=False
+  IN           full n=  190 positive=  189 frame= 99.5% runs= 2 max= 18.7s run_span_min= 0.31 conf_runs= 1 conf_max= 18.7s conf_span_min= 0.31 lag_raw= 0.00s lag_conf= 0.00s pre=True
+  TW           amp  n=  361 positive=    6 frame=  1.7% runs= 1 max=  0.4s run_span_min= 0.01 conf_runs= 1 conf_max=  0.4s conf_span_min= 0.01 lag_raw= 0.05s lag_conf= 0.05s pre=True
+  TW           full n=  361 positive=  208 frame= 57.6% runs= 1 max= 20.7s run_span_min= 0.34 conf_runs= 2 conf_max= 14.1s conf_span_min= 0.34 lag_raw=15.31s lag_conf=15.51s pre=True
+  IN           amp  n=  231 positive=  227 frame= 98.3% runs= 1 max= 22.5s run_span_min= 0.38 conf_runs= 1 conf_max= 22.3s conf_span_min= 0.37 lag_raw= 0.02s lag_conf= 0.22s pre=False
+  IN           full n=  231 positive=  231 frame=100.0% runs= 1 max= 22.9s run_span_min= 0.38 conf_runs= 1 conf_max= 22.9s conf_span_min= 0.38 lag_raw= 0.02s lag_conf= 0.02s pre=True
+  TW           amp  n=   90 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=True
+  TW           full n=   90 positive=   16 frame= 17.8% runs= 1 max=  1.5s run_span_min= 0.03 conf_runs= 1 conf_max=  1.5s conf_span_min= 0.03 lag_raw= 0.05s lag_conf= 0.05s pre=True
+  LIVING_ROOM  amp  n=12870 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  LIVING_ROOM  full n=12870 positive=    0 frame=  0.0% runs= 0 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw=  nans lag_conf=  nans pre=False
+  labeled-walk-0915.db amp known AUC=0.982 n=992
+  labeled-walk-0915.db full known AUC=0.983 n=992
+  labeled-walk-0915.db amp IN missed=0.050
+  labeled-walk-0915.db full IN missed=0.002
+stove-case-0913-d06e old-heldout segments
+  IN           amp  n=  749 positive=  705 frame= 94.1% runs= 1 max= 70.4s run_span_min= 1.17 conf_runs= 3 conf_max= 54.6s conf_span_min= 1.16 lag_raw= 3.71s lag_conf= 3.86s pre=False
+  IN           full n=  749 positive=  694 frame= 92.7% runs= 2 max= 69.1s run_span_min= 1.15 conf_runs= 3 conf_max= 54.6s conf_span_min= 1.14 lag_raw= 4.07s lag_conf= 4.37s pre=False
+  IN           amp  n= 9300 positive= 7881 frame= 84.7% runs=10 max=617.6s run_span_min=13.12 conf_runs=10 conf_max=433.6s conf_span_min=13.08 lag_raw= 0.08s lag_conf= 0.08s pre=True
+  IN           full n= 9300 positive= 7108 frame= 76.4% runs=29 max=375.0s run_span_min=11.79 conf_runs=15 conf_max=346.2s conf_span_min=11.74 lag_raw= 0.08s lag_conf= 0.08s pre=True
+  TW           amp  n=14801 positive= 4907 frame= 33.2% runs=87 max=136.2s run_span_min= 8.04 conf_runs=38 conf_max=117.4s conf_span_min= 7.86 lag_raw=204.69s lag_conf=204.95s pre=False
+  TW           full n=14801 positive= 2000 frame= 13.5% runs=266 max= 27.3s run_span_min= 2.90 conf_runs=92 conf_max= 25.7s conf_span_min= 2.50 lag_raw=205.36s lag_conf=205.50s pre=False
+  stove-case-0913-d06e amp known AUC=0.898 n=24850
+  stove-case-0913-d06e full known AUC=0.843 n=24850
+  stove-case-0913-d06e amp IN missed=0.146
+  stove-case-0913-d06e full IN missed=0.224
+labeled-sessions-0909-d06e old-heldout segments
+  IN           amp  n=  287 positive=  194 frame= 67.6% runs=32 max=  3.9s run_span_min= 0.27 conf_runs=21 conf_max=  3.9s conf_span_min= 0.20 lag_raw= 0.08s lag_conf= 0.08s pre=True
+  IN           full n=  287 positive=  287 frame=100.0% runs= 1 max= 28.5s run_span_min= 0.48 conf_runs= 1 conf_max= 28.5s conf_span_min= 0.48 lag_raw= 0.08s lag_conf= 0.08s pre=True
+  IN           amp  n= 4021 positive= 1329 frame= 33.1% runs=537 max=  4.2s run_span_min= 1.31 conf_runs=114 conf_max=  4.0s conf_span_min= 0.78 lag_raw= 0.06s lag_conf= 0.06s pre=True
+  IN           full n= 4021 positive= 2405 frame= 59.8% runs=47 max=131.4s run_span_min= 3.91 conf_runs=20 conf_max= 52.8s conf_span_min= 3.85 lag_raw= 0.06s lag_conf= 0.06s pre=True
+  TW           amp  n=  127 positive=    2 frame=  1.6% runs= 2 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw= 0.27s lag_conf=  nans pre=False
+  TW           full n=  127 positive=   85 frame= 66.9% runs= 3 max=  7.4s run_span_min= 0.14 conf_runs= 3 conf_max=  7.2s conf_span_min= 0.13 lag_raw= 0.78s lag_conf= 0.98s pre=False
+  TW           amp  n=   84 positive=    1 frame=  1.2% runs= 1 max=  0.0s run_span_min= 0.00 conf_runs= 0 conf_max=  0.0s conf_span_min= 0.00 lag_raw= 2.08s lag_conf=  nans pre=False
+  TW           full n=   84 positive=   79 frame= 94.0% runs= 1 max=  7.8s run_span_min= 0.13 conf_runs= 1 conf_max=  7.8s conf_span_min= 0.13 lag_raw= 0.03s lag_conf= 0.03s pre=True
+  TW           amp  n=  742 positive=  258 frame= 34.8% runs=142 max=  1.1s run_span_min= 0.18 conf_runs=24 conf_max=  1.0s conf_span_min= 0.06 lag_raw= 0.38s lag_conf= 0.48s pre=True
+  TW           full n=  742 positive=  717 frame= 96.6% runs=11 max= 35.5s run_span_min= 1.17 conf_runs= 8 conf_max= 26.9s conf_span_min= 1.14 lag_raw= 0.12s lag_conf= 0.12s pre=True
+  TW           amp  n=  328 positive=   53 frame= 16.2% runs=41 max=  0.2s run_span_min= 0.02 conf_runs= 2 conf_max=  0.0s conf_span_min= 0.00 lag_raw= 1.32s lag_conf= 1.99s pre=True
+  TW           full n=  328 positive=  234 frame= 71.3% runs= 9 max= 20.3s run_span_min= 0.38 conf_runs= 6 conf_max= 16.3s conf_span_min= 0.36 lag_raw= 0.10s lag_conf= 0.10s pre=True
+  EMPTY        amp  n= 3717 positive=   86 frame=  2.3% runs=64 max=  0.4s run_span_min= 0.04 conf_runs= 3 conf_max=  0.2s conf_span_min= 0.01 lag_raw=13.02s lag_conf=46.09s pre=False
+  EMPTY        full n= 3717 positive=   81 frame=  2.2% runs= 8 max=  2.7s run_span_min= 0.13 conf_runs= 5 conf_max=  2.5s conf_span_min= 0.11 lag_raw=23.26s lag_conf=47.22s pre=False
+  labeled-sessions-0909-d06e amp known AUC=0.580 n=5589
+  labeled-sessions-0909-d06e full known AUC=0.479 n=5589
+  labeled-sessions-0909-d06e amp IN missed=0.646
+  labeled-sessions-0909-d06e full IN missed=0.375
