@@ -1,0 +1,18 @@
+{
+  "FD:68:3B:41:6E:FF": [
+    {
+      "ts": 1789305000.0824316,
+      "kind": "occupied",
+      "confidence": 0.5,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789305330.1187804,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    }
+  ]
+}

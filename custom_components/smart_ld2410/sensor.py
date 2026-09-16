@@ -195,7 +195,7 @@ class GateClassesSensor(_SmartLD2410SensorEntity):
     def extra_state_attributes(self) -> dict[str, Any]:
         """Per-gate class and decayed episode counts."""
         attributes: dict[str, Any] = {}
-        for stat in self.coordinator.detector.classifier.stats:
+        for stat in self.coordinator.detector.gates.stats:
             attributes[f"gate_{stat.gate}_class"] = stat.gate_class
             attributes[f"gate_{stat.gate}_n_sustained"] = round(stat.n_sustained, 2)
             attributes[f"gate_{stat.gate}_n_brief"] = round(stat.n_brief, 2)
@@ -228,20 +228,19 @@ class BoundaryGateSensor(_SmartLD2410SensorEntity):
     def extra_state_attributes(self) -> dict[str, Any]:
         """ceil_profile, confirmed_days, and whether suppression is armed."""
         config = self.coordinator.detector.config
-        classifier = self.coordinator.detector.classifier
-        half_life_s = config.stats_half_life_s
+        gates = self.coordinator.detector.gates
         return {
             "ceil_profile": [
                 None if value is None else round(value, 3)
-                for value in classifier.ceil_profile
+                for value in gates.ceil_profile
             ],
             # Read at each gate's own last update rather than at "now": this
             # is an entity property, and reaching for a wall clock here would
             # make the same state render differently on a replay.
             "n_epi": [
-                round(stat.n_epi(stat.updated_ts or 0.0, half_life_s), 2)
-                for stat in classifier.stats
+                round(stat.n_epi(stat.updated_ts or 0.0), 2)
+                for stat in gates.stats
             ],
-            "confirmed_days": classifier.confirmed_days,
+            "confirmed_days": gates.confirmed_days,
             "ceiling_enabled": config.ceiling_enabled,
         }

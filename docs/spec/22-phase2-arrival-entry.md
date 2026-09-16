@@ -15,6 +15,14 @@ Per sensor:
   machinery as the baseline and persisted with it. It converges toward the
   strongest motion the sensor ever sees (saturation at 100 for any sensor a
   person walks in front of) and decays so a relocated sensor relearns.
+- The ceiling's window advances only through buckets whose raw maximum
+  moving energy reaches `ceiling_motion_floor` (default 60): empty time
+  carries no arrival evidence, so it must not age the ceiling out. An
+  unoccupied stretch of any length — a vacation — leaves the ceiling
+  where the last real motion put it, while a genuine regime change
+  (remount, different room) still replaces it over accumulated lived
+  motion. The floor sits above the strongest observed through-wall bleed
+  and below what any genuine arrival produces.
 
 The reference is sensor-global, not per-gate: attenuation is absolute
 physics on a 0–100 scale, and a per-gate reference would self-normalize
@@ -63,9 +71,9 @@ evidence pattern a genuinely still occupant can produce must never release.
 
 ## 5. Options
 
-`arrival_frac` (0 disables the rule) and `arrival_min_frames`;
-diagnostic-tier. One global default each, tuned only by validation
-evidence.
+`arrival_frac` (0 disables the rule), `arrival_min_frames`, and
+`ceiling_motion_floor` (0 restores an ungated window); diagnostic-tier.
+One global default each, tuned only by validation evidence.
 
 ## 6. Acceptance
 

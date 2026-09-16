@@ -1,0 +1,176 @@
+<title>Gate Scope</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F4F6F8;--surface:#FFFFFF;--ink:#1B2027;--muted:#6B7480;--line:#D9DEE4;
+  --accent:#C8871F;--in:#1F9E86;--tw:#D95A34;--empty:#8A93A0;--pet:#7B61C9;
+  --occ:#1F9E86;--vac:#B0B8C2;--cross:#1B2027;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1216;--surface:#171B21;--ink:#E6E9ED;--muted:#8A93A0;--line:#2A3039;
+  --accent:#E9A83B;--in:#2FB59A;--tw:#E0603C;--empty:#5E6772;--pet:#9D86E6;
+  --occ:#2FB59A;--vac:#5E6772;--cross:#E6E9ED;}}
+:root[data-theme="dark"]{
+  --bg:#0F1216;--surface:#171B21;--ink:#E6E9ED;--muted:#8A93A0;--line:#2A3039;
+  --accent:#E9A83B;--in:#2FB59A;--tw:#E0603C;--empty:#5E6772;--pet:#9D86E6;
+  --occ:#2FB59A;--vac:#5E6772;--cross:#E6E9ED;}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;padding:0 20px;padding-block:16px 32px;max-width:1400px;margin:0 auto}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 24px;margin-bottom:12px}
+h1{font-size:20px;font-weight:600;margin:0;letter-spacing:-.01em}
+h1 small{font-weight:400;color:var(--muted);font-size:13px;margin-left:8px}
+select,button{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:5px 9px}
+button{cursor:pointer}button:hover{border-color:var(--accent)}
+button:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-left:auto}
+.hint{font-size:12px;color:var(--muted)}
+.scope{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;display:grid;gap:6px}
+.row{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:stretch}
+.row .lab{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;flex-direction:column;justify-content:center}
+.row .lab b{color:var(--ink);font-weight:500;letter-spacing:0;text-transform:none;font-size:12px}
+canvas{display:block;width:100%;image-rendering:pixelated;border-radius:3px}
+#truth{height:22px}#events{height:16px}#move,#still{height:150px;cursor:crosshair}#axis{height:22px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);align-items:center}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.card h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px;font-weight:500}
+.bars{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;align-items:end;height:70px}
+.bar{background:var(--line);border-radius:2px 2px 0 0;position:relative;min-height:2px}
+.bar i{position:absolute;bottom:0;left:0;right:0;background:var(--accent);border-radius:2px 2px 0 0}
+.bar span{position:absolute;top:-16px;left:0;right:0;text-align:center;font-size:10px;color:var(--muted)}
+.gl{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;font-size:10px;color:var(--muted);text-align:center;margin-top:3px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px}
+.kv dt{color:var(--muted)}.kv dd{margin:0}
+.cmap{height:10px;border-radius:2px;background:linear-gradient(90deg,#0d1b3a,#1f5f8b,#2fb59a,#e9d24b,#fff5c2)}
+@media (max-width:700px){.row{grid-template-columns:40px 1fr}#move,#still{height:110px}}
+</style>
+
+<header>
+  <h1>Gate Scope<small>LD2410 engineering frames, 9 gates × 10 Hz</small></h1>
+  <div class="controls">
+    <select id="fixture" aria-label="Recording"></select>
+    <button id="reset" type="button">Full range</button>
+    <span class="hint">drag to zoom · wheel to zoom at cursor · hover for values</span>
+  </div>
+</header>
+
+<div class="scope">
+  <div class="row"><div class="lab">truth</div><canvas id="truth"></canvas></div>
+  <div class="row"><div class="lab">detector</div><canvas id="events"></canvas></div>
+  <div class="row"><div class="lab"><b>move</b><span>gate 0 top</span></div><canvas id="move"></canvas></div>
+  <div class="row"><div class="lab"><b>still</b><span>gate 0 top</span></div><canvas id="still"></canvas></div>
+  <div class="row"><div class="lab"></div><canvas id="axis"></canvas></div>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--in)"></i>in-room</span>
+    <span><i class="sw" style="background:var(--tw)"></i>through-wall / neighbor</span>
+    <span><i class="sw" style="background:var(--empty)"></i>empty</span>
+    <span><i class="sw" style="background:var(--pet)"></i>pet</span>
+    <span><i class="sw" style="background:var(--occ)"></i>occupied</span>
+    <span><i class="sw" style="background:var(--vac)"></i>vacant</span>
+    <span style="display:inline-flex;align-items:center;gap:6px">energy 0<i class="cmap" style="width:90px;display:inline-block"></i>100</span>
+  </div>
+</div>
+
+<div class="readout">
+  <div class="card"><h2>Move energy at cursor</h2><div class="bars" id="mbars"></div><div class="gl mono">0 1 2 3 4 5 6 7 8</div></div>
+  <div class="card"><h2>Still energy at cursor</h2><div class="bars" id="sbars"></div><div class="gl mono">0 1 2 3 4 5 6 7 8</div></div>
+  <div class="card"><h2>Cursor</h2><dl class="kv mono" id="kv"><dt>time</dt><dd>—</dd><dt>truth</dt><dd>—</dd><dt>detector</dt><dd>—</dd><dt>view</dt><dd>—</dd></dl></div>
+</div>
+
+<script>
+window.__viz = window.__viz || {};
+const $ = id => document.getElementById(id);
+const C = {truth:$('truth'),events:$('events'),move:$('move'),still:$('still'),axis:$('axis')};
+let D = null, view = [0, 1], frames = [], mv = null, st = null, pend = 0;
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const KIND = {in:'--in',tw:'--tw',empty:'--empty',pet:'--pet'};
+
+const CM = [[13,27,58],[31,95,139],[47,181,154],[233,210,75],[255,245,194]];
+function color(v){const x=Math.max(0,Math.min(100,v))/100*(CM.length-1);const i=Math.floor(x),f=x-i;const a=CM[i],b=CM[Math.min(i+1,CM.length-1)];return [a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f,a[2]+(b[2]-a[2])*f];}
+
+function decode(){
+  const n=D.frames.length; frames=new Float64Array(n); mv=new Uint8Array(n*9); st=new Uint8Array(n*9);
+  D.frames.forEach((f,i)=>{frames[i]=f[0];for(let g=0;g<9;g++){mv[i*9+g]=parseInt(f[1].substr(g*2,2),16);st[i*9+g]=parseInt(f[2].substr(g*2,2),16);}});
+}
+function fmt(t){const d=new Date((D.t0+t)*1000);return d.toLocaleTimeString([], {hour12:false});}
+function fmts(t){const d=new Date((D.t0+t)*1000);return d.toLocaleTimeString([], {hour12:false})+'.'+String(Math.floor((t%1)*10))}
+function idxAt(t){let lo=0,hi=frames.length-1;while(lo<hi){const m=(lo+hi)>>1;if(frames[m]<t)lo=m+1;else hi=m;}return lo;}
+function span(){return [view[0]*frames[frames.length-1], view[1]*frames[frames.length-1]];}
+
+function size(c){const r=c.getBoundingClientRect();const w=Math.max(1,Math.floor(r.width));const h=Math.max(1,Math.floor(r.height));if(c.width!==w||c.height!==h){c.width=w;c.height=h;}return [w,h];}
+
+function heat(c, arr){
+  const [w,h]=size(c);const ctx=c.getContext('2d');const img=ctx.createImageData(w,h);
+  const [a,b]=span();const rows=h/9;
+  let i0=idxAt(a);
+  for(let x=0;x<w;x++){
+    const ta=a+(b-a)*x/w, tb=a+(b-a)*(x+1)/w;
+    let i1=idxAt(tb); if(i1<=i0) i1=Math.min(i0+1,frames.length);
+    const mx=new Uint8Array(9);
+    for(let i=i0;i<i1;i++)for(let g=0;g<9;g++){const v=arr[i*9+g];if(v>mx[g])mx[g]=v;}
+    for(let g=0;g<9;g++){const [r,gg,bb]=color(mx[g]);const y0=Math.floor(g*rows),y1=Math.floor((g+1)*rows);
+      for(let y=y0;y<y1;y++){const p=(y*w+x)*4;img.data[p]=r;img.data[p+1]=gg;img.data[p+2]=bb;img.data[p+3]=255;}}
+    i0=i1;
+  }
+  ctx.putImageData(img,0,0);
+  ctx.strokeStyle='rgba(0,0,0,.25)';for(let g=1;g<9;g++){ctx.beginPath();ctx.moveTo(0,g*rows+.5);ctx.lineTo(w,g*rows+.5);ctx.stroke();}
+}
+function bands(){
+  const c=C.truth;const [w,h]=size(c);const ctx=c.getContext('2d');ctx.clearRect(0,0,w,h);
+  const [a,b]=span();const X=t=>(t-a)/(b-a)*w;
+  ctx.fillStyle=css('--line');ctx.fillRect(0,h/2-.5,w,1);
+  D.spans.forEach(s=>{const x0=Math.max(0,X(s.a)),x1=Math.min(w,X(s.b));if(x1<=0||x0>=w)return;
+    ctx.fillStyle=css(KIND[s.kind]||'--empty');ctx.globalAlpha=.85;ctx.fillRect(x0,3,Math.max(1,x1-x0),h-6);ctx.globalAlpha=1;
+    if(x1-x0>60){ctx.fillStyle='#fff';ctx.font='11px IBM Plex Sans, sans-serif';ctx.fillText(s.label,x0+5,h/2+4,x1-x0-8);}});
+}
+function events(){
+  const c=C.events;const [w,h]=size(c);const ctx=c.getContext('2d');ctx.clearRect(0,0,w,h);
+  const [a,b]=span();const X=t=>(t-a)/(b-a)*w;
+  let state=null,from=0;const ev=D.events;
+  const segs=[];ev.forEach(e=>{if(state!==null)segs.push([from,e.t,state]);state=e.kind;from=e.t;});
+  if(state!==null)segs.push([from,frames[frames.length-1],state]);
+  segs.forEach(([t0,t1,k])=>{const x0=Math.max(0,X(t0)),x1=Math.min(w,X(t1));if(x1<=0||x0>=w)return;
+    ctx.fillStyle=css(k==='occupied'?'--occ':'--vac');ctx.fillRect(x0,4,Math.max(1,x1-x0),h-8);});
+  ctx.fillStyle=css('--cross');ev.forEach(e=>{const x=X(e.t);if(x<0||x>w)return;ctx.fillRect(Math.round(x),0,1,h);});
+}
+function axis(){
+  const c=C.axis;const [w,h]=size(c);const ctx=c.getContext('2d');ctx.clearRect(0,0,w,h);
+  const [a,b]=span();const dur=b-a;const steps=[1,2,5,10,15,30,60,120,300,600,900,1800,3600];
+  let step=steps.find(s=>dur/s<=12)||3600;
+  ctx.fillStyle=css('--muted');ctx.font='11px IBM Plex Mono, monospace';ctx.textAlign='center';
+  const first=Math.ceil((D.t0+a)/step)*step-D.t0;
+  for(let t=first;t<=b;t+=step){const x=(t-a)/dur*w;ctx.fillRect(Math.round(x),0,1,5);ctx.fillText(fmt(t),x,17);}
+}
+function draw(){if(!D)return;heat(C.move,mv);heat(C.still,st);bands();events();axis();$('kv').children[7].textContent=fmt(span()[0])+' – '+fmt(span()[1]);}
+
+function bars(el,arr,i){el.innerHTML='';for(let g=0;g<9;g++){const v=arr[i*9+g];el.insertAdjacentHTML('beforeend',`<div class="bar"><i style="height:${v}%"></i><span class="mono">${v}</span></div>`);}}
+function hover(ev){
+  if(!D)return;const c=ev.currentTarget;const r=c.getBoundingClientRect();const [a,b]=span();const t=a+(b-a)*(ev.clientX-r.left)/r.width;
+  const i=Math.min(frames.length-1,idxAt(t));bars($('mbars'),mv,i);bars($('sbars'),st,i);
+  const kv=$('kv').children;kv[1].textContent=fmts(frames[i]);
+  const tr=D.spans.filter(s=>frames[i]>=s.a&&frames[i]<=s.b).map(s=>s.label);kv[3].textContent=tr.length?tr.join(' · '):'—';
+  let det='—';for(const e of D.events){if(e.t<=frames[i])det=e.kind;}kv[5].textContent=det;
+  [C.move,C.still].forEach(k=>{});
+}
+let drag=null;
+function down(ev){const c=ev.currentTarget;const r=c.getBoundingClientRect();drag=[c,(ev.clientX-r.left)/r.width];}
+function up(ev){if(!drag)return;const [c,x0]=drag;drag=null;const r=c.getBoundingClientRect();const x1=(ev.clientX-r.left)/r.width;
+  if(Math.abs(x1-x0)<0.01)return;const lo=Math.min(x0,x1),hi=Math.max(x0,x1);const [a,b]=view;view=[a+(b-a)*lo,a+(b-a)*hi];draw();}
+function wheel(ev){ev.preventDefault();const c=ev.currentTarget;const r=c.getBoundingClientRect();const f=(ev.clientX-r.left)/r.width;
+  const [a,b]=view;const k=ev.deltaY<0?0.8:1.25;const cx=a+(b-a)*f;let na=cx-(cx-a)*k,nb=cx+(b-cx)*k;na=Math.max(0,na);nb=Math.min(1,nb);if(nb-na<1e-4)return;view=[na,nb];draw();}
+[C.move,C.still].forEach(c=>{c.addEventListener('mousemove',hover);c.addEventListener('mousedown',down);c.addEventListener('mouseup',up);c.addEventListener('wheel',wheel,{passive:false});c.addEventListener('dblclick',()=>{view=[0,1];draw();});});
+$('reset').onclick=()=>{view=[0,1];draw();};
+window.addEventListener('resize',()=>{clearTimeout(pend);pend=setTimeout(draw,80);});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+
+function load(name){
+  const go=()=>{D=window.__viz[name];decode();view=[0,1];draw();};
+  if(window.__viz[name]){go();return;}
+  const s=document.createElement('script');s.src='data/'+name+'.js';s.onload=go;document.head.appendChild(s);
+}
+const MAN=[["stove-case-0913-d06e","Bathroom — leave, then far kitchen (09-13)"],["stove-case-0913-fd68","Living room — same window (09-13)"],["bathroom-visit-2204-d06e","Bathroom — confirmed visit 22:04 (09-11)"],["throughwall-morning-d06e","Bathroom — through-wall morning (09-11)"],["livingroom-reset-seated-fd68","Living room — reset while seated (09-11)"],["labeled-sessions-0909-d06e","Bathroom — labeled sessions (09-09)"]];
+MAN.forEach(([n,t])=>$('fixture').insertAdjacentHTML('beforeend',`<option value="${n}">${t}</option>`));
+$('fixture').onchange=e=>load(e.target.value);
+load(MAN[0][0]);
+</script>

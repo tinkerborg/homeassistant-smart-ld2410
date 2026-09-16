@@ -9,9 +9,14 @@ import pytest
 
 from custom_components.smart_ld2410.algo.baseline import (
     SCHEMA_VERSION,
-    BaselineModel,
+    Baseline,
 )
-from custom_components.smart_ld2410.algo.types import GATE_COUNT, Frame
+from custom_components.smart_ld2410.algo.types import (
+    CHANNEL_MOVE,
+    CHANNEL_STILL,
+    GATE_COUNT,
+    Frame,
+)
 
 from . import (
     TEST_BUCKET_S,
@@ -39,12 +44,14 @@ def test_learns_stationary_noise_floor() -> None:
     exceedances = 0
     for gate in range(GATE_COUNT):
         for channel, samples in (
-            (model.move[gate], [frame.move_gates[gate] for frame in frames]),
-            (model.still[gate], [frame.still_gates[gate] for frame in frames]),
+            (CHANNEL_MOVE, [frame.move_gates[gate] for frame in frames]),
+            (CHANNEL_STILL, [frame.still_gates[gate] for frame in frames]),
         ):
-            assert channel.floor == pytest.approx(stream.floor, abs=1.0)
-            assert channel.spread >= config.min_mad
-            threshold = channel.floor + config.k * channel.spread
+            floor = model.floor(gate, channel)
+            spread = model.spread(gate, channel)
+            assert floor == pytest.approx(stream.floor, abs=1.0)
+            assert spread >= config.min_mad
+            threshold = floor + config.k * spread
             total += len(samples)
             exceedances += sum(1 for sample in samples if sample >= threshold)
 
@@ -76,15 +83,17 @@ def test_spread_tracks_the_upper_tail_not_the_bulk() -> None:
     for frame in frames:
         model.add_frame(frame)
 
-    quiet = model.still[0]
-    spiky = model.move[0]
-    assert spiky.floor == pytest.approx(quiet.floor, abs=1.0)
+    quiet_floor = model.floor(0, CHANNEL_STILL)
+    quiet_spread = model.spread(0, CHANNEL_STILL)
+    spiky_floor = model.floor(0)
+    spiky_spread = model.spread(0)
+    assert spiky_floor == pytest.approx(quiet_floor, abs=1.0)
     # Same bulk, same centre - but the spiky channel is scaled far wider.
-    assert spiky.spread > 3 * quiet.spread
+    assert spiky_spread > 3 * quiet_spread
 
     worst = max(frame.move_gates[0] for frame in frames)
     assert worst > 25  # the tail really is there
-    assert (worst - spiky.floor) / spiky.spread < make_config().k
+    assert (worst - spiky_floor) / spiky_spread < make_config().k
 
 
 def test_empty_channel_reports_neutral_stats() -> None:
@@ -93,9 +102,9 @@ def test_empty_channel_reports_neutral_stats() -> None:
     model = make_baseline(config)
 
     assert model.bucket_s == TEST_BUCKET_S
-    assert model.move[0].floor == 0.0
-    assert model.move[0].spread == config.min_mad
-    assert model.still[8].spread == config.min_mad
+    assert model.floor(0) == 0.0
+    assert model.spread(0) == config.min_mad
+    assert model.spread(8, CHANNEL_STILL) == config.min_mad
 
 
 def test_not_ready_until_min_buckets_close() -> None:
@@ -136,7 +145,7 @@ def test_ingestion_is_unconditional() -> None:
     assert model.bucket_count == before + 30
     # The elevated buckets are in the window, but they are the *upper* three
     # fifths of it, so the 25th-percentile floor still reads the empty room.
-    assert model.move[4].floor == pytest.approx(stream.floor, abs=1.0)
+    assert model.floor(4) == pytest.approx(stream.floor, abs=1.0)
 
 
 def test_floor_ignores_a_minority_of_occupied_buckets() -> None:
@@ -145,12 +154,12 @@ def test_floor_ignores_a_minority_of_occupied_buckets() -> None:
     model = make_baseline()
     for frame in stream.burst(40.0):
         model.add_frame(frame)
-    idle_floor = model.move[4].floor
+    idle_floor = model.floor(4)
 
     for frame in stream.burst(15.0, move={4: 40}):
         model.add_frame(frame)
 
-    assert model.move[4].floor == pytest.approx(idle_floor, abs=0.5)
+    assert model.floor(4) == pytest.approx(idle_floor, abs=0.5)
 
 
 def test_floor_absorbs_an_overwhelmingly_occupied_window() -> None:
@@ -162,7 +171,7 @@ def test_floor_absorbs_an_overwhelmingly_occupied_window() -> None:
     for frame in stream.burst(50.0, move={4: 40}):
         model.add_frame(frame)
 
-    assert model.move[4].floor > stream.floor + 30
+    assert model.floor(4) > stream.floor + 30
 
 
 def test_window_evicts_buckets_beyond_the_configured_span() -> None:
@@ -194,7 +203,7 @@ def test_gaps_do_not_backfill_buckets() -> None:
     # seconds fed after the gap count. The +/-1 allows for the resume landing
     # either side of a bucket boundary.
     assert before + 2 <= model.bucket_count <= before + 4
-    assert model.move[0].floor == pytest.approx(stream.floor, abs=1.0)
+    assert model.floor(0) == pytest.approx(stream.floor, abs=1.0)
 
 
 def test_restore_after_gap_discards_stale_open_bucket() -> None:
@@ -206,7 +215,7 @@ def test_restore_after_gap_discards_stale_open_bucket() -> None:
     before = model.bucket_count
 
     payload = json.loads(json.dumps(model.to_dict()))
-    restored = BaselineModel.from_dict(payload)
+    restored = Baseline.from_dict(payload)
     assert restored.bucket_count == before
 
     # Hours pass - an HA restart - before the next sample arrives.
@@ -238,7 +247,7 @@ def test_restore_immediate_continuation_still_closes_open_bucket() -> None:
     assert before == 8
 
     payload = json.loads(json.dumps(model.to_dict()))
-    restored = BaselineModel.from_dict(payload)
+    restored = Baseline.from_dict(payload)
 
     # No gap: the very next sample lands in the following bucket, same as it
     # would have without any restart in between.
@@ -255,8 +264,8 @@ def test_min_mad_zero_does_not_divide_by_zero() -> None:
         model.add_frame(frame)
 
     assert model.ready
-    assert model.move[0].spread > 0.0
-    assert model.still[0].spread > 0.0
+    assert model.spread(0) > 0.0
+    assert model.spread(0, CHANNEL_STILL) > 0.0
 
     move, still = model.residuals(stream.next_frame())
     assert all(math.isfinite(value) for value in move)
@@ -266,8 +275,8 @@ def test_min_mad_zero_does_not_divide_by_zero() -> None:
 def test_empty_channel_min_mad_zero_reports_epsilon_floor() -> None:
     """An unpopulated channel with min_mad=0 still reports a positive spread."""
     model = make_baseline(make_config(min_mad=0.0))
-    assert model.move[0].spread > 0.0
-    assert model.still[0].spread > 0.0
+    assert model.spread(0) > 0.0
+    assert model.spread(0, CHANNEL_STILL) > 0.0
 
 
 def test_resize_window_shrinks_and_truncates_oldest_buckets() -> None:
@@ -283,7 +292,7 @@ def test_resize_window_shrinks_and_truncates_oldest_buckets() -> None:
     for frame in stream.burst(5.0):
         model.add_frame(frame)
     assert model.ready
-    mixed_floor = model.move[0].floor
+    mixed_floor = model.floor(0)
     assert mixed_floor > stream.floor + 10  # the elevated buckets dominate
 
     model.resize_window(5.0)
@@ -293,7 +302,7 @@ def test_resize_window_shrinks_and_truncates_oldest_buckets() -> None:
     assert model.age_s == 5.0
     # The oldest (elevated) buckets were truncated away; only the newest,
     # floor-level buckets remain.
-    assert model.move[0].floor == pytest.approx(stream.floor, abs=1.0)
+    assert model.floor(0) == pytest.approx(stream.floor, abs=1.0)
 
 
 def test_resize_window_grows_and_preserves_data() -> None:
@@ -305,12 +314,12 @@ def test_resize_window_grows_and_preserves_data() -> None:
         model.add_frame(frame)
     assert model.ready
     before_count = model.bucket_count
-    before_floor = model.move[0].floor
+    before_floor = model.floor(0)
 
     model.resize_window(60.0)
 
     assert model.bucket_count == before_count
-    assert model.move[0].floor == pytest.approx(before_floor)
+    assert model.floor(0) == pytest.approx(before_floor)
     assert model.age_s == before_count * TEST_BUCKET_S
 
     # The larger cap now lets more data accumulate instead of evicting.
@@ -347,16 +356,16 @@ def test_persistence_round_trip_preserves_behaviour() -> None:
 
     payload = json.loads(json.dumps(model.to_dict()))
     assert payload["version"] == SCHEMA_VERSION
-    restored = BaselineModel.from_dict(payload)
+    restored = Baseline.from_dict(payload)
 
     assert restored.bucket_count == model.bucket_count
     assert restored.ready == model.ready
     assert restored.age_s == model.age_s
     for gate in range(GATE_COUNT):
-        assert restored.move[gate].floor == model.move[gate].floor
-        assert restored.move[gate].spread == model.move[gate].spread
-        assert restored.still[gate].floor == model.still[gate].floor
-        assert restored.still[gate].spread == model.still[gate].spread
+        assert restored.floor(gate) == model.floor(gate)
+        assert restored.spread(gate) == model.spread(gate)
+        assert restored.floor(gate, CHANNEL_STILL) == model.floor(gate, CHANNEL_STILL)
+        assert restored.spread(gate, CHANNEL_STILL) == model.spread(gate, CHANNEL_STILL)
 
     # Same subsequent frames, same decisions from detectors over each model.
     frames = [
@@ -375,7 +384,7 @@ def test_from_dict_rejects_unknown_schema_version() -> None:
     payload = make_baseline().to_dict()
     payload["version"] = SCHEMA_VERSION + 1
     with pytest.raises(ValueError, match="unsupported baseline schema version"):
-        BaselineModel.from_dict(payload)
+        Baseline.from_dict(payload)
 
 
 def test_from_dict_rejects_previous_schema_versions() -> None:
@@ -404,11 +413,11 @@ def test_from_dict_rejects_previous_schema_versions() -> None:
         ],
     }
     with pytest.raises(ValueError, match="unsupported baseline schema version 2"):
-        BaselineModel.from_dict(legacy)
+        Baseline.from_dict(legacy)
 
     legacy["version"] = 1
     with pytest.raises(ValueError, match="unsupported baseline schema version 1"):
-        BaselineModel.from_dict(legacy)
+        Baseline.from_dict(legacy)
 
 
 def test_from_dict_rejects_mismatched_bucket_series() -> None:
@@ -421,7 +430,7 @@ def test_from_dict_rejects_mismatched_bucket_series() -> None:
     payload = model.to_dict()
     payload["move"][0]["spreads"].pop()
     with pytest.raises(ValueError, match="mismatched bucket series"):
-        BaselineModel.from_dict(payload)
+        Baseline.from_dict(payload)
 
 
 def test_warmup_helper_makes_the_model_ready() -> None:

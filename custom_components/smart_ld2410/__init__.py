@@ -25,7 +25,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.helpers.storage import Store
 
-from .algo.baseline import BaselineModel
+from .algo.baseline import Baseline
 from .algo.detector import Detector
 from .algo.types import DetectorConfig
 from .ble.client import LD2410Client
@@ -266,14 +266,14 @@ def _retention_from_options(options: Mapping[str, Any]) -> tuple[int, int]:
 
 def _restore_baseline(
     data: dict[str, Any] | None, config: DetectorConfig
-) -> BaselineModel | None:
+) -> Baseline | None:
     """Restore a persisted baseline if it exists and matches the config window."""
     if data is None:
         return None
     try:
         if float(data["window_s"]) != config.baseline_window_s:
             return None
-        return BaselineModel.from_dict(data)
+        return Baseline.from_dict(data, config)
     except (KeyError, TypeError, ValueError):
         _LOGGER.warning("Discarding incompatible persisted baseline", exc_info=True)
         return None
@@ -349,12 +349,11 @@ async def _async_setup_entry_with_store(
         hass, BASELINE_STORAGE_VERSION, f"{DOMAIN}.baseline_{address}"
     )
     baseline_data = await baseline_store.async_load()
-    baseline = _restore_baseline(baseline_data, config)
-    classifier = Detector.classifier_from_state(baseline_data, config)
-    retention = Detector.retention_from_state(baseline_data, config)
-
     detector = Detector(
-        config, baseline=baseline, classifier=classifier, retention=retention
+        config,
+        baseline=_restore_baseline(baseline_data, config),
+        gates=Detector.gates_from_state(baseline_data, config),
+        presence=Detector.presence_from_state(baseline_data, config),
     )
     coordinator = SmartLD2410Coordinator(hass, entry, detector, store, address)
 

@@ -1,0 +1,76 @@
+{
+  "D0:6E:81:D2:5D:A6": [
+    {
+      "ts": 1789305000.0151749,
+      "kind": "occupied",
+      "confidence": 0.5,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789305330.2214398,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789305843.8610826,
+      "kind": "occupied",
+      "confidence": 0.9999999999999942,
+      "score": 27.585185185185182,
+      "active_gates": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "ts": 1789305946.0567405,
+      "kind": "vacant",
+      "confidence": 0.01798620996209156,
+      "score": 0.0,
+      "active_gates": []
+    },
+    {
+      "ts": 1789306443.1072075,
+      "kind": "occupied",
+      "confidence": 0.9999999999999378,
+      "score": 25.805555555555557,
+      "active_gates": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "ts": 1789308208.7258093,
+      "kind": "vacant",
+      "confidence": 0.999999869494698,
+      "score": 14.88888888888889,
+      "active_gates": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "ts": 1789308436.3262374,
+      "kind": "occupied",
+      "confidence": 0.9999999998073932,
+      "score": 19.77777777777778,
+      "active_gates": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    }
+  ]
+}

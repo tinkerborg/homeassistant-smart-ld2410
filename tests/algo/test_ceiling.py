@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import json
 
-from custom_components.smart_ld2410.algo.classifier import GateClassifier
+from custom_components.smart_ld2410.algo.gates import GateModel
 from custom_components.smart_ld2410.algo.detector import Detector
 from custom_components.smart_ld2410.algo.types import (
     CLASS_IN_ROOM,
@@ -29,7 +29,7 @@ from custom_components.smart_ld2410.algo.types import (
     Episode,
 )
 
-from . import FrameStream, feed, make_config, make_detector
+from . import FrameStream, feed, make_config, make_detector, make_gates
 
 DAY_S = 86400.0
 """One evaluation interval: the classifier's "day" (spec 21 §2.3)."""
@@ -69,7 +69,7 @@ def _episode(
 
 
 def _feed_day(
-    classifier: GateClassifier,
+    classifier: GateModel,
     day: int,
     profile: dict[int, int],
     *,
@@ -89,7 +89,7 @@ def _feed_day(
 
 
 def _feed_day_open(
-    classifier: GateClassifier,
+    classifier: GateModel,
     day: int,
     profile: dict[int, int],
     *,
@@ -105,10 +105,10 @@ def _feed_day_open(
     return classifier.tick(base + DAY_S, open_gates=open_gates)[1]
 
 
-def _classifier(**overrides: object) -> GateClassifier:
+def _classifier(**overrides: object) -> GateModel:
     """A classifier whose evaluation interval is exactly one day."""
     config = DetectorConfig(class_eval_interval_s=DAY_S, **overrides)  # type: ignore[arg-type]
-    return GateClassifier(config)
+    return make_gates(config)
 
 
 WALL_PROFILE = {
@@ -159,7 +159,7 @@ def test_insufficient_episode_counts_produce_no_boundary() -> None:
         _feed_day(classifier, day, WALL_PROFILE, count=3)
 
     assert all(
-        stat.n_epi(3 * DAY_S, classifier._config.stats_half_life_s) < 10.0
+        stat.n_epi(3 * DAY_S) < 10.0
         for stat in classifier.stats
     )
     assert classifier.boundary_gate is None
@@ -350,7 +350,7 @@ def test_a_flapping_candidate_never_confirms() -> None:
         profile[5] = straddle
         profile.update(dict.fromkeys(range(6, GATE_COUNT), 12))
         _feed_day(classifier, day, profile)
-        candidates.append(classifier._pending_boundary)
+        candidates.append(classifier.pending_boundary)
         assert classifier.confirmed_days < 3
 
     assert candidates == [5, 4, 5, 4, 5, 4, 5]
@@ -456,7 +456,7 @@ def test_ceiling_state_survives_a_serialisation_round_trip() -> None:
         _feed_day(classifier, day, WALL_PROFILE)
     classifier.observe(_episode(6, 4 * DAY_S, peak=70, duration_s=90.0, still_frac=0.9))
 
-    restored = GateClassifier.from_dict(
+    restored = GateModel.from_dict(
         json.loads(json.dumps(classifier.to_dict())), classifier._config
     )
 
@@ -493,7 +493,7 @@ def test_pre_ceiling_state_restores_with_the_dwell_statistics_intact() -> None:
     legacy.pop("confirm_count")
     legacy.pop("last_boundary_eval_ts")
 
-    restored = GateClassifier.from_dict(legacy, classifier._config)
+    restored = GateModel.from_dict(legacy, classifier._config)
 
     assert restored.stats[3].gate_class == CLASS_IN_ROOM
     assert restored.stats[3].n_sustained == 1.0
@@ -555,8 +555,8 @@ def test_wall_attenuation_learns_the_boundary_and_suppresses_beyond_it() -> None
 
     _walk_the_room(stream, detector, passes=14)
 
-    assert detector.classifier.boundary_gate == WALL_GATE - 1
-    profile = detector.classifier.ceil_profile
+    assert detector.gates.boundary_gate == WALL_GATE - 1
+    profile = detector.gates.ceil_profile
     assert profile[WALL_GATE - 1] is not None and profile[WALL_GATE - 1] > 0.9
     assert all(value is not None and value < 0.45 for value in profile[WALL_GATE:])
 
@@ -568,15 +568,15 @@ def test_wall_attenuation_learns_the_boundary_and_suppresses_beyond_it() -> None
     assert all(output.score == 0.0 for output in island)
     # It was suppressed by the boundary, not by the dwell statistics: the gate
     # itself learned exactly what spec 20 said it would.
-    assert detector.classifier.stats[7].gate_class == CLASS_IN_ROOM
-    assert detector.classifier.gate_class(7) == CLASS_OUT
+    assert detector.gates.stats[7].gate_class == CLASS_IN_ROOM
+    assert detector.gates.gate_class(7) == CLASS_OUT
 
     # And the armchair at gate 3, on this side of it, is untouched.
     feed(detector, stream.burst(120.0))
     in_room = feed(detector, stream.burst(180.0, still={2: 8, 3: 25}))
     feed(detector, stream.burst(20.0))
     assert any(output.occupied for output in in_room)
-    assert detector.classifier.gate_class(3) == CLASS_IN_ROOM
+    assert detector.gates.gate_class(3) == CLASS_IN_ROOM
 
 
 def test_the_same_wall_with_the_ceiling_disabled_still_admits_the_island() -> None:
@@ -587,17 +587,15 @@ def test_the_same_wall_with_the_ceiling_disabled_still_admits_the_island() -> No
     _walk_the_room(stream, detector, passes=14)
 
     # Learned all the same things...
-    assert detector.classifier.boundary_gate == WALL_GATE - 1
-    assert detector.classifier.stats[7].n_epi(
-        stream.ts, detector.config.stats_half_life_s
-    ) >= detector.config.n_ceil_min
+    assert detector.gates.boundary_gate == WALL_GATE - 1
+    assert detector.gates.stats[7].n_epi(stream.ts) >= detector.config.n_ceil_min
 
     # ...and acts on none of them.
     feed(detector, stream.burst(120.0))
     island = feed(detector, stream.burst(180.0, still={6: 8, 7: 25}))
     feed(detector, stream.burst(20.0))
     assert any(output.occupied for output in island)
-    assert detector.classifier.gate_class(7) == CLASS_IN_ROOM
+    assert detector.gates.gate_class(7) == CLASS_IN_ROOM
 
 
 def test_episodes_carry_the_raw_move_peak_not_the_residual() -> None:

@@ -56,13 +56,16 @@ def _active_frac(active_time: float, span: float) -> float:
     return min(1.0, active_time / span)
 
 
-def _result(
-    saw_occupied: bool,
-    saw_active: bool,
-    saw_energy_floor: bool,
-    saw_arrival: bool,
-    saw_leading_edge: bool,
-) -> str:
+_REJECTION_PRIORITY = (
+    RESULT_REJECTED_LEADING_EDGE,
+    RESULT_REJECTED_ARRIVAL,
+    RESULT_REJECTED_ENERGY_FLOOR,
+)
+"""Rejections most specific first: a later rule only judges frames the earlier
+ones admitted, so it is the better answer to "why not"."""
+
+
+def _result(saw_occupied: bool, saw_active: bool, rejections: set[str]) -> str:
     """Classify how an episode ended relative to the occupancy decision."""
     if saw_occupied:
         return RESULT_ENTERED
@@ -70,14 +73,9 @@ def _result(
         # The gate was hot but never survived the spatial-coherence test, so
         # it never even reached the hysteresis machine.
         return RESULT_REJECTED_COHERENCE
-    # Each entry rule only ever blocks a frame the ones before it let through,
-    # so the last one to fire is the most specific answer to "why not".
-    if saw_leading_edge:
-        return RESULT_REJECTED_LEADING_EDGE
-    if saw_arrival:
-        return RESULT_REJECTED_ARRIVAL
-    if saw_energy_floor:
-        return RESULT_REJECTED_ENERGY_FLOOR
+    for reason in _REJECTION_PRIORITY:
+        if reason in rejections:
+            return reason
     return RESULT_REJECTED_HYSTERESIS
 
 
@@ -101,10 +99,8 @@ class _OpenGateEpisode:
         "leading_gate",
         "peak",
         "peak_raw",
+        "rejections",
         "saw_active",
-        "saw_arrival",
-        "saw_energy_floor",
-        "saw_leading_edge",
         "saw_occupied",
         "still_time",
         "t0",
@@ -126,9 +122,7 @@ class _OpenGateEpisode:
         self.below_since: float | None = None
         self.saw_active = False
         self.saw_occupied = False
-        self.saw_energy_floor = False
-        self.saw_arrival = False
-        self.saw_leading_edge = False
+        self.rejections: set[str] = set()
         self.leading_gate: int | None = None
 
     def close(self) -> Episode:
@@ -150,13 +144,7 @@ class _OpenGateEpisode:
             centroid_mean=float(self.gate),
             centroid_vel=0.0,
             still_frac=still_frac,
-            result=_result(
-                self.saw_occupied,
-                self.saw_active,
-                self.saw_energy_floor,
-                self.saw_arrival,
-                self.saw_leading_edge,
-            ),
+            result=_result(self.saw_occupied, self.saw_active, self.rejections),
             active_frac=active_frac,
             gate_peaks=tuple(gate_peaks),
             leading_gate=self.leading_gate,
@@ -177,10 +165,8 @@ class _OpenDetectionEpisode:
         "last_ts",
         "leading_gate",
         "peak",
+        "rejections",
         "saw_active",
-        "saw_arrival",
-        "saw_energy_floor",
-        "saw_leading_edge",
         "saw_occupied",
         "still_time",
         "t0",
@@ -203,9 +189,7 @@ class _OpenDetectionEpisode:
         self.last_centroid = float(gate)
         self.saw_active = False
         self.saw_occupied = False
-        self.saw_energy_floor = False
-        self.saw_arrival = False
-        self.saw_leading_edge = False
+        self.rejections: set[str] = set()
         self.leading_gate: int | None = None
 
     def close(self) -> Episode:
@@ -234,13 +218,7 @@ class _OpenDetectionEpisode:
             centroid_mean=centroid_mean,
             centroid_vel=velocity,
             still_frac=still_frac,
-            result=_result(
-                self.saw_occupied,
-                self.saw_active,
-                self.saw_energy_floor,
-                self.saw_arrival,
-                self.saw_leading_edge,
-            ),
+            result=_result(self.saw_occupied, self.saw_active, self.rejections),
             active_frac=_active_frac(self.active_time, duration),
             gate_peaks=tuple(self.gate_peaks),
             leading_gate=self.leading_gate,
@@ -285,9 +263,7 @@ class EpisodeTracker:
         move_raw: tuple[int, ...],
         active_gates: tuple[int, ...],
         occupied: bool,
-        entry_suppressed: bool = False,
-        arrival_suppressed: bool = False,
-        lead_suppressed: bool = False,
+        rejection: str | None = None,
         leading_gate: int | None = None,
     ) -> tuple[Episode, ...]:
         """Fold one frame in and return whatever episodes it closed.
@@ -297,10 +273,10 @@ class EpisodeTracker:
 
         ``move_raw`` is the frame's unmodified move-channel energies, feeding
         the energy ceiling, which must not depend on the baseline.
-        ``occupied`` is the detector's post-hysteresis state for this frame;
-        ``entry_suppressed`` says a rule held it down; ``arrival_suppressed``
-        and ``lead_suppressed`` say which one. ``leading_gate`` is the nearest
-        gate elevated above its learned quiet level.
+        ``occupied`` is the detector's post-hysteresis state for this frame and
+        ``rejection`` the entry filter's reason for holding it down, if any.
+        ``leading_gate`` is the nearest gate elevated above its learned quiet
+        level.
         """
         config = self._config
         on = config.s_gate_on
@@ -348,11 +324,8 @@ class EpisodeTracker:
                     episode.still_time += elapsed
                 episode.saw_active |= gate in active_gates
                 episode.saw_occupied |= occupied
-                episode.saw_energy_floor |= (
-                    entry_suppressed and not arrival_suppressed and not lead_suppressed
-                )
-                episode.saw_arrival |= arrival_suppressed
-                episode.saw_leading_edge |= lead_suppressed
+                if rejection is not None:
+                    episode.rejections.add(rejection)
                 episode.leading_gate = _nearer(episode.leading_gate, leading_gate)
                 self._widen_detection(ts, gate)
                 continue
@@ -378,9 +351,7 @@ class EpisodeTracker:
                 move_raw=move_raw,
                 active_gates=active_gates,
                 occupied=occupied,
-                entry_suppressed=entry_suppressed,
-                arrival_suppressed=arrival_suppressed,
-                lead_suppressed=lead_suppressed,
+                rejection=rejection,
                 leading_gate=leading_gate,
             )
 
@@ -432,9 +403,7 @@ class EpisodeTracker:
         move_raw: tuple[int, ...],
         active_gates: tuple[int, ...],
         occupied: bool,
-        entry_suppressed: bool,
-        arrival_suppressed: bool,
-        lead_suppressed: bool,
+        rejection: str | None,
         leading_gate: int | None,
     ) -> None:
         """Fold this frame's band-wide quantities into the detection episode.
@@ -456,11 +425,8 @@ class EpisodeTracker:
                 detection.gate_peaks[gate] = move_raw[gate]
         detection.saw_active |= bool(active_gates)
         detection.saw_occupied |= occupied
-        detection.saw_energy_floor |= (
-            entry_suppressed and not arrival_suppressed and not lead_suppressed
-        )
-        detection.saw_arrival |= arrival_suppressed
-        detection.saw_leading_edge |= lead_suppressed
+        if rejection is not None:
+            detection.rejections.add(rejection)
         detection.leading_gate = _nearer(detection.leading_gate, leading_gate)
 
         centroid = _centroid(peaks, support, on)

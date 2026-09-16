@@ -12,7 +12,7 @@ import json
 
 from custom_components.smart_ld2410.algo.baseline import (
     SCHEMA_VERSION,
-    BaselineModel,
+    Baseline,
 )
 from custom_components.smart_ld2410.algo.detector import Detector
 from custom_components.smart_ld2410.algo.types import (
@@ -206,7 +206,7 @@ def test_state_round_trip_preserves_the_move_ceiling() -> None:
 
     payload = json.loads(json.dumps(model.to_dict()))
     assert payload["version"] == SCHEMA_VERSION
-    restored = BaselineModel.from_dict(payload)
+    restored = Baseline.from_dict(payload)
 
     assert model.move_ceiling_learned
     assert restored.move_ceiling_learned
@@ -224,8 +224,8 @@ def test_state_without_a_ceiling_loads_with_it_unlearned() -> None:
     del payload["move_ceiling"]
     payload["version"] = SCHEMA_VERSION - 1
 
-    restored = BaselineModel.from_dict(payload)
+    restored = Baseline.from_dict(payload)
 
     assert not restored.move_ceiling_learned
     assert restored.bucket_count == model.bucket_count
-    assert restored.move[0].floor == model.move[0].floor
+    assert restored.floor(0) == model.floor(0)

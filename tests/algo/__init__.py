@@ -9,8 +9,14 @@ from __future__ import annotations
 import random
 from collections.abc import Mapping
 
-from custom_components.smart_ld2410.algo.baseline import BaselineModel
+from custom_components.smart_ld2410.algo.baseline import Baseline
+from custom_components.smart_ld2410.algo.context import DetectorContext
 from custom_components.smart_ld2410.algo.detector import Detector
+from custom_components.smart_ld2410.algo.episodes import EpisodeTracker
+from custom_components.smart_ld2410.algo.gates import GateModel
+from custom_components.smart_ld2410.algo.pipeline import build_pipeline
+from custom_components.smart_ld2410.algo.presence import Presence
+from custom_components.smart_ld2410.algo.roles import StageEnv
 from custom_components.smart_ld2410.algo.types import (
     GATE_COUNT,
     DetectorConfig,
@@ -30,14 +36,14 @@ TEST_BUCKET_S = 1.0
 TEST_MIN_BUCKETS = 5
 
 
-def make_config(**overrides: float | None) -> DetectorConfig:
+def make_config(**overrides: object) -> DetectorConfig:
     """Return a detector config with a short baseline window for tests.
 
     The leading-edge rule is off unless a test asks for it: the synthetic
     bands the other rules are exercised with sit wherever those rules need
     them, which is rarely at the entry gates.
     """
-    values: dict[str, float | int | None] = {
+    values: dict[str, object] = {
         "k": 4.5,
         "baseline_window_s": 60.0,
         "enter_score": 3.0,
@@ -54,7 +60,7 @@ def make_config(**overrides: float | None) -> DetectorConfig:
 def make_detector(
     config: DetectorConfig | None = None,
     *,
-    baseline: BaselineModel | None = None,
+    baseline: Baseline | None = None,
     bucket_s: float = TEST_BUCKET_S,
 ) -> Detector:
     """Build a detector wired to the fast test bucketing."""
@@ -68,12 +74,12 @@ def make_detector(
 
 def make_baseline(
     config: DetectorConfig | None = None, *, bucket_s: float = TEST_BUCKET_S
-) -> BaselineModel:
-    """Build a standalone baseline model with the fast test bucketing."""
-    return BaselineModel.from_config(
-        config or make_config(),
-        bucket_s=bucket_s,
-        min_buckets=TEST_MIN_BUCKETS,
+) -> Baseline:
+    """Build a standalone baseline with the fast test bucketing."""
+    resolved = config or make_config()
+    return Baseline.build(
+        StageEnv(resolved, bucket_s=bucket_s, min_buckets=TEST_MIN_BUCKETS),
+        resolved.stages,
     )
 
 
@@ -198,3 +204,40 @@ def feed(detector: Detector, frames: list[Frame]) -> list[DetectorOutput]:
 def warmup_frames(stream: FrameStream, duration_s: float = 10.0) -> list[Frame]:
     """Produce enough idle frames for the baseline to become ready."""
     return stream.burst(duration_s)
+
+
+def make_gates(config: DetectorConfig) -> GateModel:
+    """Build the gate stages on their own, as a detector would."""
+    return GateModel.build(StageEnv(config), config.stages)
+
+
+def make_presence(config: DetectorConfig) -> Presence:
+    """Build the presence stages on their own, as a detector would."""
+    return Presence.build(StageEnv(config), config.stages)
+
+
+def hold_refreshes(
+    config: DetectorConfig, presence: Presence, ts: float, *, scored: bool
+) -> bool:
+    """Whether the config's hold refreshers keep an occupancy alive at ``ts``.
+
+    Drives the shipped stages the way :meth:`Detector._advance` drives them for
+    an owned room, without folding a frame into the retention statistic.
+    """
+    env = StageEnv(config, bucket_s=TEST_BUCKET_S, min_buckets=TEST_MIN_BUCKETS)
+    pipeline = build_pipeline(env, presence=presence)
+    context = DetectorContext(
+        config, pipeline=pipeline, episodes=EpisodeTracker(config)
+    )
+    context.frame = Frame(
+        ts_utc=ts,
+        ts_mono=ts,
+        move_gates=(0,) * GATE_COUNT,
+        still_gates=(0,) * GATE_COUNT,
+        target_distance_cm=0,
+        device_occupancy=False,
+    )
+    context.score = config.exit_score if scored else 0.0
+    if presence.owned:
+        presence.step_arming(ts)
+    return pipeline.refreshes_hold(context)
