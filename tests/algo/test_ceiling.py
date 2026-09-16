@@ -105,9 +105,22 @@ def _feed_day_open(
     return classifier.tick(base + DAY_S, open_gates=open_gates)[1]
 
 
+CEILING_STAGES = (
+    "quantile_floor",
+    "tail_spread",
+    "run_score",
+    "lone_gate_suppression",
+    "dwell_class",
+    "energy_ceiling",
+    "gate_exclusion",
+    "score_hold",
+)
+"""The scoring core plus the dwell statistics the energy ceiling is learned from."""
+
+
 def _classifier(**overrides: object) -> GateModel:
     """A classifier whose evaluation interval is exactly one day."""
-    config = DetectorConfig(class_eval_interval_s=DAY_S, **overrides)  # type: ignore[arg-type]
+    config = DetectorConfig(stages=CEILING_STAGES, class_eval_interval_s=DAY_S, **overrides)  # type: ignore[arg-type]
     return make_gates(config)
 
 
@@ -370,7 +383,9 @@ def test_max_gate_outranks_a_learned_boundary() -> None:
 
     # Lift the cap and the learned boundary is what remains in force.
     classifier.reconfigure(
-        DetectorConfig(class_eval_interval_s=DAY_S, ceiling_enabled=True)
+        DetectorConfig(
+            stages=CEILING_STAGES, class_eval_interval_s=DAY_S, ceiling_enabled=True
+        )
     )
     assert classifier.gate_class(4) != CLASS_OUT
     assert classifier.gate_class(5) == CLASS_OUT
@@ -399,7 +414,10 @@ def test_a_boundary_retreat_waits_for_an_open_episode_to_close() -> None:
     # 50/90 is 0.55: inside a 0.45 drop, outside a 0.70 one.
     classifier.reconfigure(
         DetectorConfig(
-            class_eval_interval_s=DAY_S, ceiling_enabled=True, ceil_drop=0.70
+            stages=CEILING_STAGES,
+            class_eval_interval_s=DAY_S,
+            ceiling_enabled=True,
+            ceil_drop=0.70,
         )
     )
 
@@ -515,10 +533,10 @@ def _wall_detector(**overrides: object) -> Detector:
     each one to close on its own.
     """
     values: dict[str, object] = {
+        "stages": CEILING_STAGES,
         "baseline_window_s": 3600.0,
         "class_eval_interval_s": 60.0,
         "hold_s": 2.0,
-        "arrival_frac": 0.0,
     }
     values.update(overrides)
     return make_detector(make_config(**values), bucket_s=60.0)  # type: ignore[arg-type]

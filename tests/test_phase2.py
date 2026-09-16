@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import sqlite3
+from dataclasses import replace
 from typing import Any
+from unittest.mock import patch
 
 from homeassistant.const import CONF_ADDRESS
 from homeassistant.core import Event, HomeAssistant
@@ -11,7 +13,10 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from custom_components.smart_ld2410 import _detector_config_from_options
 from custom_components.smart_ld2410.algo.types import (
+    ALL_STAGES,
+    DEFAULT_STAGES,
     GATE_COUNT,
     DetectorConfig,
     Frame,
@@ -75,9 +80,16 @@ def _warmup_frames(count: int = 7) -> list[Frame]:
 
 
 async def _setup_entry(
-    hass: HomeAssistant, *, options: dict[str, Any] | None = None
+    hass: HomeAssistant,
+    *,
+    options: dict[str, Any] | None = None,
+    stages: tuple[str, ...] = DEFAULT_STAGES,
 ) -> tuple[MockConfigEntry, FakeLD2410Client]:
-    """Add and set up a config entry, returning it and its fake BLE client."""
+    """Add and set up a config entry, returning it and its fake BLE client.
+
+    ``stages`` is not an option, so a test that needs a detector wider than the
+    default one says so where the config is built.
+    """
     entry = MockConfigEntry(
         domain=DOMAIN,
         title="PRP1-RD_6615",
@@ -87,8 +99,14 @@ async def _setup_entry(
     )
     entry.add_to_hass(hass)
 
-    assert await hass.config_entries.async_setup(entry.entry_id)
-    await hass.async_block_till_done()
+    with patch(
+        "custom_components.smart_ld2410._detector_config_from_options",
+        lambda options: replace(
+            _detector_config_from_options(options), stages=stages
+        ),
+    ):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
 
     client = entry.runtime_data.client
     assert isinstance(client, FakeLD2410Client)
@@ -152,7 +170,7 @@ async def test_episode_lands_in_store_and_fires_bus_event(hass: HomeAssistant) -
 
 async def test_gate_classes_entity_reflects_detector_output(hass: HomeAssistant) -> None:
     """A sustained still dwell on gate 3 promotes it to IN_ROOM ('I')."""
-    entry, client = await _setup_entry(hass)
+    entry, client = await _setup_entry(hass, stages=ALL_STAGES)
     entity_id = _entity_id(hass, "sensor", "gate_classes")
     assert entity_id is not None
 
@@ -287,7 +305,7 @@ async def test_boundary_gate_entity_publishes_while_the_ceiling_is_disabled(
     act, is the entire ship path - so this entity existing and carrying its
     profile at default options is the feature, not an extra.
     """
-    _entry, client = await _setup_entry(hass)
+    _entry, client = await _setup_entry(hass, stages=ALL_STAGES)
     entity_id = _entity_id(hass, "sensor", "boundary_gate")
     assert entity_id is not None
 

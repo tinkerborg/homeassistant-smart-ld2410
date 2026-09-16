@@ -13,7 +13,11 @@ from custom_components.smart_ld2410.algo.harness import (
     score_timeline,
     sensor_ids,
 )
-from custom_components.smart_ld2410.algo.types import DEFAULT_STAGES, DetectorConfig
+from custom_components.smart_ld2410.algo.types import (
+    ALL_STAGES,
+    DEFAULT_STAGES,
+    DetectorConfig,
+)
 
 RECORDINGS = Path(__file__).parent.parent / "fixtures" / "recordings"
 WALK = RECORDINGS / "labeled-walk-0915.db"
@@ -58,7 +62,7 @@ def test_a_stage_list_overrides_the_config_it_is_given() -> None:
 
 def test_the_replayed_visit_is_one_occupied_span() -> None:
     """The harness reports the transitions, in order, with their payload."""
-    timeline = replay(BATHROOM, BATHROOM_SENSOR)
+    timeline = replay(BATHROOM, BATHROOM_SENSOR, stages=ALL_STAGES)
 
     assert [event.kind for event in timeline] == [
         "occupied",

@@ -131,6 +131,9 @@ class Pipeline:
 
     def refreshes_hold(self, context: DetectorContext) -> bool:
         """Whether any refresher keeps the occupancy alive this frame."""
+        anchor = self._stages.get("motion_anchor")
+        if anchor is not None:
+            return anchor.refreshes(context)
         return any(stage.refreshes(context) for stage in self._hold_refreshers)
 
 

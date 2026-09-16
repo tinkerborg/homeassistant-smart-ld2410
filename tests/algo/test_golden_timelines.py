@@ -14,6 +14,7 @@ from pathlib import Path
 
 import pytest
 
+from custom_components.smart_ld2410.algo.types import ALL_STAGES
 from custom_components.smart_ld2410.algo.harness import (
     replay,
     sensor_ids,
@@ -45,4 +46,4 @@ def test_the_timeline_matches_the_recorded_baseline(case: tuple[Path, str]) -> N
     recording, sensor_id = case
     golden = json.loads((GOLDEN / f"{recording.stem}.json").read_text())
 
-    assert timeline_rows(replay(recording, sensor_id)) == golden[sensor_id]
+    assert timeline_rows(replay(recording, sensor_id, stages=ALL_STAGES)) == golden[sensor_id]

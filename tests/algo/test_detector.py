@@ -8,6 +8,7 @@ import pytest
 
 from custom_components.smart_ld2410.algo.types import (
     CHANNEL_STILL,
+    DEFAULT_STAGES,
     DetectorOutput,
     Frame,
 )
@@ -21,6 +22,9 @@ from . import (
     warmup_frames,
 )
 
+
+HOLD_STAGES = (*DEFAULT_STAGES, "score_hold")
+"""The default detector plus the score-driven hold the hysteresis rules need."""
 
 def _transitions(outputs: list[DetectorOutput]) -> int:
     """Count occupancy edges in a run of outputs."""
@@ -115,7 +119,7 @@ def test_still_presence_is_retained_and_never_learned() -> None:
     empty room.
     """
     stream = FrameStream()
-    config = make_config(baseline_window_s=12 * 3600.0)
+    config = make_config(baseline_window_s=12 * 3600.0, stages=HOLD_STAGES)
     detector = make_detector(config, bucket_s=60.0)
     step = 10.0
     feed(detector, stream.burst(6 * 3600.0, interval_s=step))
@@ -221,9 +225,7 @@ def test_warmup_contaminated_by_a_person_still_learns_the_noise() -> None:
     property that lets the baseline be learned in an occupied room.
     """
     stream = FrameStream()
-    detector = make_detector(
-        make_config(baseline_window_s=600.0, arrival_frac=0.0), bucket_s=10.0
-    )
+    detector = make_detector(make_config(baseline_window_s=600.0), bucket_s=10.0)
 
     person = {3: 45, 4: 45}
     for _ in range(10):
@@ -285,7 +287,7 @@ def test_new_noise_source_is_absorbed_without_a_death_spiral() -> None:
 def test_hysteresis_holds_through_short_dips() -> None:
     """Spec item 6: only a dip longer than hold_s releases occupancy."""
     stream = FrameStream()
-    config = make_config()
+    config = make_config(stages=HOLD_STAGES)
     detector = make_detector(config)
     feed(detector, warmup_frames(stream))
 
@@ -314,7 +316,7 @@ def test_hysteresis_holds_through_short_dips() -> None:
 def test_gap_in_frames_is_tolerated() -> None:
     """Spec item 7: a ten-minute BLE dropout elapses timers, nothing else."""
     stream = FrameStream()
-    detector = make_detector()
+    detector = make_detector(make_config(stages=HOLD_STAGES))
     feed(detector, warmup_frames(stream))
 
     present = {3: 40, 4: 40, 5: 40}

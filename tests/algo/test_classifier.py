@@ -38,6 +38,19 @@ DWELL = {6: 8, 7: 25}
 """A person settling at gate 7: still-channel energy with a little spill."""
 
 
+CLASSIFIER_STAGES = (
+    "quantile_floor",
+    "tail_spread",
+    "run_score",
+    "lone_gate_suppression",
+    "dwell_class",
+    "portal_class",
+    "gate_exclusion",
+    "score_hold",
+)
+"""The scoring core plus the gate classifiers and the exclusion they drive."""
+
+
 def _stream() -> FrameStream:
     """A synthetic sensor whose idle spread is not pinned to ``min_mad``.
 
@@ -49,7 +62,7 @@ def _stream() -> FrameStream:
     return FrameStream(sigma=2.0)
 
 
-def _detector(**overrides: float | None) -> Detector:
+def _detector(**overrides: object) -> Detector:
     """A detector whose baseline window can outlast a minute-long dwell.
 
     The shared test default is a 60 s window, so a 60 s dwell is a quarter of
@@ -61,7 +74,11 @@ def _detector(**overrides: float | None) -> Detector:
     their pass-bys eight seconds apart, so it is short enough for each one to
     close on its own.
     """
-    values: dict[str, float | None] = {"baseline_window_s": 3600.0, "hold_s": 2.0}
+    values: dict[str, object] = {
+        "stages": CLASSIFIER_STAGES,
+        "baseline_window_s": 3600.0,
+        "hold_s": 2.0,
+    }
     values.update(overrides)
     return make_detector(make_config(**values), bucket_s=60.0)
 
@@ -331,7 +348,11 @@ def test_max_gate_override_forces_out_and_excludes_from_scoring() -> None:
     # gate without relearning it from scratch.
     assert detector.gates.stats[8].n_sustained == 1.0
 
-    detector.reconfigure(make_config(baseline_window_s=3600.0, max_gate=None))
+    detector.reconfigure(
+        make_config(
+            stages=CLASSIFIER_STAGES, baseline_window_s=3600.0, max_gate=None
+        )
+    )
     detector.gates.evaluate(stream.ts)
     assert detector.gates.gate_class(8) == CLASS_IN_ROOM
 
@@ -428,7 +449,7 @@ def test_classifier_state_survives_a_serialisation_round_trip() -> None:
 
 def test_state_without_gate_stats_restores_as_permissive() -> None:
     """Baseline state written before this phase loads with every gate unknown."""
-    detector = make_detector()
+    detector = make_detector(make_config(stages=CLASSIFIER_STAGES))
     legacy = detector.baseline.to_dict()
 
     assert Detector.gates_from_state(legacy, detector.config) is None
@@ -467,9 +488,9 @@ DOOR = dict.fromkeys(DOOR_GATES, 40)
 """A body's worth of move energy on the doorway gates."""
 
 
-def _classifier(**overrides: float | None) -> GateModel:
+def _classifier(**overrides: object) -> GateModel:
     """A classifier whose bleed threshold is out of reach unless asked for."""
-    values: dict[str, float | None] = {"n_bleed_min": 100.0}
+    values: dict[str, object] = {"stages": CLASSIFIER_STAGES, "n_bleed_min": 100.0}
     values.update(overrides)
     return make_gates(make_config(**values))
 

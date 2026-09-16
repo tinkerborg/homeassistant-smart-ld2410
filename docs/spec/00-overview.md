@@ -118,7 +118,11 @@ records:
 Release needs no role of its own: an occupancy ends when the hold window
 expires with nothing refreshing it, so refusing to release is refreshing.
 
-Default order: `quantile_floor`, `tail_spread`, `move_ceiling`, `run_score`,
+Default order: `quantile_floor`, `tail_spread`, `run_score`,
+`lone_gate_suppression`, `energy_floor`.
+
+Available order — every stage a config may name, in the order the pipeline
+evaluates them: `quantile_floor`, `tail_spread`, `move_ceiling`, `run_score`,
 `lone_gate_suppression`, `dwell_class`, `portal_class`, `energy_ceiling`,
 `gate_exclusion`, `energy_floor`, `arrival`, `leading_edge`, `retention`,
 `ownership`, `crossing_arming`, `score_hold`, `attributed_hold`,

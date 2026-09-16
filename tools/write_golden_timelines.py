@@ -17,6 +17,7 @@ from custom_components.smart_ld2410.algo.harness import (  # noqa: E402
     sensor_ids,
     timeline_rows,
 )
+from custom_components.smart_ld2410.algo.types import ALL_STAGES  # noqa: E402
 
 RECORDINGS = ROOT / "tests" / "fixtures" / "recordings"
 GOLDEN = ROOT / "tests" / "fixtures" / "golden"
@@ -27,7 +28,7 @@ def main() -> int:
     GOLDEN.mkdir(parents=True, exist_ok=True)
     for recording in sorted(RECORDINGS.glob("*.db")):
         timelines = {
-            sensor_id: timeline_rows(replay(recording, sensor_id))
+            sensor_id: timeline_rows(replay(recording, sensor_id, stages=ALL_STAGES))
             for sensor_id in sensor_ids(recording)
         }
         (GOLDEN / f"{recording.stem}.json").write_text(

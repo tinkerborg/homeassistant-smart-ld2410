@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from custom_components.smart_ld2410.algo.detector import Detector
 from custom_components.smart_ld2410.algo.types import (
+    DEFAULT_STAGES,
     RESULT_ENTERED,
     RESULT_REJECTED_ENERGY_FLOOR,
     SCOPE_DETECTION,
@@ -30,6 +31,9 @@ STILL_DWELL_STILL = 55
 
 WALK_IN_MOVE = 60
 """Move elevation of somebody walking in, strong from the first frame."""
+
+HOLD_STAGES = (*DEFAULT_STAGES, "score_hold")
+"""The default detector plus the score-driven hold exit is judged against."""
 
 BAND = (3, 4, 5)
 """A three-gate run, wide enough to pass the spatial-coherence test."""
@@ -111,7 +115,7 @@ def test_walk_in_entry_latency_is_unchanged() -> None:
     for energy_floor in (0.0, DetectorConfig().energy_floor):
         stream = FrameStream()
         detector = _ready_detector(
-            stream, make_config(energy_floor=energy_floor, arrival_frac=0.0)
+            stream, make_config(energy_floor=energy_floor)
         )
         outputs = feed(detector, stream.burst(5.0, move=_elevate(WALK_IN_MOVE)))
         latencies.append(next(
@@ -135,7 +139,7 @@ def test_zero_floor_disables_the_rule() -> None:
 def test_occupancy_survives_energy_decaying_under_the_floor() -> None:
     """Exit stays score-driven: a person going faint and still is not dropped."""
     stream = FrameStream()
-    detector = _ready_detector(stream, make_config())
+    detector = _ready_detector(stream, make_config(stages=HOLD_STAGES))
 
     entry = feed(detector, stream.burst(5.0, move=_elevate(WALK_IN_MOVE)))
     assert entry[-1].occupied

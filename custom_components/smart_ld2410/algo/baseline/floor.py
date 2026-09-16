@@ -62,6 +62,8 @@ class _FloorChannel(BucketWindow):
         return {"q50s": list(self._medians), **self.open_state()}
 
     def restore(self, data: dict[str, Any], *, max_buckets: int) -> None:
+        if "q50s" not in data:
+            return
         self._medians = deque(
             (float(value) for value in data["q50s"]), maxlen=max_buckets
         )

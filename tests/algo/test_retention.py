@@ -44,9 +44,25 @@ def _still(level: int) -> tuple[int, ...]:
     )
 
 
-def _config(**overrides: float | None) -> DetectorConfig:
+RETENTION_STAGES = (
+    "quantile_floor",
+    "tail_spread",
+    "run_score",
+    "lone_gate_suppression",
+    "leading_edge",
+    "retention",
+    "ownership",
+    "crossing_arming",
+    "score_hold",
+    "attributed_hold",
+    "retention_hold",
+)
+"""The scoring core, the entry rule ownership is earned by, and both holds."""
+
+
+def _config(**overrides: object) -> DetectorConfig:
     """A config with the leading-edge rule live, as ownership needs."""
-    values: dict[str, float | None] = {"lead_gate_max": 1, "arrival_frac": 0.0}
+    values: dict[str, object] = {"stages": RETENTION_STAGES, "lead_gate_max": 1}
     values.update(overrides)
     return make_config(**values)
 

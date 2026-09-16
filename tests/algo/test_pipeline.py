@@ -7,7 +7,7 @@ import pytest
 from custom_components.smart_ld2410.algo.baseline import Baseline
 from custom_components.smart_ld2410.algo.pipeline import REGISTRY, build_pipeline
 from custom_components.smart_ld2410.algo.roles import StageEnv
-from custom_components.smart_ld2410.algo.types import DEFAULT_STAGES, DetectorOutput
+from custom_components.smart_ld2410.algo.types import ALL_STAGES, DEFAULT_STAGES, DetectorOutput
 
 from . import FrameStream, feed, make_config, make_detector
 
@@ -59,7 +59,7 @@ def test_residuals_need_a_floor_and_a_spread() -> None:
 
 def test_a_stage_nothing_depends_on_can_be_dropped() -> None:
     """Composing is subtractive as well as additive."""
-    stages = tuple(name for name in DEFAULT_STAGES if name != "energy_ceiling")
+    stages = tuple(name for name in ALL_STAGES if name != "energy_ceiling")
 
     pipeline = build_pipeline(StageEnv(make_config(stages=stages)))
 
@@ -69,7 +69,7 @@ def test_a_stage_nothing_depends_on_can_be_dropped() -> None:
 
 def test_dropping_the_energy_floor_admits_the_candidate_it_refused() -> None:
     """A stage list is what decides the rules, with no other knob touched."""
-    without_floor = tuple(name for name in DEFAULT_STAGES if name != "energy_floor")
+    without_floor = tuple(name for name in ALL_STAGES if name != "energy_floor")
 
-    assert not any(output.occupied for output in _entry_run(DEFAULT_STAGES))
+    assert not any(output.occupied for output in _entry_run(ALL_STAGES))
     assert any(output.occupied for output in _entry_run(without_floor))

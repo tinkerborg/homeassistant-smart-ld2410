@@ -74,6 +74,8 @@ class _SpreadChannel(BucketWindow):
         return {"spreads": list(self._spreads), **self.open_state()}
 
     def restore(self, data: dict[str, Any], *, max_buckets: int) -> None:
+        if "spreads" not in data:
+            return
         self._spreads = deque(
             (float(value) for value in data["spreads"]), maxlen=max_buckets
         )

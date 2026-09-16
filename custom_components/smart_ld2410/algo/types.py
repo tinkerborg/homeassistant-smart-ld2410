@@ -86,9 +86,11 @@ DEFAULT_BUCKET_S = 60.0
 DEFAULT_MIN_BUCKETS = 5
 """Closed buckets needed before the baseline is usable (5 minutes by default)."""
 
-DEFAULT_STAGES = (
+ALL_STAGES = (
     "quantile_floor",
     "tail_spread",
+    "histogram_floor",
+    "mode_spread",
     "move_ceiling",
     "run_score",
     "lone_gate_suppression",
@@ -97,6 +99,7 @@ DEFAULT_STAGES = (
     "energy_ceiling",
     "gate_exclusion",
     "energy_floor",
+    "motion_anchor",
     "arrival",
     "leading_edge",
     "retention",
@@ -106,7 +109,22 @@ DEFAULT_STAGES = (
     "attributed_hold",
     "retention_hold",
 )
-"""The stages the detector runs, in evaluation order, unless configured otherwise."""
+"""Every registered stage, in evaluation order.
+
+Both floor estimators and both spread estimators are named, and the earlier of
+each pair is the one residuals are taken against - a stage list holding every
+mechanism is still one detector, not two.
+"""
+
+DEFAULT_STAGES = (
+    "histogram_floor",
+    "mode_spread",
+    "run_score",
+    "lone_gate_suppression",
+    "energy_floor",
+    "motion_anchor",
+)
+"""The stages the detector runs unless configured otherwise."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -128,6 +146,14 @@ class DetectorConfig:
     freeze_hold_s: float = 60.0
     min_mad: float = 1.0
     support_tau_s: float = 1.0
+
+    # -- Phase 2.5: histogram baseline (spec 25) ------------------------------
+    # Samples a gate must have observed before its histogram peak is trusted: a
+    # freshly power-cycled channel reads saturated, and a mode estimator
+    # follows it. ``mode_band`` is the half-width of the quiet population whose
+    # median absolute deviation is the residual divisor.
+    mode_min_s: float = 60.0
+    mode_band: float = 6.0
 
     # -- Phase 2: dwell-character gate classification (spec 20) ---------------
     # Episode segmentation thresholds are expressed as fractions of ``k`` so

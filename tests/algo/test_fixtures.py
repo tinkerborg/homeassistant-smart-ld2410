@@ -1,7 +1,7 @@
 """Replay of the recorded fixtures, against their README ground truth.
 
-These are the corpus checks spec 24 §5 is written against, run at default
-tuning: the leading edge must refuse a room full of through-wall activity
+These are the corpus checks spec 24 §5 is written against, run over the full
+stage list: the leading edge must refuse a room full of through-wall activity
 without costing the genuine visit next door its entry, and retention must
 carry a motionless occupant the device has absorbed.
 """
@@ -14,11 +14,18 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from custom_components.smart_ld2410.algo.detector import Detector
-from custom_components.smart_ld2410.algo.types import DetectorConfig, Frame
+from custom_components.smart_ld2410.algo.types import (
+    ALL_STAGES,
+    DetectorConfig,
+    Frame,
+)
 
 RECORDINGS = Path(__file__).parent.parent / "fixtures" / "recordings"
 LOCAL = ZoneInfo("America/New_York")
 RECORDED_DAY = (2026, 9, 11)
+
+FULL = DetectorConfig(stages=ALL_STAGES)
+"""Every stage the detector offers, which is what the corpus is judged against."""
 
 BATHROOM = ("bathroom-visit-2204-d06e.db", "D0:6E:81:D2:5D:A6")
 THROUGH_WALL = ("throughwall-morning-d06e.db", "D0:6E:81:D2:5D:A6")
@@ -68,7 +75,7 @@ def _timeline(
     recording: tuple[str, str], config: DetectorConfig | None = None
 ) -> list[tuple[float, bool]]:
     """Occupancy transitions once the baseline is learned: ``(ts, occupied)``."""
-    detector = Detector(config or DetectorConfig())
+    detector = Detector(config or FULL)
     transitions: list[tuple[float, bool]] = []
     previous: bool | None = None
     for frame in _frames(recording):
@@ -94,7 +101,9 @@ def test_through_wall_morning_never_enters() -> None:
 
 def test_through_wall_morning_entered_before_the_leading_edge() -> None:
     """The same recording is what the rule exists for: without it, false entries."""
-    without = DetectorConfig(lead_gate_max=-1, retention_off=0.0)
+    without = DetectorConfig(
+        stages=ALL_STAGES, lead_gate_max=-1, retention_off=0.0
+    )
     entries = [ts for ts, occupied in _timeline(THROUGH_WALL, without) if occupied]
 
     assert entries
@@ -116,7 +125,7 @@ def test_the_bathroom_visit_releases_at_its_departure() -> None:
 
     assert len(releases) == 1
     departure = _at(22, 6, 43)
-    assert departure <= releases[0] <= departure + DetectorConfig().hold_s, _local(
+    assert departure <= releases[0] <= departure + FULL.hold_s, _local(
         releases[0]
     )
 

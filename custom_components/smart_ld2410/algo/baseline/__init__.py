@@ -31,23 +31,31 @@ from ..types import (
 )
 from .ceiling import MoveCeiling
 from .floor import QuantileFloor
+from .histogram_floor import HistogramFloor
+from .mode_spread import ModeSpread
 from .spread import TailSpread
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 """Current persisted-state layout.
 
 Versions 1 and 2 stored bucket medians and MADs, neither of which carries the
-upper-tail spread this estimator divides by, so :meth:`Baseline.from_dict`
-refuses them rather than misreading them. Version 3 is read as-is: it holds
-exactly these bucket summaries, only without a move ceiling, which simply
-starts unlearned.
+upper-tail spread the quantile estimator divides by, so
+:meth:`Baseline.from_dict` refuses them rather than misreading them. Versions 3
+and 4 are read as-is: they hold the bucket summaries a quantile floor and a
+tail spread are made of, and every statistic they do not carry - a move
+ceiling, a gate's energy histograms - simply starts unlearned.
+
+A payload carries whatever the stages that wrote it had learned, so a stage
+whose state is absent starts fresh rather than refusing the payload.
 """
 
-_READABLE_VERSIONS = frozenset({3, SCHEMA_VERSION})
+_READABLE_VERSIONS = frozenset({3, 4, SCHEMA_VERSION})
 
 STAGES: dict[str, type[Stage]] = {
     "quantile_floor": QuantileFloor,
     "tail_spread": TailSpread,
+    "histogram_floor": HistogramFloor,
+    "mode_spread": ModeSpread,
     "move_ceiling": MoveCeiling,
 }
 """The baseline stages, by the name a config lists them under."""
@@ -67,23 +75,29 @@ class Baseline:
         "_window_s",
     )
 
-    def __init__(self, env: StageEnv, stages: dict[str, Stage]) -> None:
-        """Hold the baseline stages the pipeline built."""
+    def __init__(
+        self,
+        env: StageEnv,
+        stages: dict[str, Stage],
+        names: tuple[str, ...] | None = None,
+    ) -> None:
+        """Hold the baseline stages the pipeline built, in the order it names them."""
         self._stages = stages
+        order = env.config.stages if names is None else names
         self._window_s = env.config.baseline_window_s
         self._min_spread = env.config.min_mad
         self._bucket_s = env.bucket_s
         self._min_buckets = env.min_buckets
-        self._floor: QuantileFloor | None = _by_role(stages, ROLE_FLOOR)
-        self._spread: TailSpread | None = _by_role(stages, ROLE_SPREAD)
-        self._ceiling: MoveCeiling | None = _by_role(stages, ROLE_CEILING)
+        self._floor: Any = _by_role(stages, ROLE_FLOOR, order)
+        self._spread: Any = _by_role(stages, ROLE_SPREAD, order)
+        self._ceiling: MoveCeiling | None = _by_role(stages, ROLE_CEILING, order)
         if self._floor is None or self._spread is None:
             raise ValueError("residuals need a floor stage and a spread stage")
 
     @classmethod
     def build(cls, env: StageEnv, names: tuple[str, ...]) -> Baseline:
         """Build the baseline stages ``names`` asks for."""
-        return cls(env, build_stages(env, names, STAGES))
+        return cls(env, build_stages(env, names, STAGES), names)
 
     @property
     def stages(self) -> dict[str, Stage]:
@@ -225,7 +239,13 @@ class Baseline:
             if len(channels) != GATE_COUNT:
                 raise ValueError("baseline state has the wrong gate count")
             for gate, channel_data in enumerate(channels):
-                if len(channel_data["q50s"]) != len(channel_data["spreads"]):
+                q50s = channel_data.get("q50s")
+                spreads = channel_data.get("spreads")
+                if (
+                    q50s is not None
+                    and spreads is not None
+                    and len(q50s) != len(spreads)
+                ):
                     raise ValueError("baseline channel has mismatched bucket series")
                 if self._floor is not None:
                     self._floor.restore_channel(channel, gate, channel_data)
@@ -244,5 +264,6 @@ class Baseline:
         return state
 
 
-def _by_role(stages: dict[str, Stage], role: str) -> Any:
-    return next((stage for stage in stages.values() if stage.role == role), None)
+def _by_role(stages: dict[str, Stage], role: str, order: tuple[str, ...]) -> Any:
+    named = [stages[name] for name in order if name in stages]
+    return next((stage for stage in named if stage.role == role), None)
