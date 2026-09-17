@@ -1,0 +1,153 @@
+{
+  "fixture": "bathroom-false-clear",
+  "label_basis": "user-confirmed bathroom occupancy 20:08:45-20:13:10; integration state history independent of replay",
+  "variants": {
+    "current_anchor": {
+      "inside_occupied_fraction": 0.7483968313843833,
+      "longest_false_vacancy_s": 32.97218656539917,
+      "known_false_clear_window_occupied_fraction": 0.3860640301318267,
+      "empty_before_occupied_fraction": 0.0,
+      "empty_after_occupied_fraction": 0.0,
+      "visit": {
+        "start": 1789603725.0,
+        "entry_offset_s": 15.216090202331543,
+        "pre_entry_positive_frames_1s": 0,
+        "dropouts_after_detection": {
+          "positive_frames": 515,
+          "runs": 2,
+          "longest_span_s": 32.97218656539917
+        },
+        "first_clear_offset_s": 0.07248234748840332,
+        "clear_within_30s": true,
+        "later_kitchen_positive_frames": 0,
+        "observation_end": 1789604081.2141948
+      }
+    },
+    "balanced_anchor": {
+      "inside_occupied_fraction": 0.7483968313843833,
+      "longest_false_vacancy_s": 32.97218656539917,
+      "known_false_clear_window_occupied_fraction": 0.3860640301318267,
+      "empty_before_occupied_fraction": 0.0,
+      "empty_after_occupied_fraction": 0.0,
+      "visit": {
+        "start": 1789603725.0,
+        "entry_offset_s": 15.216090202331543,
+        "pre_entry_positive_frames_1s": 0,
+        "dropouts_after_detection": {
+          "positive_frames": 515,
+          "runs": 2,
+          "longest_span_s": 32.97218656539917
+        },
+        "first_clear_offset_s": 0.07248234748840332,
+        "clear_within_30s": true,
+        "later_kitchen_positive_frames": 0,
+        "observation_end": 1789604081.2141948
+      }
+    },
+    "recent4_20s": {
+      "inside_occupied_fraction": 0.8328932478310072,
+      "longest_false_vacancy_s": 28.98308801651001,
+      "known_false_clear_window_occupied_fraction": 1.0,
+      "empty_before_occupied_fraction": 0.0,
+      "empty_after_occupied_fraction": 0.0,
+      "visit": {
+        "start": 1789603725.0,
+        "entry_offset_s": 15.216090202331543,
+        "pre_entry_positive_frames_1s": 0,
+        "dropouts_after_detection": {
+          "positive_frames": 291,
+          "runs": 1,
+          "longest_span_s": 28.98308801651001
+        },
+        "first_clear_offset_s": 0.07248234748840332,
+        "clear_within_30s": true,
+        "later_kitchen_positive_frames": 0,
+        "observation_end": 1789604081.2141948
+      }
+    },
+    "latest1_20s": {
+      "inside_occupied_fraction": 0.8328932478310072,
+      "longest_false_vacancy_s": 28.98308801651001,
+      "known_false_clear_window_occupied_fraction": 1.0,
+      "empty_before_occupied_fraction": 0.0,
+      "empty_after_occupied_fraction": 0.0,
+      "visit": {
+        "start": 1789603725.0,
+        "entry_offset_s": 15.216090202331543,
+        "pre_entry_positive_frames_1s": 0,
+        "dropouts_after_detection": {
+          "positive_frames": 291,
+          "runs": 1,
+          "longest_span_s": 28.98308801651001
+        },
+        "first_clear_offset_s": 0.07248234748840332,
+        "clear_within_30s": true,
+        "later_kitchen_positive_frames": 0,
+        "observation_end": 1789604081.2141948
+      }
+    },
+    "shape_path_0_12_30s": {
+      "inside_occupied_fraction": 0.9426631459826481,
+      "longest_false_vacancy_s": 15.105045795440674,
+      "known_false_clear_window_occupied_fraction": 1.0,
+      "empty_before_occupied_fraction": 0.0,
+      "empty_after_occupied_fraction": 0.22149122807017543,
+      "visit": {
+        "start": 1789603725.0,
+        "entry_offset_s": 15.216090202331543,
+        "pre_entry_positive_frames_1s": 0,
+        "dropouts_after_detection": {
+          "positive_frames": 0,
+          "runs": 0,
+          "longest_span_s": 0.0
+        },
+        "first_clear_offset_s": 20.34913992881775,
+        "clear_within_30s": true,
+        "later_kitchen_positive_frames": 0,
+        "observation_end": 1789604081.2141948
+      }
+    },
+    "contrast_0_5_20s": {
+      "inside_occupied_fraction": 0.8328932478310072,
+      "longest_false_vacancy_s": 28.880856037139893,
+      "known_false_clear_window_occupied_fraction": 1.0,
+      "empty_before_occupied_fraction": 0.0,
+      "empty_after_occupied_fraction": 0.0,
+      "visit": {
+        "start": 1789603725.0,
+        "entry_offset_s": 15.216090202331543,
+        "pre_entry_positive_frames_1s": 0,
+        "dropouts_after_detection": {
+          "positive_frames": 291,
+          "runs": 2,
+          "longest_span_s": 28.880856037139893
+        },
+        "first_clear_offset_s": 0.07248234748840332,
+        "clear_within_30s": true,
+        "later_kitchen_positive_frames": 0,
+        "observation_end": 1789604081.2141948
+      }
+    },
+    "kurtosis_2_15_30s": {
+      "inside_occupied_fraction": 0.8245944926442852,
+      "longest_false_vacancy_s": 31.23125720024109,
+      "known_false_clear_window_occupied_fraction": 0.4180790960451977,
+      "empty_before_occupied_fraction": 0.0,
+      "empty_after_occupied_fraction": 0.23574561403508773,
+      "visit": {
+        "start": 1789603725.0,
+        "entry_offset_s": 15.216090202331543,
+        "pre_entry_positive_frames_1s": 0,
+        "dropouts_after_detection": {
+          "positive_frames": 313,
+          "runs": 1,
+          "longest_span_s": 31.23125720024109
+        },
+        "first_clear_offset_s": 21.577021598815918,
+        "clear_within_30s": true,
+        "later_kitchen_positive_frames": 0,
+        "observation_end": 1789604081.2141948
+      }
+    }
+  }
+}

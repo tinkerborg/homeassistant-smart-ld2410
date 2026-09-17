@@ -1,0 +1,185 @@
+{
+  "method": "Entry-only anchor; every 30 s judge the distribution of per-frame z-scored still-gate kurtosis in the completed window. No fixed gate position or entry template. Percentile 25/50/75 tests how much of a window must retain an occupied-like shape.",
+  "fixtures": {
+    "labeled-walk-0915": {
+      "p25": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          42.75721788406372
+        ]
+      },
+      "p50": {
+        "IN_occupied_fraction": 0.9572446555819477,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          42.9602324962616
+        ]
+      },
+      "p75": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.38003502626970226,
+        "clear_offsets_s": [
+          12.74587106704712,
+          37.127708196640015
+        ]
+      }
+    },
+    "labeled-loop-0915": {
+      "p25": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.056863616170590846,
+        "clear_offsets_s": [
+          102.70387721061707
+        ]
+      },
+      "p50": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6532258064516129,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.59481859207153
+        ]
+      },
+      "p75": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6532258064516129,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.59481859207153
+        ]
+      }
+    },
+    "post-deploy-0915": {
+      "p25": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.38088235294117645,
+        "false_window_occupied_frames": 676,
+        "clear_offsets_s": [
+          83.71399402618408
+        ]
+      },
+      "p50": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.2338235294117647,
+        "false_window_occupied_frames": 376,
+        "clear_offsets_s": [
+          53.713948011398315
+        ]
+      },
+      "p75": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.08676470588235294,
+        "false_window_occupied_frames": 76,
+        "clear_offsets_s": [
+          23.713566303253174
+        ]
+      }
+    },
+    "new-living-room": {
+      "p25": {
+        "IN_occupied_fraction": 0.9989664568260829,
+        "EMPTY_occupied_fraction": 0.10882352941176471,
+        "longest_false_vacancy_s": 0.8667373657226562
+      },
+      "p50": {
+        "IN_occupied_fraction": 0.9557455604622757,
+        "EMPTY_occupied_fraction": 0.17352941176470588,
+        "longest_false_vacancy_s": 42.1580753326416
+      },
+      "p75": {
+        "IN_occupied_fraction": 0.3346800714084375,
+        "EMPTY_occupied_fraction": 0.17352941176470588,
+        "longest_false_vacancy_s": 475.44374799728394
+      }
+    },
+    "new-bathroom-walkby": {
+      "p25": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "p50": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "p75": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      }
+    },
+    "mixed-living-room": {
+      "p25": {
+        "known_empty": {
+          "occupied_fraction": 0.324459234608985,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.9999019607843137,
+          "transitions": 2
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.9572535622031497,
+          "transitions": 4
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "p50": {
+        "known_empty": {
+          "occupied_fraction": 0.39767054908485855,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.9548039215686275,
+          "transitions": 4
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9448333333333333,
+          "transitions": 4
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.655445379551704,
+          "transitions": 8
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "p75": {
+        "known_empty": {
+          "occupied_fraction": 0.39767054908485855,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.30676470588235294,
+          "transitions": 8
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9236666666666666,
+          "transitions": 6
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.5899508374302141,
+          "transitions": 10
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      }
+    }
+  }
+}

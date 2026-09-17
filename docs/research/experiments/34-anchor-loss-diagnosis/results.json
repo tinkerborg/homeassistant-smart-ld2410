@@ -1,0 +1,96 @@
+{
+  "fixture": "new-living-room",
+  "sensor": "68:43:B2:C2:7C:4A",
+  "entry_ts": 1789573236.0,
+  "freeze_at_ts": 1789573235.9754179,
+  "variants": {
+    "normal": {
+      "occupied_fraction_after_entry": 0.28958000563750824,
+      "longest_false_vacancy_s": 529.4081523418427
+    },
+    "freeze_still_floor": {
+      "occupied_fraction_after_entry": 0.28958000563750824,
+      "longest_false_vacancy_s": 529.4081523418427
+    },
+    "freeze_all_floor": {
+      "occupied_fraction_after_entry": 0.28958000563750824,
+      "longest_false_vacancy_s": 529.4081523418427
+    },
+    "freeze_spread": {
+      "occupied_fraction_after_entry": 0.28958000563750824,
+      "longest_false_vacancy_s": 529.4081523418427
+    },
+    "freeze_floor_and_spread": {
+      "occupied_fraction_after_entry": 0.28958000563750824,
+      "longest_false_vacancy_s": 529.4081523418427
+    },
+    "replace_still_floor_with_empty_interval": {
+      "occupied_fraction_after_entry": 0.3579817720567509,
+      "longest_false_vacancy_s": 502.1699261665344
+    }
+  },
+  "empty_interval_median_still_gates_2_8": [
+    8.0,
+    7.0,
+    6.0,
+    13.0,
+    17.0,
+    8.0,
+    8.0
+  ],
+  "first_supported_ts": 1789573237.0311437,
+  "first_loss": {
+    "first_loss_ts": 1789573268.8381443,
+    "seconds_after_entry": 32.838144302368164,
+    "reported_anchor_score_at_loss": 0.3902771595268964,
+    "counterfactual_score_with_preentry_floor": 0.3902771595268964,
+    "template_gates_2_8": [
+      0.0,
+      0.0,
+      0.0,
+      27.0,
+      10.7578125,
+      1.1484375,
+      0.703125
+    ],
+    "still_gates_2_8_at_loss": [
+      46.0,
+      100.0,
+      88.0,
+      46.0,
+      34.0,
+      19.0,
+      11.0
+    ],
+    "floor_gates_2_8_preentry": [
+      16.0,
+      100.0,
+      100.0,
+      19.0,
+      19.0,
+      11.0,
+      8.0
+    ],
+    "floor_gates_2_8_at_loss": [
+      16.0,
+      100.0,
+      100.0,
+      19.0,
+      19.0,
+      11.0,
+      8.0
+    ],
+    "residual_gates_2_8_at_loss": [
+      10.0,
+      0.0,
+      0.0,
+      9.0,
+      7.5,
+      4.0,
+      3.0
+    ],
+    "cosine_at_loss": 0.7011970974365399,
+    "amplitude_ratio_at_loss": 0.5565869581515451
+  },
+  "limitation": "Replay re-estimates histogram state; deployed persisted baseline and live anchor score were not exported."
+}

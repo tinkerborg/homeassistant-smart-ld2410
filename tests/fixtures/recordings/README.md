@@ -62,9 +62,9 @@ island intervals; arrival motion begins up to ~27 s before a label flip.
 
 ## labeled-loop-0915.db
 
-2026-09-15 19:20–19:32, bathroom (D0:6E), kitchen (B3:26), living room
-(FD:68) in one file with a `labels(person, room, ts_start, ts_end, note)`
-table. Ground truth from the user's narrative, timed by the raw traces:
+2026-09-15 19:20–19:30, bathroom (D0:6E), kitchen (B3:26), living room
+(FD:68) in one file with `labels(person, room, ts_start, ts_end, note)`
+and `states` tables. Ground truth from the user's narrative, timed by the raw traces:
 user in the living room, walked to the bathroom (transit ~19:24:10–20),
 used the toilet 19:24:20–19:25:38 (bathroom gates 2–4 saturated), walked
 to the kitchen 19:25:40–19:26:42 (stood in two spots, looped the island —
@@ -77,6 +77,43 @@ near-band approach is visible for the entry. Watch/Bermuda reported
 "Kitchen" for the entire window — unusable here. Shipped detector:
 bathroom entered 19:24:20 (correct) and had not released by 19:32;
 kitchen 19:25:41–19:27:14.
+
+## living-room-continuous-occupancy-2026-09-16.db
+
+2026-09-16 11:15–11:58, the REPLACEMENT living-room sensor
+(68:43:B2:C2:7C:4A, "Living Room Back", frames from 11:19:59), bathroom
+(D0:6E) and kitchen (B3:26), with `labels` and `states` tables. Ground
+truth (per user, timed by the traces): user in the living room setting
+up the new sensor until ~11:38:32; walked past the bathroom to the
+kitchen (bathroom saw nothing); kitchen 11:39:12–11:40:20 (kitchen
+saturated, bathroom through-wall still 43–89); walked back past the
+bathroom door 11:40:20–11:40:36 — the bathroom falsely entered
+11:40:18–11:40:34 on the walk-by (still 95–100, move 42); entered the
+living room at 11:40:36 and stayed seated. The new living-room sensor
+reads ambient (8–10) at gate 2 while the room is empty — the old unit's
+pegged gate-2 still is gone — yet the detector still flapped on the
+seated user (vacant 11:42:15, occupied 11:52:22, …). An earlier version
+of this fixture (old FD:68 unit, 07:45–09:47, 107 flips) was replaced.
+
+## living-room-mixed-2026-09-16.db
+
+2026-09-16 10:00–17:00, living room (old unit FD:68 until 11:15:27, then
+the replacement 68:43:B2:C2:7C:4A from 11:19:59), bathroom (D0:6E) and
+kitchen (B3:26), with `labels` and `states` tables. Unlabeled beyond
+what living-room-continuous-occupancy-2026-09-16 documents for
+11:15–11:58; a mixed day of ordinary use, 270 occupancy transitions
+across the four sensor ids.
+
+## bathroom-false-clear-2026-09-16.db
+
+2026-09-16 20:03:41–20:14:41, bathroom (D0:6E) only, with `labels` and
+`states`. Ground truth (per user): in the bathroom the whole visit
+(~20:08:45–20:13:10 by the traces), making extensive motion trying to
+get it to detect. Detector: occupied 20:09:00, a 3 s vacant/occupied
+blip at 20:09:41, then a FALSE CLEAR 20:10:38–20:11:31 with the user
+present (still 37–78 at gates 2–4 in the gap, move only 12–23), re-entry
+at 20:11:31 on move 100, and an early release at 20:12:31 while still
+read 53–83 for another 30 s. Five minutes of empty lead-in included.
 
 ## overnight-2026-09-16.db
 

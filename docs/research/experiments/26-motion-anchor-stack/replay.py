@@ -28,6 +28,27 @@ from custom_components.smart_ld2410.algo.entry.energy_floor import EnergyFloor
 from custom_components.smart_ld2410.algo.presence.motion_anchor import MotionAnchor
 
 
+class SameGateBalanceAnchor(MotionAnchor):
+    """Apply experiment 20's balance condition only when creating a template."""
+
+    def update(self, ts_mono, move, still, floor, spread):
+        previous = self._previous_ts
+        existing = self.template is not None and (
+            previous is None or 0 <= ts_mono - previous <= self.max_gap_s
+        )
+        qualifies = any(
+            move[g] >= 40 and move[g] / max(move[g] + still[g], 1) >= 1 / 3
+            for g in range(2, 9)
+        )
+        threshold = self.motion_threshold
+        if not existing and not qualifies:
+            self.motion_threshold = float("inf")
+        try:
+            return super().update(ts_mono, move, still, floor, spread)
+        finally:
+            self.motion_threshold = threshold
+
+
 def estimates(f):
     # Spec25 estimator arithmetic, raw-sample adapter. Fixtures shorter than12h.
     assert f.ts[-1] - f.ts[0] < 43200
@@ -51,14 +72,15 @@ def estimates(f):
     return floors, spreads
 
 
-def replay(f, fl, sp, with_anchor=True, hold_s=0.0):
+def replay(f, fl, sp, with_anchor=True, hold_s=0.0, same_gate_balance=False, hold_support=None, hold_review=None, entry_only_anchor=False, anchor_factory=None):
     cfg = DetectorConfig(hold_s=hold_s)
     env = StageEnv(cfg)
     scorer = RunScorer(env, lone_gate_suppression=LoneGateSuppression(env))
     energy = EnergyFloor(env)
-    anchor = MotionAnchor()
+    anchor = anchor_factory() if anchor_factory is not None else SameGateBalanceAnchor() if same_gate_balance else MotionAnchor()
     occupied = False
     deadline = None
+    deadline_start = None
     support = np.zeros(9)
     output = np.zeros(len(f.ts), bool)
     scores = np.zeros(len(f.ts))
@@ -87,11 +109,21 @@ def replay(f, fl, sp, with_anchor=True, hold_s=0.0):
             occupied=occupied, activity=bool(gates), frame=frame, active_gates=gates
         )
         energy.accumulate(ctx)
-        # Filled once the standalone module interface is finalized.
-        good = anchor.update(
+        anchor_result = anchor.update(
             float(t), frame.move_gates, frame.still_gates, fl[i, 1], sp[i, 1]
-        ).anchored
+        )
+        good = anchor_result.anchored
+        hold_good = (
+            hold_support.update(float(t), frame.move_gates, frame.still_gates,
+                                fl[i, 1], sp[i, 1], anchor_result)
+            if hold_support is not None else good
+        )
         anchor_scores[i] = anchor.score
+        if hold_review is not None:
+            hold_review.observe(float(t), frame.still_gates)
+            if hasattr(hold_review, "observe_anchor"):
+                hold_review.observe_anchor(float(t), frame.move_gates, frame.still_gates,
+                                           anchor_result)
         if not occupied:
             if (
                 score >= cfg.enter_score
@@ -99,19 +131,42 @@ def replay(f, fl, sp, with_anchor=True, hold_s=0.0):
                 and (not with_anchor or good)
             ):
                 occupied = True
-                deadline = None
+                deadline = t + hold_s if entry_only_anchor else None
+                deadline_start = t if entry_only_anchor else None
         else:
-            keep = good if with_anchor else score >= cfg.exit_score
-            if keep:
-                deadline = None
-            elif hold_s == 0:
-                occupied = False
-                deadline = None
-            elif deadline is None:
-                deadline = t + hold_s
-            elif t >= deadline:
-                occupied = False
-                deadline = None
+            if entry_only_anchor:
+                if t >= deadline:
+                    if hold_review is not None and hold_review.occupied_looking(deadline_start, float(t)):
+                        deadline_start = t
+                        deadline = t + hold_s
+                    else:
+                        occupied = False
+                        deadline = None
+                        deadline_start = None
+            else:
+                keep = hold_good if with_anchor else score >= cfg.exit_score
+                if keep:
+                    deadline = None
+                    deadline_start = None
+                elif hold_s == 0:
+                    occupied = False
+                    deadline = None
+                    deadline_start = None
+                elif deadline is None:
+                    deadline = t + hold_s
+                    deadline_start = t
+                elif t >= deadline:
+                    if hold_review is not None and hold_review.occupied_looking(deadline_start, float(t)):
+                        deadline_start = t
+                        deadline = t + hold_s
+                    else:
+                        occupied = False
+                        deadline = None
+                        deadline_start = None
+        if not occupied and hold_support is not None and hasattr(hold_support, "reset"):
+            hold_support.reset()
+        if not occupied and hold_review is not None and hasattr(hold_review, "reset"):
+            hold_review.reset()
         output[i] = occupied
     return output, scores, anchor_scores
 

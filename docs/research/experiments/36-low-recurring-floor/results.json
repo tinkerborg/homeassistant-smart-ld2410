@@ -1,0 +1,131 @@
+{
+  "floor_rule": "lowest 2-unit histogram local peak with >=60 seconds of samples at observed sample rate; otherwise dominant peak",
+  "fixtures": {
+    "labeled-walk-0915": {
+      "dominant": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7040280210157618,
+        "clear_offsets_s": [
+          31.182610034942627,
+          31.18564534187317
+        ]
+      },
+      "lowest_recurring": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7040280210157618,
+        "clear_offsets_s": [
+          31.182610034942627,
+          31.18564534187317
+        ]
+      }
+    },
+    "labeled-loop-0915": {
+      "dominant": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.5612903225806452,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          36.86450147628784
+        ]
+      },
+      "lowest_recurring": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.5612903225806452,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          36.86450147628784
+        ]
+      }
+    },
+    "post-deploy-0915": {
+      "dominant": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.1514705882352941,
+        "false_window_occupied_frames": 208,
+        "clear_offsets_s": [
+          36.916391134262085
+        ]
+      },
+      "lowest_recurring": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.1514705882352941,
+        "false_window_occupied_frames": 208,
+        "clear_offsets_s": [
+          36.916391134262085
+        ]
+      }
+    },
+    "new-living-room": {
+      "dominant": {
+        "IN_occupied_fraction": 0.28958000563750824,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 529.4081523418427,
+        "first_entry_offset_s": 1.0311436653137207,
+        "first_false_clear_after_entry_s": 99.29550957679749,
+        "preentry_still_floor_gates_2_8": [
+          16.0,
+          100.0,
+          100.0,
+          19.0,
+          19.0,
+          11.0,
+          8.0
+        ],
+        "preentry_still_spread_gates_2_8": [
+          3.0,
+          1.0,
+          1.0,
+          3.0,
+          2.0,
+          2.0,
+          1.0
+        ]
+      },
+      "lowest_recurring": {
+        "IN_occupied_fraction": 0.3578878135863948,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 502.1699261665344,
+        "first_entry_offset_s": 1.0311436653137207,
+        "first_false_clear_after_entry_s": 126.53373575210571,
+        "preentry_still_floor_gates_2_8": [
+          8.0,
+          7.0,
+          6.0,
+          13.0,
+          19.0,
+          11.0,
+          8.0
+        ],
+        "preentry_still_spread_gates_2_8": [
+          3.0,
+          1.0,
+          1.0,
+          3.0,
+          2.0,
+          2.0,
+          1.0
+        ]
+      }
+    },
+    "new-bathroom-walkby": {
+      "dominant": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "lowest_recurring": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      }
+    },
+    "cat-only-kitchen": {
+      "dominant": {
+        "EMPTY_occupied_fraction": 0.028630838131797825
+      },
+      "lowest_recurring": {
+        "EMPTY_occupied_fraction": 0.028630838131797825
+      }
+    }
+  }
+}

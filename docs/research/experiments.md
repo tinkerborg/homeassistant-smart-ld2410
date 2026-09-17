@@ -486,3 +486,118 @@ experiments/24-causal-gate-coupling/report.md.
 Split replay validation scenarios by occupant stillness level; very-still is
 where detectors fail and must be its own reported axis.
 **Status: idea** — belongs in the validation suite regardless of the rest.
+
+## 28. Strength-scaled new-anchor confirmation
+
+**Status: done — rejects the observed spike, adds unacceptable delay to one arrival.** Fixed40/60/80 bands require3/2/1 frames. Post-deploy kitchen false trigger is rejected; added genuine-entry delays are0,.102,1.528,.158s. No retention dropouts or clear-time changes. The solo visit starts with an isolated motion59 pulse, so confirmation postpones it until a later strong burst. No production changes. Report: experiments/28-strength-confirmation/report.md.
+
+## 32. Anchored gate-band hold
+
+**Status: done — rejected.** On the replacement living-room fixture, a
+gate-band hold gave no gain over the exact anchor (28.9% versus 29.0% occupied
+while seated). Adding neighboring gates kept the bathroom occupied for 170 s
+after a departure into the kitchen. Full stack includes same-gate balance.
+Report: experiments/32-anchored-gate-band/report.md.
+
+## 33. Entry-change hold
+
+**Status: done — promising mechanism, insufficient reliability.** The
+replacement fixture includes empty-room data before a real living-room entry.
+Tracking still energy added at entry increased seated occupancy from 29.0% to
+50.9% (40% retention) or 81.1% (20% retention), but the latter still had a
+195 s false vacancy. Bathroom departure also lengthened. The full replay with
+same-gate balance rejected the new bathroom walk-by. Report:
+experiments/33-entry-change-hold/report.md.
+
+## 34. Replacement living-room anchor-loss diagnosis
+
+**Status: done — both baseline contamination and pattern drift matter.** In
+fixture replay, still gates 3/4 already had histogram floor 100 before entry,
+though an empty interval measured 7/6. The first anchor loss scored .390 just
+below .400; shape cosine .701 × amplitude ratio .557. Freezing the floor at
+entry had no effect; replacing it with the empty-room values improved seated
+occupancy only 29.0%→35.8%. The live state cleared at score3.89 above the
+default exit threshold, consistent with exclusive anchor hold. Report:
+experiments/34-anchor-loss-diagnosis/report.md.
+
+## 35. Per-gate temporal continuity hold
+
+**Status: done — clear tradeoff.** A three-second low-percentile of the
+entry-added still energy scores steady gate support higher than patchy bursts,
+with entry still requiring the full balanced motion-anchor stack. At 0.2
+retention, seated living-room occupancy rose 29.0%→76.8%, but a 225 s false
+vacancy remained and the post-deploy bathroom stayed on for 168 s after exit.
+At 0.4, bathroom release stayed near baseline while living-room hold did not
+improve. Stable kitchen through-wall signal can also sustain the score.
+Report: experiments/35-continuity-hold/report.md.
+
+## 36. Lowest recurring floor with the full balanced stack
+
+**Status: done — promising floor correction, insufficient hold fix.** With
+same-gate balance enabled throughout, a causal lowest-supported histogram
+peak finds still floors 7/6 instead of 100/100 at the replacement living-room
+sensor's gates 3/4. Seated occupancy rises 29.0%→35.8%, and the first false
+clear moves 99→127 s after entry. The trusted bathroom visit/departure
+measurements, new bathroom walk-by, post-deploy kitchen false-event window,
+and cat-only kitchen control are unchanged. No production change. Report:
+experiments/36-low-recurring-floor/report.md.
+
+## 37. Raw-gate source separation, independent of stack
+
+**Status: done — simple additive split insufficient.** Offline, unsupervised
+rank-two factorization of one sensor's motion/still gates yields a selected
+living-room component dominant for 97.8% of the seated interval. On the two
+bathroom fixtures it is dominant during 99.6–100% of real visits, but still
+dominates 57–87% of the first 30 s after exit into kitchen activity. This
+noncausal feasibility probe does not validate a deployable hold rule and
+suggests simple additive source separation cannot distinguish the overlapping
+bathroom/kitchen profiles. Labels evaluate only. Report:
+experiments/37-raw-component-separation/report.md.
+
+## 38. Post-entry still-gate shape
+
+**Status: done — settled shape carries useful continuity, but overlaps through-wall presence.** A 3–12 s shape envelope accepts only 4.2% of later seated living-room frames. A 30–60 s settled shape matches 98.9% of later seated frames, but also 22.7% of the first 30 s after bathroom exit into the kitchen. Report: experiments/38-post-entry-envelope/report.md.
+
+## 39. Settled-shape hold with the full balanced stack
+
+**Status: done — not viable as a sole hold rule.** Causal settled-shape tracking raises living-room occupied coverage 29.0%→81.5%, but a 195 s false vacancy remains. It delays bathroom clearing in `labeled-loop` from 36.9 to 81.6 s. Shorter bathroom visits, the post-deploy false-entry window, and the new bathroom walk-by are unchanged. No production code change. Report: experiments/39-settled-shape-hold/report.md.
+
+## 40. Scale-free gate-shape descriptors
+
+**Status: done — promising independent signal, no occupancy rule yet.** Real bathroom and kitchen through-wall frames differ in still-profile kurtosis (95.7/96.1% pairwise separation across the two trusted fixtures) and motion-profile entropy (86.9/96.1%). The pattern persists in the 30 seconds after bathroom exit. These features compare the gate profile itself rather than similarity to a saved template. A lone-window, calibration-free classifier has not been validated. No production code change. Report: experiments/40-scale-free-shape/report.md.
+
+## 41. Mixed-day living-room shape survey
+
+**Status: done — longer recording supports shape continuity during false clears.** The mixed fixture is wholly unlabeled, but the user reports mostly living-room occupancy before 13:00. From 12:00–13:00 the integration is on only 33% of frames; while it says off, still-profile centroid/kurtosis medians are 4.25/1.88, close to the known occupied interval's 4.15/1.89 and distinct from the known empty interval's 5.19/2.54. At 12:00–12:20 the living-room state flips 14 times with kitchen and bathroom states off throughout; still-profile centroids are 4.18 on and 4.17 off. The 14:00–16:00 signal has a different, quiet-looking shape, but is not ground-truth empty. No production code change. Report: experiments/41-living-room-mixed-shape/report.md.
+
+## 42. Scale-free shape hold in the full balanced stack
+
+**Status: done — rejected.** A z-scored still-profile kurtosis hold rule fixes the living-room known occupied interval (26%→100%) but prolongs `labeled-loop` bathroom clearing (37→137 s) and falsely holds a known empty living-room minute. A strict setting avoids much of this at the cost of almost no living-room improvement. Two- and five-second smoothing do not remove the tradeoff. This is the actual occupancy replay of experiment 40's shape idea, not only a feature-separation diagnostic. No production code change. Report: experiments/42-shape-hold-full-stack/report.md.
+
+## 43. Entry-only anchor with end-of-window shape review
+
+**Status: done — much better decision architecture, single-feature tradeoff remains.** The motion anchor qualifies entry only; afterward, a complete 10–30 s still-shape window is judged at its end, with no per-frame hold refresh. A 30 s review raises replacement living-room occupancy 29%→96%, but leaves a 42 s false vacancy and clears the `labeled-loop` bathroom 43 s after exit, post-deploy bathroom 54 s after exit. A 10 s window clears bathrooms faster but barely improves the living room; requiring three consecutive 10 s clear windows restores living-room coverage but bathroom release rises to 53–64 s. No production code change. Report: experiments/43-end-of-hold-shape-review/report.md.
+
+## 44. Window shape persistence without fixed gate position
+
+**Status: done — single-feature tradeoff remains.** With entry-only anchor and 30 s review, accepting a window when 25% of frames have an occupied-looking still-gate shape keeps replacement living-room occupancy at 99.9%, but delays `labeled-loop` bathroom clearing to 103 s. Requiring 75% of frames brings bathroom clearing to 43 s but living-room coverage falls to 33.5%. No fixed distance or entry profile is assumed. No production code change. Report: experiments/44-window-shape-persistence/report.md.
+
+## 45. Recent post-motion shape references
+
+**Status: done — strong daytime result, overnight control failure.** The anchor does not update on every move, but later stronger motion candidates did update 17/10 times in the trusted bathroom fixtures and 30 times during the replacement living-room labeled interval. Saving the last four post-motion z-scored still profiles and reviewing a 20 s window raised replacement living-room occupancy 29%→99.7%, cleared the `labeled-walk` bathroom exits in 23/17 s, `labeled-loop` in 43 s, and post-deploy in 34 s. The overnight no-human bathroom control then exposed a 461 s episode (70 s with current balanced stack). Do not deploy this version. No production code change. Report: experiments/45-motion-shape-bank/report.md.
+
+## 46. Shape evolution inside the hold window
+
+**Status: done — independent signal, failed post-deploy departure.** Adjacent normalized still-gate profiles change less during trusted occupancy than comparison intervals. A 30 s window rule with a 0.12 shape-path cutoff raises replacement living-room occupancy 29%→98.7%, but holds the post-deploy bathroom 174 s after exit. No production code change. Report: experiments/46-window-shape-evolution/report.md.
+
+## 47. Contrastive post-motion shape changes
+
+**Status: done — rejected.** Comparing hold windows to recent shape changes introduced by credible motion retains replacement living-room occupancy at 96.2% with a 20 s false gap, but the post-deploy bathroom remains occupied for 174 s after exit and `labeled-walk` fails to clear appropriately. No production code change. Report: experiments/47-contrastive-motion-shape/report.md.
+
+## 48. Confirmed bathroom false-clear fixture
+
+**Status: done — recent-shape replay fixes the live mid-visit gap but reveals another false clear.** The live integration was vacant 20:10:38–20:11:31 while the user was in the bathroom, with active gates 2–5 and score 14.67. Replay of the current balanced stack has a 33 s false gap, not the live 53 s gap. Recent-four shape review covers the live-gap interval but goes vacant 29 s before the visit ends; shape evolution covers the visit after initial entry but fails an older through-wall case. Report: experiments/48-bathroom-false-clear/report.md.
+
+## 49. Overnight false-anchor contrast
+
+**Status: done — discriminating these two artifacts is possible, general rule unproven.** Both overnight bathroom false entries had only one balanced motion gate and peaks 40–46; real bathroom entries in these fixtures started at peaks 59–100. A two-gate entry guard rejects both but delays a real entry to 1.91 s and damages the living room. Motion bar 55 rejects both without delaying the known bathroom entries, but damages the living room and was selected from a very small sample. Combined bathroom-only with recent-four 20 s shape review at correlation 0.78, it passes the observed overnight and new false-clear checks, but is not independently validated. No production code change. Report: experiments/49-two-gate-anchor/report.md.

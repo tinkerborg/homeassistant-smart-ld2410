@@ -1,0 +1,1081 @@
+{
+  "method": "Require balanced motion at two distinct gates within 0.3 s to create an anchor; subsequent template updates unchanged. Compare full balanced stack and recent-four 20s hold. No labels in rule.",
+  "fixtures": {
+    "labeled-walk-0915": {
+      "current_balanced": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7040280210157618,
+        "clear_offsets_s": [
+          31.182610034942627,
+          31.18564534187317
+        ],
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 31.182610034942627,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 31.18564534187317,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      },
+      "two_gate_baseline": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7040280210157618,
+        "clear_offsets_s": [
+          31.182610034942627,
+          31.18564534187317
+        ],
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 31.182610034942627,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 31.18564534187317,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      },
+      "motion55_baseline": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7057793345008757,
+        "clear_offsets_s": [
+          31.28146719932556,
+          31.286945819854736
+        ],
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 31.28146719932556,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 31.286945819854736,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      },
+      "recent4_balanced": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.5569176882661997,
+        "clear_offsets_s": [
+          22.781117916107178,
+          17.155956268310547
+        ],
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 22.781117916107178,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 17.155956268310547,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      },
+      "recent4_two_gate": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.5569176882661997,
+        "clear_offsets_s": [
+          22.781117916107178,
+          17.155956268310547
+        ],
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 22.781117916107178,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 17.155956268310547,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      },
+      "recent4_motion55": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.5569176882661997,
+        "clear_offsets_s": [
+          22.781117916107178,
+          17.155956268310547
+        ],
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 22.781117916107178,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 17.155956268310547,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      },
+      "recent4_balanced_corr_0_78": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.5569176882661997,
+        "clear_offsets_s": [
+          22.781117916107178,
+          17.155956268310547
+        ],
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 22.781117916107178,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 17.155956268310547,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      },
+      "recent4_motion55_corr_0_78": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.5569176882661997,
+        "clear_offsets_s": [
+          22.781117916107178,
+          17.155956268310547
+        ],
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 22.781117916107178,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 17.155956268310547,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      }
+    },
+    "labeled-loop-0915": {
+      "current_balanced": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.5612903225806452,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          36.86450147628784
+        ],
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.86450147628784,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      },
+      "two_gate_baseline": {
+        "IN_occupied_fraction": 0.9768934531450578,
+        "TW_occupied_fraction": 0.5612903225806452,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          36.86450147628784
+        ],
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 1.9133551120758057,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.86450147628784,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      },
+      "motion55_baseline": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.5612903225806452,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          36.86450147628784
+        ],
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.86450147628784,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      },
+      "recent4_balanced": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6564516129032258,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.69774889945984
+        ],
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 42.69774889945984,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      },
+      "recent4_two_gate": {
+        "IN_occupied_fraction": 0.9768934531450578,
+        "TW_occupied_fraction": 0.6806451612903226,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          44.233667850494385
+        ],
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 1.9133551120758057,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 44.233667850494385,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      },
+      "recent4_motion55": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.33225806451612905,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          22.627432107925415
+        ],
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 22.627432107925415,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      },
+      "recent4_balanced_corr_0_78": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6564516129032258,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.69774889945984
+        ],
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 42.69774889945984,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      },
+      "recent4_motion55_corr_0_78": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6564516129032258,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.69774889945984
+        ],
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 42.69774889945984,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      }
+    },
+    "bathroom-false-clear": {
+      "current_balanced": {
+        "inside_occupied_fraction": 0.7483968313843833,
+        "longest_false_vacancy_s": 32.97218656539917,
+        "known_false_clear_window_occupied_fraction": 0.3860640301318267,
+        "empty_before_occupied_fraction": 0.0,
+        "empty_after_occupied_fraction": 0.0,
+        "visit": {
+          "start": 1789603725.0,
+          "entry_offset_s": 15.216090202331543,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 515,
+            "runs": 2,
+            "longest_span_s": 32.97218656539917
+          },
+          "first_clear_offset_s": 0.07248234748840332,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789604081.2141948
+        }
+      },
+      "two_gate_baseline": {
+        "inside_occupied_fraction": 0.7453791022255752,
+        "longest_false_vacancy_s": 33.68998575210571,
+        "known_false_clear_window_occupied_fraction": 0.3860640301318267,
+        "empty_before_occupied_fraction": 0.0,
+        "empty_after_occupied_fraction": 0.0,
+        "visit": {
+          "start": 1789603725.0,
+          "entry_offset_s": 15.216090202331543,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 523,
+            "runs": 2,
+            "longest_span_s": 33.68998575210571
+          },
+          "first_clear_offset_s": 0.07248234748840332,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789604081.2141948
+        }
+      },
+      "motion55_baseline": {
+        "inside_occupied_fraction": 0.7491512636740852,
+        "longest_false_vacancy_s": 32.97218656539917,
+        "known_false_clear_window_occupied_fraction": 0.3860640301318267,
+        "empty_before_occupied_fraction": 0.0,
+        "empty_after_occupied_fraction": 0.0,
+        "visit": {
+          "start": 1789603725.0,
+          "entry_offset_s": 15.216090202331543,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 513,
+            "runs": 2,
+            "longest_span_s": 32.97218656539917
+          },
+          "first_clear_offset_s": 0.07248234748840332,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789604081.2141948
+        }
+      },
+      "recent4_balanced": {
+        "inside_occupied_fraction": 0.8328932478310072,
+        "longest_false_vacancy_s": 28.98308801651001,
+        "known_false_clear_window_occupied_fraction": 1.0,
+        "empty_before_occupied_fraction": 0.0,
+        "empty_after_occupied_fraction": 0.0,
+        "visit": {
+          "start": 1789603725.0,
+          "entry_offset_s": 15.216090202331543,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 291,
+            "runs": 1,
+            "longest_span_s": 28.98308801651001
+          },
+          "first_clear_offset_s": 0.07248234748840332,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789604081.2141948
+        }
+      },
+      "recent4_two_gate": {
+        "inside_occupied_fraction": 0.8328932478310072,
+        "longest_false_vacancy_s": 28.98308801651001,
+        "known_false_clear_window_occupied_fraction": 1.0,
+        "empty_before_occupied_fraction": 0.0,
+        "empty_after_occupied_fraction": 0.0,
+        "visit": {
+          "start": 1789603725.0,
+          "entry_offset_s": 15.216090202331543,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 291,
+            "runs": 1,
+            "longest_span_s": 28.98308801651001
+          },
+          "first_clear_offset_s": 0.07248234748840332,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789604081.2141948
+        }
+      },
+      "recent4_motion55": {
+        "inside_occupied_fraction": 0.8328932478310072,
+        "longest_false_vacancy_s": 28.98308801651001,
+        "known_false_clear_window_occupied_fraction": 1.0,
+        "empty_before_occupied_fraction": 0.0,
+        "empty_after_occupied_fraction": 0.0,
+        "visit": {
+          "start": 1789603725.0,
+          "entry_offset_s": 15.216090202331543,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 291,
+            "runs": 1,
+            "longest_span_s": 28.98308801651001
+          },
+          "first_clear_offset_s": 0.07248234748840332,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789604081.2141948
+        }
+      },
+      "recent4_balanced_corr_0_78": {
+        "inside_occupied_fraction": 0.9426631459826481,
+        "longest_false_vacancy_s": 15.105045795440674,
+        "known_false_clear_window_occupied_fraction": 1.0,
+        "empty_before_occupied_fraction": 0.0,
+        "empty_after_occupied_fraction": 0.1206140350877193,
+        "visit": {
+          "start": 1789603725.0,
+          "entry_offset_s": 15.216090202331543,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 11.073187112808228,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789604081.2141948
+        }
+      },
+      "recent4_motion55_corr_0_78": {
+        "inside_occupied_fraction": 0.9426631459826481,
+        "longest_false_vacancy_s": 15.105045795440674,
+        "known_false_clear_window_occupied_fraction": 1.0,
+        "empty_before_occupied_fraction": 0.0,
+        "empty_after_occupied_fraction": 0.1206140350877193,
+        "visit": {
+          "start": 1789603725.0,
+          "entry_offset_s": 15.216090202331543,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 11.073187112808228,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789604081.2141948
+        }
+      }
+    },
+    "post-deploy-0915": {
+      "current_balanced": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.1514705882352941,
+        "false_window_occupied_frames": 208,
+        "clear_offsets_s": [
+          36.916391134262085
+        ],
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.916391134262085,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "two_gate_baseline": {
+        "IN_occupied_fraction": 0.8857142857142857,
+        "TW_occupied_fraction": 0.1514705882352941,
+        "false_window_occupied_frames": 208,
+        "clear_offsets_s": [
+          36.916391134262085
+        ],
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.8718914985656738,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.916391134262085,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "motion55_baseline": {
+        "IN_occupied_fraction": 0.8857142857142857,
+        "TW_occupied_fraction": 0.1514705882352941,
+        "false_window_occupied_frames": 208,
+        "clear_offsets_s": [
+          36.916391134262085
+        ],
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.8718914985656738,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.916391134262085,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "recent4_balanced": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.13578431372549019,
+        "false_window_occupied_frames": 176,
+        "clear_offsets_s": [
+          33.80836296081543
+        ],
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 33.80836296081543,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "recent4_two_gate": {
+        "IN_occupied_fraction": 0.8857142857142857,
+        "TW_occupied_fraction": 0.13676470588235295,
+        "false_window_occupied_frames": 178,
+        "clear_offsets_s": [
+          33.94670295715332
+        ],
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.8718914985656738,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 33.94670295715332,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "recent4_motion55": {
+        "IN_occupied_fraction": 0.8857142857142857,
+        "TW_occupied_fraction": 0.13676470588235295,
+        "false_window_occupied_frames": 178,
+        "clear_offsets_s": [
+          33.94670295715332
+        ],
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.8718914985656738,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 33.94670295715332,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "recent4_balanced_corr_0_78": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.13578431372549019,
+        "false_window_occupied_frames": 176,
+        "clear_offsets_s": [
+          33.80836296081543
+        ],
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 33.80836296081543,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "recent4_motion55_corr_0_78": {
+        "IN_occupied_fraction": 0.8857142857142857,
+        "TW_occupied_fraction": 0.13676470588235295,
+        "false_window_occupied_frames": 178,
+        "clear_offsets_s": [
+          33.94670295715332
+        ],
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.8718914985656738,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 33.94670295715332,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      }
+    },
+    "new-living-room": {
+      "current_balanced": {
+        "IN_occupied_fraction": 0.28958000563750824,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 529.4081523418427,
+        "visits": [
+          {
+            "start": 1789573236.0,
+            "entry_offset_s": 1.0311436653137207,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 7551,
+              "runs": 2,
+              "longest_span_s": 529.4081523418427
+            },
+            "first_clear_offset_s": null,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": null,
+            "observation_end": 1789574300.2136898
+          }
+        ]
+      },
+      "two_gate_baseline": {
+        "IN_occupied_fraction": 0.12205205299257728,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 565.8628661632538,
+        "visits": [
+          {
+            "start": 1789573236.0,
+            "entry_offset_s": 1.4051885604858398,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 9331,
+              "runs": 3,
+              "longest_span_s": 565.8628661632538
+            },
+            "first_clear_offset_s": null,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": null,
+            "observation_end": 1789574300.2136898
+          }
+        ]
+      },
+      "motion55_baseline": {
+        "IN_occupied_fraction": 0.23066804472423189,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 565.8628661632538,
+        "visits": [
+          {
+            "start": 1789573236.0,
+            "entry_offset_s": 1.4051885604858398,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 8175,
+              "runs": 3,
+              "longest_span_s": 565.8628661632538
+            },
+            "first_clear_offset_s": null,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": null,
+            "observation_end": 1789574300.2136898
+          }
+        ]
+      },
+      "recent4_balanced": {
+        "IN_occupied_fraction": 0.9970872874189608,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 1.8971710205078125,
+        "visits": [
+          {
+            "start": 1789573236.0,
+            "entry_offset_s": 1.0311436653137207,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 21,
+              "runs": 2,
+              "longest_span_s": 1.8971710205078125
+            },
+            "first_clear_offset_s": null,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": null,
+            "observation_end": 1789574300.2136898
+          }
+        ]
+      },
+      "recent4_two_gate": {
+        "IN_occupied_fraction": 0.1697829559334774,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 547.0213112831116,
+        "visits": [
+          {
+            "start": 1789573236.0,
+            "entry_offset_s": 1.4051885604858398,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 8823,
+              "runs": 4,
+              "longest_span_s": 547.0213112831116
+            },
+            "first_clear_offset_s": null,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": null,
+            "observation_end": 1789574300.2136898
+          }
+        ]
+      },
+      "recent4_motion55": {
+        "IN_occupied_fraction": 0.23339284036455887,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 547.0213112831116,
+        "visits": [
+          {
+            "start": 1789573236.0,
+            "entry_offset_s": 1.4051885604858398,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 8146,
+              "runs": 3,
+              "longest_span_s": 547.0213112831116
+            },
+            "first_clear_offset_s": null,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": null,
+            "observation_end": 1789574300.2136898
+          }
+        ]
+      },
+      "recent4_balanced_corr_0_78": {
+        "IN_occupied_fraction": 0.999060415296439,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 0.8667373657226562,
+        "visits": [
+          {
+            "start": 1789573236.0,
+            "entry_offset_s": 1.0311436653137207,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": null,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": null,
+            "observation_end": 1789574300.2136898
+          }
+        ]
+      },
+      "recent4_motion55_corr_0_78": {
+        "IN_occupied_fraction": 0.30893545053086535,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 466.6366534233093,
+        "visits": [
+          {
+            "start": 1789573236.0,
+            "entry_offset_s": 1.4051885604858398,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 7342,
+              "runs": 3,
+              "longest_span_s": 466.6366534233093
+            },
+            "first_clear_offset_s": null,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": null,
+            "observation_end": 1789574300.2136898
+          }
+        ]
+      }
+    },
+    "overnight-bathroom": {
+      "current_balanced": {
+        "episode_count": 2,
+        "longest_episode_s": 70.38077068328857,
+        "occupied_fraction": 0.004146798039821764
+      },
+      "two_gate_baseline": {
+        "episode_count": 0,
+        "longest_episode_s": 0,
+        "occupied_fraction": 0.0
+      },
+      "motion55_baseline": {
+        "episode_count": 0,
+        "longest_episode_s": 0,
+        "occupied_fraction": 0.0
+      },
+      "recent4_balanced": {
+        "episode_count": 2,
+        "longest_episode_s": 461.24630904197693,
+        "occupied_fraction": 0.03135104347191881
+      },
+      "recent4_two_gate": {
+        "episode_count": 0,
+        "longest_episode_s": 0,
+        "occupied_fraction": 0.0
+      },
+      "recent4_motion55": {
+        "episode_count": 0,
+        "longest_episode_s": 0,
+        "occupied_fraction": 0.0
+      },
+      "recent4_balanced_corr_0_78": {
+        "episode_count": 2,
+        "longest_episode_s": 501.391804933548,
+        "occupied_fraction": 0.033441807642750225
+      },
+      "recent4_motion55_corr_0_78": {
+        "episode_count": 0,
+        "longest_episode_s": 0,
+        "occupied_fraction": 0.0
+      }
+    }
+  }
+}

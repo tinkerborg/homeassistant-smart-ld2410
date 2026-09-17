@@ -91,3 +91,35 @@ Run:
 ```
 
 Full measurements: `results.json`.
+
+## Post-deploy recording with experiment 20 same-gate balance
+
+`postdeploy_balance.py` adds the experiment 20 rule as an **optional new-anchor
+condition** in this same stack adapter: any gate 2–8 must have raw motion >=40
+and motion/(motion+still) >=1/3. It compares that option with the original
+anchor on `post-deploy-0915.db`, using the existing scorer, lone-gate suppression,
+energy floor, histogram estimator, and hold logic. Only bathroom readings enter
+inference. The reconstructed labels are not independent timing ground truth.
+No production integration code is changed.
+
+| Configured hold | Original: occupied frames in 115 s false window | With balance | New kitchen anchor? |
+|---|---:|---:|---|
+| 0 s | 984 | **0** | No |
+| 20 s | 1,150 | **108** | No; remaining frames are release tail |
+| 30 s | 1,150 | **208** | No; remaining frames are release tail |
+
+With 20/30 s hold, occupancy is still true at the reported false event because
+the departure timer has not expired. The distinction is that no new occupied
+transition occurs there and the balance variant subsequently clears. The
+original variant reacquires kitchen evidence and stays occupied throughout the
+window. The separate experiment 30 replay shows the three trusted bathroom
+entries and clear times unchanged at zero extra hold.
+
+Reproduce:
+`.venv/bin/python docs/research/experiments/26-motion-anchor-stack/postdeploy_balance.py`
+Output: `postdeploy-balance-results.json`.
+
+This is the experiment adapter, not an exact replay of the deployed detector's
+baseline state and configured hold value, which were not exported. The timing
+of the recorded live event is authoritative; the adapter's simulated state is
+a mechanism check.

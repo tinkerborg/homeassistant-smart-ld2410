@@ -1,0 +1,151 @@
+{
+  "method": "3-second 20th percentile of per-gate raw still energy added since pre-entry; capped by entry delta, summed across entry gates",
+  "fixtures": {
+    "labeled-walk-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7040280210157618,
+        "clear_offsets_s": [
+          31.182610034942627,
+          31.18564534187317
+        ]
+      },
+      "continuity_40": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          32.41293525695801
+        ]
+      },
+      "continuity_30": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          33.13004446029663
+        ]
+      },
+      "continuity_20": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          33.950297117233276
+        ]
+      }
+    },
+    "labeled-loop-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.5612903225806452,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          36.86450147628784
+        ]
+      },
+      "continuity_40": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.041981341625944024,
+        "clear_offsets_s": [
+          95.94609260559082
+        ]
+      },
+      "continuity_30": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.041981341625944024,
+        "clear_offsets_s": [
+          95.94609260559082
+        ]
+      },
+      "continuity_20": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.041981341625944024,
+        "clear_offsets_s": [
+          95.94609260559082
+        ]
+      }
+    },
+    "post-deploy-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.1514705882352941,
+        "false_window_occupied_frames": 208,
+        "clear_offsets_s": [
+          36.916391134262085
+        ]
+      },
+      "continuity_40": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.1553921568627451,
+        "false_window_occupied_frames": 216,
+        "clear_offsets_s": [
+          37.80166268348694
+        ]
+      },
+      "continuity_30": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.6421568627450981,
+        "false_window_occupied_frames": 1150,
+        "clear_offsets_s": [
+          165.23384857177734
+        ]
+      },
+      "continuity_20": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.6421568627450981,
+        "false_window_occupied_frames": 1150,
+        "clear_offsets_s": [
+          167.68492341041565
+        ]
+      }
+    },
+    "new-living-room": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.28958000563750824,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 529.4081523418427
+      },
+      "continuity_40": {
+        "IN_occupied_fraction": 0.2881706285821667,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 530.4316370487213
+      },
+      "continuity_30": {
+        "IN_occupied_fraction": 0.2883585455228789,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 530.4316370487213
+      },
+      "continuity_20": {
+        "IN_occupied_fraction": 0.7675467443390022,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 224.88100290298462
+      }
+    },
+    "new-bathroom-walkby": {
+      "exact_anchor": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "continuity_40": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "continuity_30": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "continuity_20": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      }
+    }
+  }
+}

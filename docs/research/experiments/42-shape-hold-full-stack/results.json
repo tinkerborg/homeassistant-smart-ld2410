@@ -1,0 +1,465 @@
+{
+  "method": "Original balanced full-stack entry; hold supported by original anchor OR per-frame z-scored still-gate kurtosis below a single dimensionless cutoff; 30 s departure hold. Labels only evaluate.",
+  "fixtures": {
+    "labeled-walk-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7040280210157618,
+        "clear_offsets_s": [
+          31.182610034942627,
+          31.18564534187317
+        ]
+      },
+      "shape_kurtosis_1_8": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          null
+        ]
+      },
+      "shape_kurtosis_2_0": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          null
+        ]
+      },
+      "shape_kurtosis_2_2": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          null
+        ]
+      },
+      "shape_kurtosis_1_8_2s": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          33.848681688308716
+        ]
+      },
+      "shape_kurtosis_2_0_2s": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          33.950297117233276
+        ]
+      },
+      "shape_kurtosis_1_8_5s": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7057793345008757,
+        "clear_offsets_s": [
+          31.28146719932556,
+          35.28070688247681
+        ]
+      },
+      "shape_kurtosis_2_0_5s": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          35.38391971588135
+        ]
+      }
+    },
+    "labeled-loop-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.5612903225806452,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          36.86450147628784
+        ]
+      },
+      "shape_kurtosis_1_8": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.11239449133718347,
+        "clear_offsets_s": [
+          127.58724594116211
+        ]
+      },
+      "shape_kurtosis_2_0": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.1339404709018214,
+        "clear_offsets_s": [
+          137.31545281410217
+        ]
+      },
+      "shape_kurtosis_2_2": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.44469124833407375,
+        "clear_offsets_s": [
+          null
+        ]
+      },
+      "shape_kurtosis_1_8_2s": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.0730786317192359,
+        "clear_offsets_s": [
+          109.97409558296204
+        ]
+      },
+      "shape_kurtosis_2_0_2s": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 0.11505997334517992,
+        "clear_offsets_s": [
+          128.8164517879486
+        ]
+      },
+      "shape_kurtosis_1_8_5s": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.8790322580645161,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          56.52157187461853
+        ]
+      },
+      "shape_kurtosis_2_0_5s": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.885483870967742,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          56.932546615600586
+        ]
+      }
+    },
+    "post-deploy-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.1514705882352941,
+        "false_window_occupied_frames": 208,
+        "clear_offsets_s": [
+          36.916391134262085
+        ]
+      },
+      "shape_kurtosis_1_8": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.2867647058823529,
+        "false_window_occupied_frames": 484,
+        "clear_offsets_s": [
+          64.52823901176453
+        ]
+      },
+      "shape_kurtosis_2_0": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.28823529411764703,
+        "false_window_occupied_frames": 487,
+        "clear_offsets_s": [
+          64.83546590805054
+        ]
+      },
+      "shape_kurtosis_2_2": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.6421568627450981,
+        "false_window_occupied_frames": 1150,
+        "clear_offsets_s": [
+          null
+        ]
+      },
+      "shape_kurtosis_1_8_2s": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.2916666666666667,
+        "false_window_occupied_frames": 494,
+        "clear_offsets_s": [
+          65.5524332523346
+        ]
+      },
+      "shape_kurtosis_2_0_2s": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.2931372549019608,
+        "false_window_occupied_frames": 497,
+        "clear_offsets_s": [
+          65.85931372642517
+        ]
+      },
+      "shape_kurtosis_1_8_5s": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.29901960784313725,
+        "false_window_occupied_frames": 509,
+        "clear_offsets_s": [
+          67.088125705719
+        ]
+      },
+      "shape_kurtosis_2_0_5s": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.30049019607843136,
+        "false_window_occupied_frames": 512,
+        "clear_offsets_s": [
+          67.3348822593689
+        ]
+      }
+    },
+    "new-living-room": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.28958000563750824,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 529.4081523418427
+      },
+      "shape_kurtosis_1_8": {
+        "IN_occupied_fraction": 0.3328009020013154,
+        "EMPTY_occupied_fraction": 0.12205882352941176,
+        "longest_false_vacancy_s": 483.3284659385681
+      },
+      "shape_kurtosis_2_0": {
+        "IN_occupied_fraction": 0.999060415296439,
+        "EMPTY_occupied_fraction": 1.0,
+        "longest_false_vacancy_s": 0.8667373657226562
+      },
+      "shape_kurtosis_2_2": {
+        "IN_occupied_fraction": 1.0,
+        "EMPTY_occupied_fraction": 1.0,
+        "longest_false_vacancy_s": 0.0
+      },
+      "shape_kurtosis_1_8_2s": {
+        "IN_occupied_fraction": 0.3339284036455886,
+        "EMPTY_occupied_fraction": 0.13676470588235295,
+        "longest_false_vacancy_s": 482.2023096084595
+      },
+      "shape_kurtosis_2_0_2s": {
+        "IN_occupied_fraction": 0.999060415296439,
+        "EMPTY_occupied_fraction": 0.13970588235294118,
+        "longest_false_vacancy_s": 0.8667373657226562
+      },
+      "shape_kurtosis_1_8_5s": {
+        "IN_occupied_fraction": 0.33402236211594477,
+        "EMPTY_occupied_fraction": 0.016176470588235296,
+        "longest_false_vacancy_s": 482.0916883945465
+      },
+      "shape_kurtosis_2_0_5s": {
+        "IN_occupied_fraction": 0.3575119797049704,
+        "EMPTY_occupied_fraction": 0.1588235294117647,
+        "longest_false_vacancy_s": 457.1140134334564
+      }
+    },
+    "new-bathroom-walkby": {
+      "exact_anchor": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "shape_kurtosis_1_8": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "shape_kurtosis_2_0": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "shape_kurtosis_2_2": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "shape_kurtosis_1_8_2s": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "shape_kurtosis_2_0_2s": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "shape_kurtosis_1_8_5s": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "shape_kurtosis_2_0_5s": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      }
+    },
+    "mixed-living-room": {
+      "exact_anchor": {
+        "known_empty": {
+          "occupied_fraction": 0.09983361064891846,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.2597058823529412,
+          "transitions": 2
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.318,
+          "transitions": 10
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.237563536371969,
+          "transitions": 9
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "shape_kurtosis_1_8": {
+        "known_empty": {
+          "occupied_fraction": 0.33943427620632277,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.30480392156862746,
+          "transitions": 2
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.7244166666666667,
+          "transitions": 1
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.790600783268061,
+          "transitions": 6
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "shape_kurtosis_2_0": {
+        "known_empty": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "known_occupied": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.9960836596950254,
+          "transitions": 2
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "shape_kurtosis_2_2": {
+        "known_empty": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "known_occupied": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.1923445507701282,
+          "transitions": 1
+        }
+      },
+      "shape_kurtosis_1_8_2s": {
+        "known_empty": {
+          "occupied_fraction": 0.3560732113144759,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.30598039215686273,
+          "transitions": 2
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.68025,
+          "transitions": 3
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.7788517623531372,
+          "transitions": 6
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "shape_kurtosis_2_0_2s": {
+        "known_empty": {
+          "occupied_fraction": 0.3594009983361065,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.987917673527206,
+          "transitions": 4
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "shape_kurtosis_1_8_5s": {
+        "known_empty": {
+          "occupied_fraction": 0.21963394342762063,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.30607843137254903,
+          "transitions": 2
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.6815,
+          "transitions": 3
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.7425214565452879,
+          "transitions": 8
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "shape_kurtosis_2_0_5s": {
+        "known_empty": {
+          "occupied_fraction": 0.3810316139767055,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.3305882352941176,
+          "transitions": 2
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 1.0,
+          "transitions": 0
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.9625031247396051,
+          "transitions": 4
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      }
+    }
+  }
+}
