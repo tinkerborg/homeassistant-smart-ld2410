@@ -9,7 +9,7 @@ from custom_components.smart_ld2410.algo.pipeline import REGISTRY, build_pipelin
 from custom_components.smart_ld2410.algo.roles import StageEnv
 from custom_components.smart_ld2410.algo.types import ALL_STAGES, DEFAULT_STAGES, DetectorOutput
 
-from . import FrameStream, feed, make_config, make_detector
+from . import QUANTILE_STAGES, FrameStream, feed, make_config, make_detector
 
 BAND = (3, 4, 5)
 """A three-gate run, wide enough to pass the spatial-coherence test."""
@@ -69,7 +69,7 @@ def test_a_stage_nothing_depends_on_can_be_dropped() -> None:
 
 def test_dropping_the_energy_floor_admits_the_candidate_it_refused() -> None:
     """A stage list is what decides the rules, with no other knob touched."""
-    without_floor = tuple(name for name in ALL_STAGES if name != "energy_floor")
+    without_floor = tuple(name for name in QUANTILE_STAGES if name != "energy_floor")
 
-    assert not any(output.occupied for output in _entry_run(ALL_STAGES))
+    assert not any(output.occupied for output in _entry_run(QUANTILE_STAGES))
     assert any(output.occupied for output in _entry_run(without_floor))

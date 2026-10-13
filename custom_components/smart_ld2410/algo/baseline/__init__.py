@@ -16,6 +16,7 @@ from typing import Any
 from ..roles import (
     ROLE_CEILING,
     ROLE_FLOOR,
+    ROLE_ROOM_GATES,
     ROLE_SPREAD,
     Stage,
     StageEnv,
@@ -32,10 +33,12 @@ from ..types import (
 from .ceiling import MoveCeiling
 from .floor import QuantileFloor
 from .histogram_floor import HistogramFloor
+from .in_room import STILL_LIT_SPREADS, InRoomGates
 from .mode_spread import ModeSpread
+from .recurring_floor import RecurringFloor
 from .spread import TailSpread
 
-SCHEMA_VERSION = 5
+SCHEMA_VERSION = 6
 """Current persisted-state layout.
 
 Versions 1 and 2 stored bucket medians and MADs, neither of which carries the
@@ -46,17 +49,20 @@ tail spread are made of, and every statistic they do not carry - a move
 ceiling, a gate's energy histograms - simply starts unlearned.
 
 A payload carries whatever the stages that wrote it had learned, so a stage
-whose state is absent starts fresh rather than refusing the payload.
+whose state is absent starts fresh rather than refusing the payload, which is
+how a version 5 payload loads with no in-room gates learned.
 """
 
-_READABLE_VERSIONS = frozenset({3, 4, SCHEMA_VERSION})
+_READABLE_VERSIONS = frozenset({3, 4, 5, SCHEMA_VERSION})
 
 STAGES: dict[str, type[Stage]] = {
     "quantile_floor": QuantileFloor,
     "tail_spread": TailSpread,
     "histogram_floor": HistogramFloor,
+    "recurring_floor": RecurringFloor,
     "mode_spread": ModeSpread,
     "move_ceiling": MoveCeiling,
+    "in_room_gates": InRoomGates,
 }
 """The baseline stages, by the name a config lists them under."""
 
@@ -68,6 +74,7 @@ class Baseline:
         "_bucket_s",
         "_ceiling",
         "_floor",
+        "_in_room",
         "_min_buckets",
         "_min_spread",
         "_spread",
@@ -91,6 +98,7 @@ class Baseline:
         self._floor: Any = _by_role(stages, ROLE_FLOOR, order)
         self._spread: Any = _by_role(stages, ROLE_SPREAD, order)
         self._ceiling: MoveCeiling | None = _by_role(stages, ROLE_CEILING, order)
+        self._in_room: InRoomGates | None = _by_role(stages, ROLE_ROOM_GATES, order)
         if self._floor is None or self._spread is None:
             raise ValueError("residuals need a floor stage and a spread stage")
 
@@ -134,6 +142,11 @@ class Baseline:
         """Whether :attr:`move_ceiling` has any observation behind it yet."""
         return self._ceiling is not None and self._ceiling.learned
 
+    @property
+    def in_room(self) -> InRoomGates | None:
+        """The learned in-room gates, when that stage is listed."""
+        return self._in_room
+
     def floor(self, gate: int, channel: str = CHANNEL_MOVE) -> float:
         """The learned empty-room level of one gate channel."""
         return self._floor.value(channel, gate) if self._floor is not None else 0.0
@@ -170,6 +183,8 @@ class Baseline:
         del frozen
         for stage in self._stages.values():
             stage.add_frame(frame)
+        if self._in_room is not None:
+            self._in_room.observe_still(frame, self._still_lit_levels())
 
     def residuals(self, frame: Frame) -> tuple[tuple[float, ...], tuple[float, ...]]:
         """Return signed z-scores ``(energy - floor) / spread`` for all channels."""
@@ -202,6 +217,9 @@ class Baseline:
             "move_ceiling": None
             if self._ceiling is None
             else self._ceiling.to_dict(),
+            "in_room_gates": None
+            if self._in_room is None
+            else self._in_room.to_dict(),
         }
 
     @classmethod
@@ -254,6 +272,18 @@ class Baseline:
         ceiling = data.get("move_ceiling")
         if ceiling is not None and self._ceiling is not None:
             self._ceiling.restore(ceiling)
+        in_room = data.get("in_room_gates")
+        if in_room is not None and self._in_room is not None:
+            self._in_room.restore(in_room)
+
+    def _still_lit_levels(self) -> list[float | None]:
+        return [
+            self.floor(gate, CHANNEL_STILL)
+            + STILL_LIT_SPREADS * self.spread(gate, CHANNEL_STILL)
+            if self._floor.trusted(CHANNEL_STILL, gate)
+            else None
+            for gate in range(GATE_COUNT)
+        ]
 
     def _channel_state(self, channel: str, gate: int) -> dict[str, Any]:
         state: dict[str, Any] = {}

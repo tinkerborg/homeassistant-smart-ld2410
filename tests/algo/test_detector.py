@@ -8,12 +8,12 @@ import pytest
 
 from custom_components.smart_ld2410.algo.types import (
     CHANNEL_STILL,
-    DEFAULT_STAGES,
     DetectorOutput,
     Frame,
 )
 
 from . import (
+    QUANTILE_STAGES,
     FrameStream,
     entry_index,
     feed,
@@ -23,8 +23,8 @@ from . import (
 )
 
 
-HOLD_STAGES = (*DEFAULT_STAGES, "score_hold")
-"""The default detector plus the score-driven hold the hysteresis rules need."""
+HOLD_STAGES = QUANTILE_STAGES
+"""The stack the hysteresis rules are exercised on."""
 
 def _transitions(outputs: list[DetectorOutput]) -> int:
     """Count occupancy edges in a run of outputs."""

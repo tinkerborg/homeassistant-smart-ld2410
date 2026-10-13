@@ -16,6 +16,7 @@ from . import entry as entry_stages
 from . import gates as gate_stages
 from . import hold as hold_stages
 from . import presence as presence_stages
+from . import release as release_stages
 from . import scoring as scoring_stages
 from .baseline import Baseline
 from .gates import GateModel
@@ -24,6 +25,7 @@ from .roles import (
     ADMIT,
     ROLE_ENTRY_FILTER,
     ROLE_HOLD_REFRESHER,
+    ROLE_RELEASE,
     ROLE_SCORER,
     EntryVerdict,
     Stage,
@@ -43,6 +45,7 @@ REGISTRY: dict[str, type[Stage]] = {
     **entry_stages.STAGES,
     **presence_stages.STAGES,
     **hold_stages.STAGES,
+    **release_stages.STAGES,
 }
 """Every stage a config may name, by that name."""
 
@@ -53,6 +56,7 @@ class Pipeline:
     __slots__ = (
         "_entry_filters",
         "_hold_refreshers",
+        "_releases",
         "_scorer",
         "_stages",
         "baseline",
@@ -81,6 +85,9 @@ class Pipeline:
         )
         self._hold_refreshers = tuple(
             stage for stage in stages.values() if stage.role == ROLE_HOLD_REFRESHER
+        )
+        self._releases: tuple[Any, ...] = tuple(
+            stage for stage in stages.values() if stage.role == ROLE_RELEASE
         )
 
     def reconfigure(self, config: DetectorConfig) -> None:
@@ -131,10 +138,30 @@ class Pipeline:
 
     def refreshes_hold(self, context: DetectorContext) -> bool:
         """Whether any refresher keeps the occupancy alive this frame."""
-        anchor = self._stages.get("motion_anchor")
-        if anchor is not None:
-            return anchor.refreshes(context)
         return any(stage.refreshes(context) for stage in self._hold_refreshers)
+
+    def observe_release(self, context: DetectorContext) -> None:
+        """Fold this frame into every release path's own evidence."""
+        for stage in self._releases:
+            stage.observe(context)
+
+    def enter(self, context: DetectorContext) -> None:
+        """Tell every release path a fresh occupancy began on this frame."""
+        for stage in self._releases:
+            stage.enter(context)
+
+    def releases(self, context: DetectorContext) -> bool:
+        """Whether any release path ends the occupancy on this frame.
+
+        Every path is stepped, so none skips a frame of its own state.
+        """
+        verdicts = [stage.releases(context) for stage in self._releases]
+        return any(verdicts)
+
+    def rebase(self) -> None:
+        """Forget release timings left over from a timebase that has restarted."""
+        for stage in self._releases:
+            stage.rebase()
 
 
 def build_pipeline(

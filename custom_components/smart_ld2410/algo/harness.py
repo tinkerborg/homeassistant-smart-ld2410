@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Any
 
 from .detector import Detector
-from .types import DetectorConfig, DetectorOutput, Frame
+from .types import DEFAULT_MIN_BUCKETS, DetectorConfig, DetectorOutput, Frame
 
 
 @dataclass(frozen=True, slots=True)
@@ -106,9 +106,13 @@ def run(
     stages: Sequence[str] | None = None,
     start_utc: float = 0.0,
     end_utc: float = float("inf"),
+    min_buckets: int = DEFAULT_MIN_BUCKETS,
 ) -> Iterator[tuple[Frame, DetectorOutput]]:
-    """Replay a recording, yielding every frame with the decision it produced."""
-    detector = Detector(build_config(config, stages))
+    """Replay a recording, yielding every frame with the decision it produced.
+
+    ``min_buckets`` below the live default shortens the cold-start passthrough.
+    """
+    detector = Detector(build_config(config, stages), min_buckets=min_buckets)
     for frame in frames(db_path, sensor_id, start_utc=start_utc, end_utc=end_utc):
         yield frame, detector.process(frame)
 
@@ -121,6 +125,7 @@ def replay(
     stages: Sequence[str] | None = None,
     start_utc: float = 0.0,
     end_utc: float = float("inf"),
+    min_buckets: int = DEFAULT_MIN_BUCKETS,
 ) -> tuple[OccupancyEvent, ...]:
     """Return the occupancy timeline a configuration produces on a recording.
 
@@ -137,6 +142,7 @@ def replay(
         stages=stages,
         start_utc=start_utc,
         end_utc=end_utc,
+        min_buckets=min_buckets,
     ):
         if output.occupied == occupied:
             continue

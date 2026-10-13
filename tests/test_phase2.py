@@ -138,7 +138,7 @@ async def test_episode_lands_in_store_and_fires_bus_event(hass: HomeAssistant) -
     # gap that follows exits occupancy and closes both.
     warm_ts = 7 * 60.0
     for step in range(_ARRIVAL_FRAMES):
-        client.on_frame(_frame(warm_ts + step * 0.1, move={1: 50, 2: 50, 3: 50, 4: 50}))
+        client.on_frame(_frame(warm_ts + step * 0.1, move={1: 50, 2: 50, 3: 50, 4: 50}, still={2: 60, 3: 60, 4: 60}))
     calm_ts = warm_ts + _ARRIVAL_FRAMES * 0.1
     client.on_frame(_frame(calm_ts))
     client.on_frame(_frame(calm_ts + 31.0))

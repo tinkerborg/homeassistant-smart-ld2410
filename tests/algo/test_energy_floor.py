@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from custom_components.smart_ld2410.algo.detector import Detector
 from custom_components.smart_ld2410.algo.types import (
-    DEFAULT_STAGES,
     RESULT_ENTERED,
     RESULT_REJECTED_ENERGY_FLOOR,
     SCOPE_DETECTION,
@@ -18,7 +17,7 @@ from custom_components.smart_ld2410.algo.types import (
     Episode,
 )
 
-from . import NOISE_FLOOR, FrameStream, feed, make_config, make_detector
+from . import NOISE_FLOOR, QUANTILE_STAGES, FrameStream, feed, make_config, make_detector
 
 THROUGH_WALL_MOVE = 10
 """Move elevation of attenuated activity: raw ~15, faint in both channels."""
@@ -32,7 +31,7 @@ STILL_DWELL_STILL = 55
 WALK_IN_MOVE = 60
 """Move elevation of somebody walking in, strong from the first frame."""
 
-HOLD_STAGES = (*DEFAULT_STAGES, "score_hold")
+HOLD_STAGES = QUANTILE_STAGES
 """The default detector plus the score-driven hold exit is judged against."""
 
 BAND = (3, 4, 5)

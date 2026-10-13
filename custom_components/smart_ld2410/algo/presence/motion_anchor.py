@@ -22,6 +22,13 @@ GATE_START = 2
 GATE_STOP = 9
 GATE_COUNT = GATE_STOP - GATE_START
 
+BALANCE = 1.0 / 3.0
+"""Share of a gate's move+still a founding motion gate's move must carry.
+
+Through-wall activity reaches arrival-scale motion only at gates whose still
+channel dwarfs it; an occupant's own motion is balanced at the same gate.
+"""
+
 
 @dataclass(frozen=True, slots=True)
 class MotionAnchorResult:
@@ -30,6 +37,8 @@ class MotionAnchorResult:
     anchored: bool
     score: float
     template: tuple[float, ...] | None
+    admitted: bool = False
+    """Whether this frame alone qualifies to found a template."""
 
     @property
     def active(self) -> bool:
@@ -52,6 +61,7 @@ class MotionAnchor:
         "_previous_ts",
         "_score",
         "_anchored",
+        "_admitted",
     )
 
     def __init__(
@@ -74,6 +84,7 @@ class MotionAnchor:
         self._previous_ts: float | None = None
         self._score = 0.0
         self._anchored = False
+        self._admitted = False
 
     @property
     def anchored(self) -> bool:
@@ -105,6 +116,7 @@ class MotionAnchor:
         2..8; seven-element arrays are accepted for experiment adapters.
         Invalid input is ignored without changing learned state.
         """
+        self._admitted = False
         values = self._select(move, still, floor, spread)
         timestamp = self._finite(ts_mono)
         if values is None or timestamp is None:
@@ -117,6 +129,11 @@ class MotionAnchor:
             timestamp < previous or timestamp - previous > self.max_gap_s
         ):
             self._clear_template()
+        balanced = any(
+            motion >= self.motion_threshold
+            and motion / max(motion + rest, 1.0) >= BALANCE
+            for motion, rest in zip(m, s)
+        )
 
         residual = tuple(
             max(value - base, 0.0) / scale for value, base, scale in zip(s, f, d)
@@ -126,7 +143,9 @@ class MotionAnchor:
             value * (motion / max(peak, 1.0)) for value, motion in zip(residual, m)
         )
         norm = sum(value * value for value in candidate)
-        if peak >= self.motion_threshold and norm >= 1.0:
+        qualifies = peak >= self.motion_threshold and norm >= 1.0
+        self._admitted = qualifies and balanced
+        if qualifies and (self._template is not None or balanced):
             old_norm = self._template_norm() if self._template is not None else 0.0
             if self._template is None or norm > old_norm:
                 self._template = candidate
@@ -165,7 +184,7 @@ class MotionAnchor:
         self._anchored = False
 
     def _result(self, anchored: bool, score: float) -> MotionAnchorResult:
-        return MotionAnchorResult(anchored, score, self._template)
+        return MotionAnchorResult(anchored, score, self._template, self._admitted)
 
     @staticmethod
     def _finite(value: float) -> float | None:
@@ -198,16 +217,21 @@ class MotionAnchor:
 
 
 class MotionAnchorStage(Stage):
-    """Qualify entry and hold occupancy using an anchored still footprint."""
+    """Qualify entry on an anchored still footprint, and report admitted motion."""
+
+    __slots__ = ("admitted", "supported", "tracker")
 
     role = ROLE_ENTRY_FILTER
 
     def __init__(self, env: StageEnv) -> None:
+        """Start with no template."""
         super().__init__(env)
         self.tracker = MotionAnchor()
         self.supported = False
+        self.admitted = False
 
     def accumulate(self, context: DetectorContext) -> None:
+        """Fold this frame into the tracked footprint."""
         frame = context.frame
         baseline = context.baseline
         result = self.tracker.update(
@@ -218,9 +242,9 @@ class MotionAnchorStage(Stage):
             tuple(baseline.spread(g, CHANNEL_STILL) for g in range(9)),
         )
         self.supported = result.anchored
+        self.admitted = result.admitted
 
     def verdict(self, context: DetectorContext) -> EntryVerdict:
+        """Admit only while the footprint is anchored."""
+        del context
         return ADMIT if self.supported else EntryVerdict("rejected_motion_anchor")
-
-    def refreshes(self, context: DetectorContext) -> bool:
-        return self.supported

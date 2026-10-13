@@ -5,16 +5,16 @@ question the detector asks. The stages listed for a role answer it in the order
 the config names them:
 
 * floor and spread provide ``value(channel, gate)``, which residuals are taken
-  against; the ceiling provides the level an arrival is measured against.
+  against; the ceiling provides the level an arrival is measured against, and
+  the room gates say which gates arrival-scale motion has proven in-room.
 * a scorer turns a frame's elevations into a score and an active band, and a
   suppression stage says whether a lone hot gate is credible.
 * gate classifiers return a :class:`GateVerdict` per gate, a gate boundary
   learns how far the room reaches, and a gate mask turns the class into the
   exclusion entry scoring reads.
 * an entry filter returns an :class:`EntryVerdict`; a hold refresher answers
-  yes or no. Release needs no role of its own: an occupancy ends when the hold
-  window expires with nothing refreshing it, so refusing to release is
-  refreshing.
+  yes or no. An occupancy ends when the hold window expires with nothing
+  refreshing it, or earlier when a release path says the occupant has left.
 * retention, ownership and arming carry what is known about the occupant a
   room is already holding.
 """
@@ -38,6 +38,8 @@ ROLE_RETENTION = "retention"
 ROLE_OWNERSHIP = "ownership"
 ROLE_ARMING = "arming"
 ROLE_HOLD_REFRESHER = "hold_refresher"
+ROLE_ROOM_GATES = "room_gates"
+ROLE_RELEASE = "release"
 
 RANK_SUSTAINED = 0
 RANK_PORTAL = 1

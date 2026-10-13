@@ -149,7 +149,7 @@ async def test_occupancy_flip(hass: HomeAssistant) -> None:
 
     warm_ts = 7 * 60.0
     for step in range(_ARRIVAL_FRAMES):
-        client.on_frame(_frame(warm_ts + step * 0.1, move={1: 50, 2: 50, 3: 50, 4: 50}))
+        client.on_frame(_frame(warm_ts + step * 0.1, move={1: 50, 2: 50, 3: 50, 4: 50}, still={2: 60, 3: 60, 4: 60}))
     await hass.async_block_till_done()
     assert hass.states.get(occupancy_entity_id).state == "on"
 

@@ -117,6 +117,7 @@ class DetectorContext:
     def rebase(self) -> None:
         """Forget timings left over from a timebase that has restarted."""
         self.presence.rebase()
+        self.pipeline.rebase()
 
     def begin_frame(self, frame: Frame) -> None:
         """Start a frame: derive its smoothing weight and fold in the still channel."""
@@ -157,6 +158,7 @@ class DetectorContext:
         self.activity = bool(self.active_gates or self.episodes.open_gates)
         self._track_leading_edge()
         self.pipeline.observe_entry(self)
+        self.pipeline.observe_release(self)
         self.presence.observe_lead(frame.ts_mono, self.frame_leading_gate)
 
     def _track_leading_edge(self) -> None:

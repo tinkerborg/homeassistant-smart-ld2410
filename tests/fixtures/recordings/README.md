@@ -165,3 +165,209 @@ both-at-the-stove span 18:51:24–18:51:46 is the through-wall reference
 (bathroom gate 2 stays ≤30, peak at gate 4). Bathroom move gates 0–1 are
 latched at 18 throughout. The shipped detector entered the bathroom at
 18:50:53 and never released within the window.
+
+## bathroom-session-2026-09-29.db
+
+2026-09-29 00:45:00–01:14:57, bathroom (D0:6E) and kitchen (B3:26), with
+`labels` and `states` tables. Ground truth (per user): on the toilet the
+whole visit, 00:56:04.7 (first move ≥ 60) to 01:08:26.4 (user hit the
+light switch on the way out; last move ≥ 60 at 01:08:26.3). Lead-in
+00:45–00:56 and tail after 01:08:30 are unlabeled. Detector cleared
+seven times while occupied (00:59:01 7 s, 01:00:03 2 s, 01:02:11 2 s,
+01:02:54 55 s, 01:04:47 1 s, 01:05:44 39 s; final clear 01:08:44), every
+clear at confidence ~1.0 with gates 2–5/6 active. Motion gates 0–1 read
+13–17 on this unit here (no longer latched at 18).
+
+<!-- experiment 67 fixtures -->
+
+## bathroom-visit-2026-10-05-0006.db
+
+2026-10-05 00:03:15–00:22:56, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 00:06:15–00:06:37 (high; entry burst, still collapses 00:06:37, kitchen sensor lit; person stepped back out and re-entered at 00:07:11; left into an occupied kitchen); in the bathroom 00:07:11–00:17:56 (high; continuous gate 2-4 presence, exit burst 00:17:45-56 then still collapses; kitchen sensor sees the person at 00:18:25; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-0323.db
+
+2026-10-05 03:20:51–03:30:50, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 03:23:51–03:25:50 (medium; single entry burst then seated; gate-2 still fades ~03:25:45 with no exit burst; kitchen InvisOutlet on 03:26:05, kitchen sensor blips 03:26:25; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-0633.db
+
+2026-10-05 06:30:17–06:46:12, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 06:33:17–06:41:12 (high; arrives from the kitchen, presence throughout, exit burst 06:40:30-06:41:12 then still collapses; left into an occupied kitchen). Why it is here: exit into an active kitchen, quiet hold with the kitchen active. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-0921.db
+
+2026-10-05 09:18:06–09:30:50, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 09:21:06–09:25:50 (medium; seated, gate-3 motion until ~09:25:42, still fades by 09:26; kitchen off and kitchen sensor quiet; left into a quiet kitchen). Why it is here: ordinary visit. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-1101.db
+
+2026-10-05 10:58:11–11:12:42, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 11:01:11–11:07:42 (high; long active visit with a quieter 11:05-11:06:30 stretch, exit burst to 11:07:42; kitchen sensor and InvisOutlet active at exit; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-1404.db
+
+2026-10-05 14:01:15–14:10:48, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 14:04:15–14:05:48 (high; saturated motion whole visit, collapse 14:05:52; kitchen sensor blips 14:06:13; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-1951.db
+
+2026-10-05 19:48:04–19:57:00, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 19:51:04–19:52:00 (high; exit burst ends 19:52:00, kitchen sensor saturates 19:52:10; later bathroom blips are bleed; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-2115.db
+
+2026-10-05 21:12:40–21:28:40, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 21:15:40–21:16:28 (high; exit burst ends 21:16:28, kitchen saturates 21:16:45; left into an occupied kitchen); in the bathroom 21:22:13–21:23:40 (high; exit burst ends 21:23:40, kitchen saturates 21:24:00; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-2305.db
+
+2026-10-05 23:02:33–23:11:36, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 23:05:33–23:06:36 (high; exit burst ends 23:06:36, kitchen saturates 23:06:55; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-2327.db
+
+2026-10-05 23:24:16–23:34:54, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 23:27:16–23:29:54 (high; quiet first minute then busy, exit burst ends 23:29:54, kitchen saturates 23:30:05; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-05-2353.db
+
+2026-10-05 23:50:29–00:00:05, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 23:53:29–23:55:05 (medium; seated, fades from ~23:55; kitchen InvisOutlet on 23:55:01 and weak kitchen blip; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-06-1051.db
+
+2026-10-06 10:48:28–10:57:09, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 10:51:28–10:52:09 (high; exit burst ends 10:52:09, kitchen saturates 10:52:15; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-06-1617.db
+
+2026-10-06 16:14:58–16:24:00, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 16:17:58–16:19:00 (high; exit burst ends 16:19:01, kitchen saturates 16:19:07; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-06-1757.db
+
+2026-10-06 17:54:37–18:03:26, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 17:57:37–17:58:26 (high; exit burst ends 17:58:27, kitchen saturates 17:58:40; later bathroom blips are bleed; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-06-1953.db
+
+2026-10-06 19:50:30–19:59:51, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 19:53:30–19:54:51 (high; arrives from the kitchen, exit burst ends 19:54:52; kitchen sensor quiet after; left into a quiet kitchen). Why it is here: ordinary visit. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-06-2212.db
+
+2026-10-06 22:09:16–22:18:26, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 22:12:16–22:13:26 (high; exit burst ends 22:13:26, kitchen saturates 22:13:35; 22:15-22:17 bathroom blips and live re-triggers are kitchen bleed; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-07-0841.db
+
+2026-10-07 08:38:10–08:59:58, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 08:41:10–08:54:58 (medium; 14 min quiet sit, gate-3 motion to 08:54:55 then fade; InvisOutlet on but kitchen sensor nearly silent; left kitchen unclear). Why it is here: long still sit. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-07-1206.db
+
+2026-10-07 12:03:05–12:11:39, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 12:06:05–12:06:39 (high; exit burst ends 12:06:40, kitchen saturates 12:06:47; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-07-1542.db
+
+2026-10-07 15:39:43–15:48:41, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 15:42:43–15:43:41 (high; exit burst ends 15:43:41, kitchen saturates 15:44:00; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-07-1639.db
+
+2026-10-07 16:36:59–16:45:49, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 16:39:59–16:40:49 (high; exit burst ends 16:40:49, kitchen saturates 16:40:56; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-07-1731.db
+
+2026-10-07 17:28:46–17:51:07, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 17:31:46–17:46:07 (high; 14 min visit with long quiet stretches (live cleared 4x), exit burst ends 17:46:07; kitchen quiet after; left into a quiet kitchen). Why it is here: long still sit, one of the longest quiet holds. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-07-1822.db
+
+2026-10-07 18:19:28–18:28:41, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 18:22:28–18:23:41 (high; exit burst ends 18:23:41, kitchen saturates 18:24:00; later blips are bleed; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-07-1945.db
+
+2026-10-07 19:42:25–19:51:03, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 19:45:25–19:46:03 (high; exit burst ends 19:46:03, kitchen sensor blips 19:46:13; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-07-2111.db
+
+2026-10-07 21:08:14–21:18:46, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 21:11:14–21:13:46 (high; quiet middle, exit burst ends 21:13:46, kitchen sensor active 21:13:10-21:14:35; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-bleed-2026-10-10-0007.db
+
+2026-10-10 00:05:00–00:13:09, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (exp 67 rule, not user-confirmed): bathroom empty, kitchen occupied — no bathroom burst within 10 min before or 2 min after, while the bathroom's smoothed score stays above exit_score from through-wall kitchen activity. Why it is here: bleed-only control (bathroom empty, kitchen occupied; checked visually). Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-10-0723.db
+
+2026-10-10 07:20:10–07:33:45, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 07:23:10–07:28:45 (medium; seated 5 min with a dim stretch 07:25:40-07:26:20 (live cleared) and renewed still at 07:26:22 without an entry burst; fades ~07:28:45; left into a quiet kitchen). Why it is here: ordinary visit. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-10-0846.db
+
+2026-10-10 08:43:43–09:00:50, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 08:46:43–08:55:50 (high; arrives from the kitchen, quiet middle (live cleared 08:50:35), exit burst ends 08:55:47, kitchen saturates 08:56:00; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-10-1015.db
+
+2026-10-10 10:12:30–10:28:03, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 10:15:30–10:23:03 (high; long visit with quiet stretches, exit burst ends 10:23:03; InvisOutlet on and kitchen blip 10:23:58; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-10-1208.db
+
+2026-10-10 12:05:55–12:14:35, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 12:08:55–12:09:35 (medium; kitchen sensor goes dark exactly while the bathroom saturates: person stepped in for ~40 s and back to the kitchen; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-bleed-2026-10-10-1301.db
+
+2026-10-10 12:59:06–13:08:18, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (exp 67 rule, not user-confirmed): bathroom empty, kitchen occupied — no bathroom burst within 10 min before or 2 min after, while the bathroom's smoothed score stays above exit_score from through-wall kitchen activity. Why it is here: bleed-only control (bathroom empty, kitchen occupied; checked visually). Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-bleed-2026-10-10-1320.db
+
+2026-10-10 13:18:41–13:26:20, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (exp 67 rule, not user-confirmed): bathroom empty, kitchen occupied — no bathroom burst within 10 min before or 2 min after, while the bathroom's smoothed score stays above exit_score from through-wall kitchen activity. Why it is here: bleed-only control (bathroom empty, kitchen occupied; checked visually). Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-10-1558.db
+
+2026-10-10 15:55:26–16:04:20, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 15:58:26–15:59:20 (high; exit burst ends 15:59:23, kitchen saturates 15:59:20 onward; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-10-2203.db
+
+2026-10-10 22:00:20–22:09:26, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 22:03:20–22:04:26 (high; visit while someone is in the kitchen the whole time, exit burst ends 22:04:28; later blips are bleed; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-bleed-2026-10-10-2232.db
+
+2026-10-10 22:30:56–22:40:46, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (exp 67 rule, not user-confirmed): bathroom empty, kitchen occupied — no bathroom burst within 10 min before or 2 min after, while the bathroom's smoothed score stays above exit_score from through-wall kitchen activity. Why it is here: bleed-only control (bathroom empty, kitchen occupied; checked visually). Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-10-2320.db
+
+2026-10-10 23:17:51–23:26:59, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 23:20:51–23:21:59 (high; exit burst ends 23:21:59, kitchen saturates 23:22:03; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-11-0832.db
+
+2026-10-11 08:29:44–08:57:05, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 08:32:44–08:52:05 (high; 19 min visit with many quiet stretches (live cleared repeatedly), exit burst ends 08:52:05, kitchen saturates 08:52:20; left into an occupied kitchen). Why it is here: exit into an active kitchen, one of the longest quiet holds. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-11-1027.db
+
+2026-10-11 10:24:06–10:33:07, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 10:27:06–10:28:07 (high; exit burst ends 10:28:07, kitchen blip 10:28:20; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-11-1106.db
+
+2026-10-11 11:04:20–11:25:14, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 11:06:32–11:06:47 (high, pass-through; 15 s in, out to the kitchen, back at 11:07:20; left into an occupied kitchen); in the bathroom 11:07:20–11:20:14 (high; 13 min busy visit, exit burst ends 11:20:14, kitchen saturates 11:20:30; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-11-1324.db
+
+2026-10-11 13:21:00–13:35:05, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 13:24:00–13:30:05 (medium; arrives from the kitchen, quiet/dim 13:27:50-13:29:45 then renewed motion without entry burst, leaves ~13:30:05 as the kitchen lights; later blips are bleed; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-11-1809.db
+
+2026-10-11 18:06:23–18:15:47, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 18:09:23–18:10:47 (high; exit burst ends 18:10:47 into a busy kitchen; later blips and live re-triggers are bleed; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-11-1952.db
+
+2026-10-11 19:49:57–19:58:45, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 19:52:57–19:53:45 (high; exit burst ends 19:53:45, kitchen saturates 19:53:50; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-11-2154.db
+
+2026-10-11 21:51:28–22:52:05, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 21:54:28–22:11:00 (high; 16 min visit (live cleared 3x), exit burst ends 22:11:00, kitchen saturates 22:11:05; left into an occupied kitchen); in the bathroom 22:13:10–22:13:14 (high, pass-through; 5 s pass, kitchen saturates 22:13:20; left into an occupied kitchen); in the bathroom 22:14:40–22:14:43 (high, pass-through; 4 s pass; InvisOutlet just turned off, kitchen sensor dim; left kitchen unclear); in the bathroom 22:17:48–22:47:05 (medium; 29 min very still sit (live cleared 4x, and from 22:43:50), gate-3 motion to 22:46:40, gate-2 still to 22:47:20; kitchen saturates 22:47:03; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-12-0606.db
+
+2026-10-12 06:03:30–06:27:46, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 06:06:30–06:22:46 (high; one 16 min visit (algorithm split it), exit burst ends 06:22:45, kitchen saturates 06:22:55; left into an occupied kitchen). Why it is here: exit into an active kitchen, one of the longest quiet holds. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-12-0925.db
+
+2026-10-12 09:22:29–09:32:15, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 09:25:29–09:27:15 (medium; seated, fades ~09:27:15; kitchen blips 09:27:35 and 09:28:10; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-12-1048.db
+
+2026-10-12 10:45:50–10:54:52, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 10:48:50–10:49:52 (high; visit while the kitchen is occupied throughout, motion ends 10:49:53; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-12-1430.db
+
+2026-10-12 14:27:51–14:38:30, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 14:30:51–14:33:30 (medium; seated, fades ~14:33:30; kitchen off; left into a quiet kitchen). Why it is here: ordinary visit. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; medium-confidence departures are signal fades without an exit burst, ±10–20 s; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-12-1548.db
+
+2026-10-12 15:45:53–15:54:46, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 15:48:53–15:49:46 (high; exit burst ends 15:49:46, kitchen saturates 15:49:50; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
+
+## bathroom-visit-2026-10-12-1656.db
+
+2026-10-12 16:53:46–17:02:42, bathroom (D0:6E) and kitchen (B3:26), with `labels`, `states` (live bathroom/kitchen smart_ld2410, InvisOutlet kitchen occupancy, bathroom light) and `events` tables. Ground truth (hand-labelled by Claude from the radar plots in experiment 67; not user-confirmed; person unknown): in the bathroom 16:56:46–16:57:42 (high; exit burst ends 16:57:42, kitchen saturates 16:57:48; left into an occupied kitchen). Why it is here: exit into an active kitchen. Caveats: labels are a reading of the radar plots, not a user narrative; visits were found from move >= 90 bursts, so an entry without one can be missing from the labels; the InvisOutlet kitchen often turns on from the bathroom occupant alone.
