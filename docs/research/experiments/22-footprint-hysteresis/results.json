@@ -1,0 +1,778 @@
+{
+  "baseline_on0.4_off0.4": {
+    "labeled-loop-0915": {
+      "rates": {
+        "IN": 99.48652118100128,
+        "TW": 7.741935483870968,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789514660.0,
+          "end": 1789514738.0,
+          "frames": 779,
+          "positive_frames": 775,
+          "missing_fraction": 0.005134788189987138,
+          "within_visit_dropout_runs": 1,
+          "longest_dropout_s": 0.3078632354736328,
+          "first_on_after_label_s": 0.3849833011627197,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 6.858537673950195,
+          "positive_frames_in_next_10s": 68
+        }
+      ]
+    },
+    "labeled-walk-0915": {
+      "rates": {
+        "IN": 95.96199524940617,
+        "TW": 2.626970227670753,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789512652.0,
+          "end": 1789512671.0,
+          "frames": 190,
+          "positive_frames": 173,
+          "missing_fraction": 0.08947368421052626,
+          "within_visit_dropout_runs": 1,
+          "longest_dropout_s": 1.5336227416992188,
+          "first_on_after_label_s": 1.6932103633880615,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 0.9700160026550293,
+          "positive_frames_in_next_10s": 10
+        },
+        {
+          "start": 1789512708.0,
+          "end": 1789512731.0,
+          "frames": 231,
+          "positive_frames": 231,
+          "missing_fraction": 0.0,
+          "within_visit_dropout_runs": 0,
+          "longest_dropout_s": 0.0,
+          "first_on_after_label_s": 0.015818357467651367,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 0.5668082237243652,
+          "positive_frames_in_next_10s": 5
+        }
+      ]
+    },
+    "labeled-sessions-0909-d06e": {
+      "rates": {
+        "IN": 47.49303621169916,
+        "TW": 8.040593286494927,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789003463.323162,
+          "end": 1789003492.070086,
+          "frames": 287,
+          "positive_frames": 287,
+          "missing_fraction": 0.0,
+          "within_visit_dropout_runs": 0,
+          "longest_dropout_s": 0.0,
+          "first_on_after_label_s": 0.08351707458496094,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": null,
+          "positive_frames_in_next_10s": 100
+        },
+        {
+          "start": 1789010127.9949691,
+          "end": 1789010530.1642601,
+          "frames": 4021,
+          "positive_frames": 1759,
+          "missing_fraction": 0.5625466301914946,
+          "within_visit_dropout_runs": 8,
+          "longest_dropout_s": 92.57175612449646,
+          "first_on_after_label_s": 0.05877566337585449,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.017613887786865234,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "throughwall-morning-d06e": {
+      "rates": {
+        "IN": null,
+        "TW": 14.140792000289846,
+        "EMPTY": 0.0
+      },
+      "visits": []
+    },
+    "bathroom-visit-2204-d06e": {
+      "rates": {
+        "IN": 49.629629629629626,
+        "TW": null,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789178641.0,
+          "end": 1789178803.0,
+          "frames": 1620,
+          "positive_frames": 804,
+          "missing_fraction": 0.5037037037037038,
+          "within_visit_dropout_runs": 2,
+          "longest_dropout_s": 81.02973246574402,
+          "first_on_after_label_s": 0.4440627098083496,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.02279210090637207,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "stove-case-0913-d06e": {
+      "rates": {
+        "IN": 79.21186187680365,
+        "TW": 9.066954935477332,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789305840.0,
+          "end": 1789305915.0,
+          "frames": 749,
+          "positive_frames": 693,
+          "missing_fraction": 0.07476635514018692,
+          "within_visit_dropout_runs": 2,
+          "longest_dropout_s": 3.526672840118408,
+          "first_on_after_label_s": 3.79567813873291,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.028366804122924805,
+          "positive_frames_in_next_10s": 0
+        },
+        {
+          "start": 1789307400.0,
+          "end": 1789308330.0,
+          "frames": 9300,
+          "positive_frames": 7267,
+          "missing_fraction": 0.21860215053763443,
+          "within_visit_dropout_runs": 6,
+          "longest_dropout_s": 81.09571027755737,
+          "first_on_after_label_s": 0.07568860054016113,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.034655094146728516,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "livingroom-reset-seated-fd68": {
+      "rates": {
+        "IN": 9.577608720336096,
+        "TW": null,
+        "EMPTY": 0.6025641025641025
+      },
+      "visits": [
+        {
+          "start": 1789175130.0,
+          "end": 1789176000.0,
+          "frames": 8700,
+          "positive_frames": 508,
+          "missing_fraction": 0.9416091954022988,
+          "within_visit_dropout_runs": 7,
+          "longest_dropout_s": 261.6603796482086,
+          "first_on_after_label_s": 252.65324568748474,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.021448373794555664,
+          "positive_frames_in_next_10s": 0
+        },
+        {
+          "start": 1789177180.0,
+          "end": 1789178100.0,
+          "frames": 8914,
+          "positive_frames": 1179,
+          "missing_fraction": 0.8677361453892753,
+          "within_visit_dropout_runs": 8,
+          "longest_dropout_s": 255.81027817726135,
+          "first_on_after_label_s": 15.309678792953491,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.021790027618408203,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    }
+  },
+  "hysteresis_on0.7_off0.3": {
+    "labeled-loop-0915": {
+      "rates": {
+        "IN": 99.48652118100128,
+        "TW": 8.38709677419355,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789514660.0,
+          "end": 1789514738.0,
+          "frames": 779,
+          "positive_frames": 775,
+          "missing_fraction": 0.005134788189987138,
+          "within_visit_dropout_runs": 1,
+          "longest_dropout_s": 0.3078632354736328,
+          "first_on_after_label_s": 0.3849833011627197,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 7.267472982406616,
+          "positive_frames_in_next_10s": 72
+        }
+      ]
+    },
+    "labeled-walk-0915": {
+      "rates": {
+        "IN": 95.96199524940617,
+        "TW": 4.378283712784588,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789512652.0,
+          "end": 1789512671.0,
+          "frames": 190,
+          "positive_frames": 173,
+          "missing_fraction": 0.08947368421052626,
+          "within_visit_dropout_runs": 1,
+          "longest_dropout_s": 1.5336227416992188,
+          "first_on_after_label_s": 1.6932103633880615,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 1.4862587451934814,
+          "positive_frames_in_next_10s": 15
+        },
+        {
+          "start": 1789512708.0,
+          "end": 1789512731.0,
+          "frames": 231,
+          "positive_frames": 231,
+          "missing_fraction": 0.0,
+          "within_visit_dropout_runs": 0,
+          "longest_dropout_s": 0.0,
+          "first_on_after_label_s": 0.015818357467651367,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 1.0791335105895996,
+          "positive_frames_in_next_10s": 10
+        }
+      ]
+    },
+    "labeled-sessions-0909-d06e": {
+      "rates": {
+        "IN": 50.441039925719586,
+        "TW": 8.19672131147541,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789003463.323162,
+          "end": 1789003492.070086,
+          "frames": 287,
+          "positive_frames": 287,
+          "missing_fraction": 0.0,
+          "within_visit_dropout_runs": 0,
+          "longest_dropout_s": 0.0,
+          "first_on_after_label_s": 0.08351707458496094,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": null,
+          "positive_frames_in_next_10s": 100
+        },
+        {
+          "start": 1789010127.9949691,
+          "end": 1789010530.1642601,
+          "frames": 4021,
+          "positive_frames": 1886,
+          "missing_fraction": 0.5309624471524497,
+          "within_visit_dropout_runs": 8,
+          "longest_dropout_s": 81.30751609802246,
+          "first_on_after_label_s": 0.05877566337585449,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.017613887786865234,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "throughwall-morning-d06e": {
+      "rates": {
+        "IN": null,
+        "TW": 14.318321799934786,
+        "EMPTY": 0.0
+      },
+      "visits": []
+    },
+    "bathroom-visit-2204-d06e": {
+      "rates": {
+        "IN": 49.93827160493827,
+        "TW": null,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789178641.0,
+          "end": 1789178803.0,
+          "frames": 1620,
+          "positive_frames": 809,
+          "missing_fraction": 0.5006172839506173,
+          "within_visit_dropout_runs": 2,
+          "longest_dropout_s": 80.52723670005798,
+          "first_on_after_label_s": 0.4440627098083496,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.02279210090637207,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "stove-case-0913-d06e": {
+      "rates": {
+        "IN": 79.46064285003483,
+        "TW": 11.154651712722114,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789305840.0,
+          "end": 1789305915.0,
+          "frames": 749,
+          "positive_frames": 696,
+          "missing_fraction": 0.07076101468624829,
+          "within_visit_dropout_runs": 2,
+          "longest_dropout_s": 3.526672840118408,
+          "first_on_after_label_s": 3.79567813873291,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.028366804122924805,
+          "positive_frames_in_next_10s": 0
+        },
+        {
+          "start": 1789307400.0,
+          "end": 1789308330.0,
+          "frames": 9300,
+          "positive_frames": 7289,
+          "missing_fraction": 0.2162365591397849,
+          "within_visit_dropout_runs": 6,
+          "longest_dropout_s": 81.09571027755737,
+          "first_on_after_label_s": 0.07568860054016113,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.034655094146728516,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "livingroom-reset-seated-fd68": {
+      "rates": {
+        "IN": 9.770636993300784,
+        "TW": null,
+        "EMPTY": 0.641025641025641
+      },
+      "visits": [
+        {
+          "start": 1789175130.0,
+          "end": 1789176000.0,
+          "frames": 8700,
+          "positive_frames": 527,
+          "missing_fraction": 0.9394252873563218,
+          "within_visit_dropout_runs": 7,
+          "longest_dropout_s": 261.3687469959259,
+          "first_on_after_label_s": 252.65324568748474,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.021448373794555664,
+          "positive_frames_in_next_10s": 0
+        },
+        {
+          "start": 1789177180.0,
+          "end": 1789178100.0,
+          "frames": 8914,
+          "positive_frames": 1194,
+          "missing_fraction": 0.8660533991474085,
+          "within_visit_dropout_runs": 8,
+          "longest_dropout_s": 255.69208407402039,
+          "first_on_after_label_s": 15.309678792953491,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.021790027618408203,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    }
+  },
+  "control_on0.3_off0.3": {
+    "labeled-loop-0915": {
+      "rates": {
+        "IN": 99.48652118100128,
+        "TW": 8.38709677419355,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789514660.0,
+          "end": 1789514738.0,
+          "frames": 779,
+          "positive_frames": 775,
+          "missing_fraction": 0.005134788189987138,
+          "within_visit_dropout_runs": 1,
+          "longest_dropout_s": 0.3078632354736328,
+          "first_on_after_label_s": 0.3849833011627197,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 7.267472982406616,
+          "positive_frames_in_next_10s": 72
+        }
+      ]
+    },
+    "labeled-walk-0915": {
+      "rates": {
+        "IN": 95.96199524940617,
+        "TW": 4.378283712784588,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789512652.0,
+          "end": 1789512671.0,
+          "frames": 190,
+          "positive_frames": 173,
+          "missing_fraction": 0.08947368421052626,
+          "within_visit_dropout_runs": 1,
+          "longest_dropout_s": 1.5336227416992188,
+          "first_on_after_label_s": 1.6932103633880615,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 1.4862587451934814,
+          "positive_frames_in_next_10s": 15
+        },
+        {
+          "start": 1789512708.0,
+          "end": 1789512731.0,
+          "frames": 231,
+          "positive_frames": 231,
+          "missing_fraction": 0.0,
+          "within_visit_dropout_runs": 0,
+          "longest_dropout_s": 0.0,
+          "first_on_after_label_s": 0.015818357467651367,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 1.0791335105895996,
+          "positive_frames_in_next_10s": 10
+        }
+      ]
+    },
+    "labeled-sessions-0909-d06e": {
+      "rates": {
+        "IN": 50.441039925719586,
+        "TW": 8.19672131147541,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789003463.323162,
+          "end": 1789003492.070086,
+          "frames": 287,
+          "positive_frames": 287,
+          "missing_fraction": 0.0,
+          "within_visit_dropout_runs": 0,
+          "longest_dropout_s": 0.0,
+          "first_on_after_label_s": 0.08351707458496094,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": null,
+          "positive_frames_in_next_10s": 100
+        },
+        {
+          "start": 1789010127.9949691,
+          "end": 1789010530.1642601,
+          "frames": 4021,
+          "positive_frames": 1886,
+          "missing_fraction": 0.5309624471524497,
+          "within_visit_dropout_runs": 8,
+          "longest_dropout_s": 81.30751609802246,
+          "first_on_after_label_s": 0.05877566337585449,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.017613887786865234,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "throughwall-morning-d06e": {
+      "rates": {
+        "IN": null,
+        "TW": 14.318321799934786,
+        "EMPTY": 0.0
+      },
+      "visits": []
+    },
+    "bathroom-visit-2204-d06e": {
+      "rates": {
+        "IN": 49.93827160493827,
+        "TW": null,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789178641.0,
+          "end": 1789178803.0,
+          "frames": 1620,
+          "positive_frames": 809,
+          "missing_fraction": 0.5006172839506173,
+          "within_visit_dropout_runs": 2,
+          "longest_dropout_s": 80.52723670005798,
+          "first_on_after_label_s": 0.4440627098083496,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.02279210090637207,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "stove-case-0913-d06e": {
+      "rates": {
+        "IN": 79.46064285003483,
+        "TW": 11.154651712722114,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789305840.0,
+          "end": 1789305915.0,
+          "frames": 749,
+          "positive_frames": 696,
+          "missing_fraction": 0.07076101468624829,
+          "within_visit_dropout_runs": 2,
+          "longest_dropout_s": 3.526672840118408,
+          "first_on_after_label_s": 3.79567813873291,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.028366804122924805,
+          "positive_frames_in_next_10s": 0
+        },
+        {
+          "start": 1789307400.0,
+          "end": 1789308330.0,
+          "frames": 9300,
+          "positive_frames": 7289,
+          "missing_fraction": 0.2162365591397849,
+          "within_visit_dropout_runs": 6,
+          "longest_dropout_s": 81.09571027755737,
+          "first_on_after_label_s": 0.07568860054016113,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.034655094146728516,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "livingroom-reset-seated-fd68": {
+      "rates": {
+        "IN": 9.770636993300784,
+        "TW": null,
+        "EMPTY": 0.641025641025641
+      },
+      "visits": [
+        {
+          "start": 1789175130.0,
+          "end": 1789176000.0,
+          "frames": 8700,
+          "positive_frames": 527,
+          "missing_fraction": 0.9394252873563218,
+          "within_visit_dropout_runs": 7,
+          "longest_dropout_s": 261.3687469959259,
+          "first_on_after_label_s": 252.65324568748474,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.021448373794555664,
+          "positive_frames_in_next_10s": 0
+        },
+        {
+          "start": 1789177180.0,
+          "end": 1789178100.0,
+          "frames": 8914,
+          "positive_frames": 1194,
+          "missing_fraction": 0.8660533991474085,
+          "within_visit_dropout_runs": 8,
+          "longest_dropout_s": 255.69208407402039,
+          "first_on_after_label_s": 15.309678792953491,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.021790027618408203,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    }
+  },
+  "control_on0.7_off0.4": {
+    "labeled-loop-0915": {
+      "rates": {
+        "IN": 99.48652118100128,
+        "TW": 7.741935483870968,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789514660.0,
+          "end": 1789514738.0,
+          "frames": 779,
+          "positive_frames": 775,
+          "missing_fraction": 0.005134788189987138,
+          "within_visit_dropout_runs": 1,
+          "longest_dropout_s": 0.3078632354736328,
+          "first_on_after_label_s": 0.3849833011627197,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 6.858537673950195,
+          "positive_frames_in_next_10s": 68
+        }
+      ]
+    },
+    "labeled-walk-0915": {
+      "rates": {
+        "IN": 95.96199524940617,
+        "TW": 2.626970227670753,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789512652.0,
+          "end": 1789512671.0,
+          "frames": 190,
+          "positive_frames": 173,
+          "missing_fraction": 0.08947368421052626,
+          "within_visit_dropout_runs": 1,
+          "longest_dropout_s": 1.5336227416992188,
+          "first_on_after_label_s": 1.6932103633880615,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 0.9700160026550293,
+          "positive_frames_in_next_10s": 10
+        },
+        {
+          "start": 1789512708.0,
+          "end": 1789512731.0,
+          "frames": 231,
+          "positive_frames": 231,
+          "missing_fraction": 0.0,
+          "within_visit_dropout_runs": 0,
+          "longest_dropout_s": 0.0,
+          "first_on_after_label_s": 0.015818357467651367,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": 0.5668082237243652,
+          "positive_frames_in_next_10s": 5
+        }
+      ]
+    },
+    "labeled-sessions-0909-d06e": {
+      "rates": {
+        "IN": 47.49303621169916,
+        "TW": 8.040593286494927,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789003463.323162,
+          "end": 1789003492.070086,
+          "frames": 287,
+          "positive_frames": 287,
+          "missing_fraction": 0.0,
+          "within_visit_dropout_runs": 0,
+          "longest_dropout_s": 0.0,
+          "first_on_after_label_s": 0.08351707458496094,
+          "on_at_last_frame": true,
+          "first_off_after_exit_label_s": null,
+          "positive_frames_in_next_10s": 100
+        },
+        {
+          "start": 1789010127.9949691,
+          "end": 1789010530.1642601,
+          "frames": 4021,
+          "positive_frames": 1759,
+          "missing_fraction": 0.5625466301914946,
+          "within_visit_dropout_runs": 8,
+          "longest_dropout_s": 92.57175612449646,
+          "first_on_after_label_s": 0.05877566337585449,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.017613887786865234,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "throughwall-morning-d06e": {
+      "rates": {
+        "IN": null,
+        "TW": 14.140792000289846,
+        "EMPTY": 0.0
+      },
+      "visits": []
+    },
+    "bathroom-visit-2204-d06e": {
+      "rates": {
+        "IN": 49.629629629629626,
+        "TW": null,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789178641.0,
+          "end": 1789178803.0,
+          "frames": 1620,
+          "positive_frames": 804,
+          "missing_fraction": 0.5037037037037038,
+          "within_visit_dropout_runs": 2,
+          "longest_dropout_s": 81.02973246574402,
+          "first_on_after_label_s": 0.4440627098083496,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.02279210090637207,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "stove-case-0913-d06e": {
+      "rates": {
+        "IN": 79.21186187680365,
+        "TW": 9.066954935477332,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789305840.0,
+          "end": 1789305915.0,
+          "frames": 749,
+          "positive_frames": 693,
+          "missing_fraction": 0.07476635514018692,
+          "within_visit_dropout_runs": 2,
+          "longest_dropout_s": 3.526672840118408,
+          "first_on_after_label_s": 3.79567813873291,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.028366804122924805,
+          "positive_frames_in_next_10s": 0
+        },
+        {
+          "start": 1789307400.0,
+          "end": 1789308330.0,
+          "frames": 9300,
+          "positive_frames": 7267,
+          "missing_fraction": 0.21860215053763443,
+          "within_visit_dropout_runs": 6,
+          "longest_dropout_s": 81.09571027755737,
+          "first_on_after_label_s": 0.07568860054016113,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.034655094146728516,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    },
+    "livingroom-reset-seated-fd68": {
+      "rates": {
+        "IN": 9.577608720336096,
+        "TW": null,
+        "EMPTY": 0.6025641025641025
+      },
+      "visits": [
+        {
+          "start": 1789175130.0,
+          "end": 1789176000.0,
+          "frames": 8700,
+          "positive_frames": 508,
+          "missing_fraction": 0.9416091954022988,
+          "within_visit_dropout_runs": 7,
+          "longest_dropout_s": 261.6603796482086,
+          "first_on_after_label_s": 252.65324568748474,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.021448373794555664,
+          "positive_frames_in_next_10s": 0
+        },
+        {
+          "start": 1789177180.0,
+          "end": 1789178100.0,
+          "frames": 8914,
+          "positive_frames": 1179,
+          "missing_fraction": 0.8677361453892753,
+          "within_visit_dropout_runs": 8,
+          "longest_dropout_s": 255.81027817726135,
+          "first_on_after_label_s": 15.309678792953491,
+          "on_at_last_frame": false,
+          "first_off_after_exit_label_s": 0.021790027618408203,
+          "positive_frames_in_next_10s": 0
+        }
+      ]
+    }
+  }
+}

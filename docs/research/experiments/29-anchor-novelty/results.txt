@@ -1,0 +1,4 @@
+walk visit 1 actual_ts 1789512653.6932104 dt_to_target 0.0 motion_peak 100 still_delta_l2 46.14 delta [37.0, 27.5, 1.0, -1.0, 0.0, 1.0, 1.0]
+walk visit 2 actual_ts 1789512708.0158184 dt_to_target 0.0 motion_peak 67 still_delta_l2 20.31 delta [15.0, 12.5, 5.5, 1.0, 0.0, 0.0, 0.0]
+solo loop actual_ts 1789514660.3849833 dt_to_target 0.0 motion_peak 59 still_delta_l2 2.0 delta [1.0, 1.0, 1.0, 0.0, 0.0, 0.0, -1.0]
+kitchen false re-entry actual_ts 1789526209.1637087 dt_to_target -0.0 motion_peak 45 still_delta_l2 13.49 delta [0.0, 6.0, 11.0, 5.0, 0.0, 0.0, 0.0]

@@ -1,0 +1,76 @@
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.prefix, expected /Users/rmk/Repo/homeassistant-smart-ld2410/.venv, got /Users/rmk/Repo/homeassistant-smart-ld2410/docs/research/experiments/16-motion-still-coupling/../../../../.venv
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.exec_prefix, expected /Users/rmk/Repo/homeassistant-smart-ld2410/.venv, got /Users/rmk/Repo/homeassistant-smart-ld2410/docs/research/experiments/16-motion-still-coupling/../../../../.venv
+events=1382 IN=478 TW=904
+motion-saturated (>=95): 282 (20.4%)
+per-span event counts:
+  throughwall-morning-d06e:TW:0                                n=469 gates=[0, 1, 2, 3]
+  bathroom-visit-2204-d06e:IN:0                                n= 35 gates=[0, 1, 2]
+  stove-case-0913-d06e:IN:0                                    n= 19 gates=[0, 1, 2, 3]
+  stove-case-0913-d06e:IN:1                                    n=322 gates=[0, 1, 2, 3, 4, 5]
+  stove-case-0913-d06e:TW:0                                    n=410 gates=[0, 1, 2, 3, 4, 5]
+  labeled-sessions-0909-d06e:IN:0                              n=  4 gates=[2, 3]
+  labeled-sessions-0909-d06e:IN:1                              n= 98 gates=[0, 1, 2, 3]
+  labeled-sessions-0909-d06e:TW:2                              n= 19 gates=[2, 3]
+  labeled-sessions-0909-d06e:TW:3                              n=  6 gates=[0, 3]
+pooled AUC (descriptive; serially dependent events):
+  strength   0.847
+  move_mass  0.876
+  response   0.506
+  rise       0.531
+  depth      0.863
+  s0.5       0.577
+  s1         0.578
+  s2         0.578
+  s3         0.578
+  s5         0.577
+still-active gate>=2 events=388 IN=166 TW=222
+  active response 0.514 (descriptive best direction)
+  active rise   0.654 (descriptive best direction)
+  active d0.5   0.569 (descriptive best direction)
+  active d1     0.538 (descriptive best direction)
+  active d2     0.512 (descriptive best direction)
+  active d3     0.505 (descriptive best direction)
+  active d5     0.503 (descriptive best direction)
+nonsaturated-only events=1100
+  response   0.509
+  rise       0.518
+  d0.5       0.523
+  d1         0.528
+  d2         0.527
+  d3         0.527
+  d5         0.506
+
+PRIMARY ANALYSIS: still-active gates only (peak_gate >= 2)
+leave-one-span-out AUC (held-out span; model fit on other spans):
+  baseline  n=388 AUC=0.672
+  delta     n=388 AUC=0.651
+  level     n=388 AUC=0.688
+whole-fixture holdout AUC (only fixtures containing IN and TW):
+  labeled-sessions-0909-d06e: n=104 baseline=0.624 delta=0.640 level=0.649
+  stove-case-0913-d06e: n=163 baseline=0.878 delta=0.852 level=0.843
+matched IN/TW bursts (same peak gate, strength within max(5,20%));
+  labeled-sessions-0909-d06e             pairs= 24
+    response IN-TW median=   3.02  p10/p90=[-12.20333333  17.89755233]
+    rise     IN-TW median=   1.50  p10/p90=[-11.1         17.00833333]
+    d0.5     IN-TW median=  -0.75  p10/p90=[-8.1   7.35]
+    d1       IN-TW median=   1.65  p10/p90=[-11.78571429  13.99      ]
+    d2       IN-TW median=   5.48  p10/p90=[-12.6   18.19]
+    d3       IN-TW median=   5.70  p10/p90=[-15.28666667  32.49      ]
+    d5       IN-TW median=   1.63  p10/p90=[-13.25666667  22.45833333]
+    depth    IN-TW median=   0.33  p10/p90=[-15.64365539  12.15958132]
+  stove-case-0913-d06e                   pairs= 20
+    response IN-TW median=  -2.95  p10/p90=[-33.72683742  23.40708754]
+    rise     IN-TW median=  -2.82  p10/p90=[-40.91        43.18333333]
+    d0.5     IN-TW median=  -3.75  p10/p90=[-21.9         14.93333333]
+    d1       IN-TW median=  -4.33  p10/p90=[-25.15        25.98333333]
+    d2       IN-TW median=  -3.30  p10/p90=[-42.59        31.48333333]
+    d3       IN-TW median= -10.51  p10/p90=[-60.49        43.18333333]
+    d5       IN-TW median=  -4.75  p10/p90=[-72.09        43.18333333]
+    depth    IN-TW median=  -0.57  p10/p90=[-23.59295508  17.011633  ]
+hard near-wall labeled-sessions case (stove/island TW vs toilet IN):
+  IN: n=80 gates=[2, 3] move_p50=30.0 response_p50=0.0 d1_p50=0.0 depth_p50=71.9
+  TW: n=24 gates=[2, 3] move_p50=28.0 response_p50=0.6 d1_p50=0.0 depth_p50=56.6
+late stove/island vs toilet holdout (gate>=2, train excludes fixture): n=104
+  baseline: signed AUC=0.624
+  delta: signed AUC=0.640
+  level: signed AUC=0.649

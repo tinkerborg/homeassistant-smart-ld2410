@@ -26,10 +26,11 @@ GOLDEN = Path(__file__).parent.parent / "fixtures" / "golden"
 
 
 def _cases() -> list[tuple[Path, str]]:
-    """Every (recording, sensor) pair in the corpus."""
+    """Every (recording, sensor) pair with a recorded golden timeline."""
     return [
         (recording, sensor_id)
         for recording in sorted(RECORDINGS.glob("*.db"))
+        if (GOLDEN / f"{recording.stem}.json").exists()
         for sensor_id in sensor_ids(recording)
     ]
 

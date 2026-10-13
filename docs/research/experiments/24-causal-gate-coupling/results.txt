@@ -1,0 +1,55 @@
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.prefix, expected /Users/rmk/Repo/homeassistant-smart-ld2410/.venv, got /Users/rmk/Repo/homeassistant-smart-ld2410/docs/research/experiments/24-causal-gate-coupling/../../../../.venv
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.exec_prefix, expected /Users/rmk/Repo/homeassistant-smart-ld2410/.venv, got /Users/rmk/Repo/homeassistant-smart-ld2410/docs/research/experiments/24-causal-gate-coupling/../../../../.venv
+fixed horizon=5s tau=2s grid=0.1s var_floor=0.05 gates=2..8
+fixture labeled-loop-0915 frames=6152
+  IN    n=  779 coupling0 p10/50/90=-0.098,0.050,0.167 lag05=-0.128,0.005,0.091 amp=48.3,54.8,59.8
+  TW    n=  620 coupling0 p10/50/90=-0.041,0.045,0.140 lag05=-0.057,0.039,0.122 amp=8.2,12.7,23.0
+  EMPTY n= 4502 coupling0 p10/50/90=-0.072,0.027,0.136 lag05=-0.085,0.002,0.089 amp=7.0,7.3,7.8
+  span EMPTY  249.9s finite= 98.0%
+  span HALL    10.0s finite=100.0%
+  span IN      78.0s finite=100.0%
+  span TW      62.0s finite=100.0%
+  span HALL    13.0s finite=100.0%
+  span EMPTY  200.4s finite=100.0%
+fixture labeled-walk-0915 frames=14958
+  IN    n=  421 coupling0 p10/50/90=-0.040,0.068,0.181 lag05=-0.106,0.013,0.095 amp=36.8,57.7,60.7
+  TW    n=  571 coupling0 p10/50/90=-0.024,0.068,0.157 lag05=-0.099,0.002,0.104 amp=7.8,17.0,25.6
+  span TW      12.0s finite=100.0%
+  span IN      19.0s finite=100.0%
+  span TW      36.0s finite=100.0%
+  span IN      23.0s finite=100.0%
+  span TW       9.0s finite=100.0%
+fixture throughwall-morning-d06e frames=42002
+  TW    n=27601 coupling0 p10/50/90=-0.075,0.027,0.144 lag05=-0.095,-0.002,0.087 amp=4.9,5.5,25.1
+  EMPTY n=13491 coupling0 p10/50/90=-0.091,0.014,0.129 lag05=-0.089,0.004,0.099 amp=4.8,5.1,9.6
+  span EMPTY  270.0s finite= 98.1%
+  span TW    2760.0s finite=100.0%
+  span EMPTY 1079.0s finite=100.0%
+fixture bathroom-visit-2204-d06e frames=10200
+  IN    n= 1620 coupling0 p10/50/90=-0.049,0.040,0.200 lag05=-0.086,0.009,0.081 amp=5.2,23.9,60.8
+  EMPTY n= 7491 coupling0 p10/50/90=-0.099,0.009,0.101 lag05=-0.093,-0.002,0.090 amp=4.8,5.0,5.3
+  span EMPTY  480.0s finite= 98.9%
+  span IN     162.0s finite=100.0%
+  span EMPTY  269.0s finite=100.0%
+fixture labeled-sessions-0909-d06e frames=80269
+  IN    n= 4308 coupling0 p10/50/90=-0.055,0.049,0.157 lag05=-0.093,0.001,0.099 amp=25.8,40.1,52.8
+  TW    n= 1281 coupling0 p10/50/90=-0.027,0.082,0.176 lag05=-0.085,-0.006,0.093 amp=27.3,34.9,41.9
+  EMPTY n= 3717 coupling0 p10/50/90=-0.062,0.031,0.123 lag05=-0.089,-0.011,0.083 amp=5.4,6.3,32.5
+  span TW      12.7s finite=100.0%
+  span TW       8.4s finite=100.0%
+  span IN      28.7s finite=100.0%
+  span TW      74.2s finite=100.0%
+  span TW      32.9s finite=100.0%
+  span IN     402.2s finite=100.0%
+  span EMPTY  371.6s finite=100.0%
+fixture stove-case-0913-d06e frames=37201
+  IN    n=10049 coupling0 p10/50/90=-0.053,0.064,0.208 lag05=-0.098,0.008,0.114 amp=16.0,60.2,64.8
+  TW    n=14801 coupling0 p10/50/90=-0.066,0.039,0.159 lag05=-0.089,0.005,0.104 amp=5.2,6.8,31.2
+  span IN      75.0s finite=100.0%
+  span TW    1480.0s finite=100.0%
+  span IN     930.0s finite=100.0%
+
+PAIRWISE DESCRIPTIVE AUC (no fitted thresholds; pooled labeled spans)
+  labeled-loop-0915 nIN=779 nTW=620 coupling0=0.486 lag05=0.356 amp=0.972
+  labeled-walk-0915 nIN=421 nTW=571 coupling0=0.504 lag05=0.537 amp=0.978
+causality_prefix_check=PASS

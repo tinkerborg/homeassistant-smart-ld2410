@@ -34,12 +34,22 @@ class ModeSpread(Stage):
 
     role = ROLE_SPREAD
 
-    requires = ("histogram_floor",)
+    optional = ("histogram_floor", "recurring_floor")
 
-    def __init__(self, env: StageEnv, histogram_floor: HistogramFloor) -> None:
-        """Read the spread off the counts the histogram floor accumulates."""
+    def __init__(
+        self,
+        env: StageEnv,
+        histogram_floor: HistogramFloor | None = None,
+        recurring_floor: HistogramFloor | None = None,
+    ) -> None:
+        """Read the spread off the counts a histogram floor accumulates."""
         super().__init__(env)
-        self._floor = histogram_floor
+        floor = histogram_floor or recurring_floor
+        if floor is None:
+            raise ValueError(
+                "stage 'mode_spread' requires stage 'histogram_floor' or 'recurring_floor'"
+            )
+        self._floor = floor
 
     @property
     def minimum(self) -> float:

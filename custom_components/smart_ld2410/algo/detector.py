@@ -68,6 +68,7 @@ class Detector:
         "_episodes",
         "_freeze_until_mono",
         "_hold_until_mono",
+        "_measured",
         "_occupied",
         "_pipeline",
     )
@@ -95,6 +96,7 @@ class Detector:
             self._config, pipeline=self._pipeline, episodes=self._episodes
         )
         self._occupied = False
+        self._measured = False
         self._hold_until_mono: float | None = None
         self._freeze_until_mono: float | None = None
 
@@ -152,6 +154,11 @@ class Detector:
             return self._passthrough(frame)
 
         context.measure(occupied=self._occupied)
+        if not self._measured and self._occupied:
+            # An occupancy carried over from passthrough never had an entry
+            # frame, and the release paths are seeded at entry.
+            self._pipeline.enter(context)
+        self._measured = True
         verdict = self._pipeline.entry_verdict(context)
         self._advance(frame.ts_mono, admitted=verdict.admitted)
 
@@ -265,6 +272,7 @@ class Detector:
         stands at neutral confidence until residuals mean something.
         """
         self._occupied = frame.device_occupancy
+        self._measured = False
         self._hold_until_mono = None
         self._freeze_until_mono = None
         self._context.decay_support()
@@ -318,6 +326,7 @@ class Detector:
                 self._occupied = True
                 self._hold_until_mono = None
                 presence.claim(context.active_gates, context.leading_gate)
+                self._pipeline.enter(context)
             return
 
         if presence.owned:
@@ -330,10 +339,16 @@ class Detector:
         elif self._hold_until_mono is None:
             self._hold_until_mono = ts_mono + config.hold_s
         elif ts_mono >= self._hold_until_mono:
-            self._occupied = False
-            self._hold_until_mono = None
-            self._freeze_until_mono = ts_mono + config.freeze_hold_s
-            presence.release()
+            self._vacate(ts_mono)
+            return
+        if self._pipeline.releases(context):
+            self._vacate(ts_mono)
+
+    def _vacate(self, ts_mono: float) -> None:
+        self._occupied = False
+        self._hold_until_mono = None
+        self._freeze_until_mono = ts_mono + self._config.freeze_hold_s
+        self.presence.release()
 
     def _is_frozen(self, ts_mono: float) -> bool:
         """Whether the detector is inside its occupied-plus-cooldown period.

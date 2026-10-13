@@ -1,0 +1,317 @@
+{
+  "parameters": {
+    "bin_width": 2,
+    "mode_band": 6,
+    "min_mad": 1.0,
+    "mode_min_s": 60.0,
+    "tau": 15.0,
+    "motion_bar": 40.0,
+    "retain": 0.4
+  },
+  "fixtures": {
+    "labeled-walk-0915.db": {
+      "baseline21": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 2.626970227670753,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "end": 1789512671.0,
+            "detected_frames": 173,
+            "frames": 190,
+            "first_detection_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 0.9700160026550293,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 10,
+            "retrigger_after_first_clear_10s": false
+          },
+          {
+            "start": 1789512708.0,
+            "end": 1789512731.0,
+            "detected_frames": 231,
+            "frames": 231,
+            "first_detection_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 0.5668082237243652,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 5,
+            "retrigger_after_first_clear_10s": false
+          }
+        ],
+        "warmup_s": null,
+        "active_frames": 419,
+        "score_max": 1.3187193063768645,
+        "exit_tail_split": [
+          {
+            "clear_offset_s": 0.9700160026550293,
+            "tail_frames": 10,
+            "tail_positive": 10,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 10,
+            "labeled_tail_positive": 10,
+            "later_frames": 351,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          },
+          {
+            "clear_offset_s": 0.5668082237243652,
+            "tail_frames": 5,
+            "tail_positive": 5,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 5,
+            "labeled_tail_positive": 5,
+            "later_frames": 85,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          }
+        ]
+      },
+      "hist_floor_only": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 3.852889667250438,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "end": 1789512671.0,
+            "detected_frames": 173,
+            "frames": 190,
+            "first_detection_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 1.0781426429748535,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 11,
+            "retrigger_after_first_clear_10s": false
+          },
+          {
+            "start": 1789512708.0,
+            "end": 1789512731.0,
+            "detected_frames": 231,
+            "frames": 231,
+            "first_detection_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 1.1851422786712646,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 11,
+            "retrigger_after_first_clear_10s": false
+          }
+        ],
+        "warmup_s": 60.00564789772034,
+        "active_frames": 426,
+        "score_max": 1.5769721453471255,
+        "exit_tail_split": [
+          {
+            "clear_offset_s": 1.0781426429748535,
+            "tail_frames": 11,
+            "tail_positive": 11,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 11,
+            "labeled_tail_positive": 11,
+            "later_frames": 350,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          },
+          {
+            "clear_offset_s": 1.1851422786712646,
+            "tail_frames": 11,
+            "tail_positive": 11,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 11,
+            "labeled_tail_positive": 11,
+            "later_frames": 79,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          }
+        ]
+      },
+      "hist_floor_spread": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 3.852889667250438,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "end": 1789512671.0,
+            "detected_frames": 173,
+            "frames": 190,
+            "first_detection_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 1.0781426429748535,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 11,
+            "retrigger_after_first_clear_10s": false
+          },
+          {
+            "start": 1789512708.0,
+            "end": 1789512731.0,
+            "detected_frames": 231,
+            "frames": 231,
+            "first_detection_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 1.1851422786712646,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 11,
+            "retrigger_after_first_clear_10s": false
+          }
+        ],
+        "warmup_s": 60.00564789772034,
+        "active_frames": 426,
+        "score_max": 1.5769721453471255,
+        "exit_tail_split": [
+          {
+            "clear_offset_s": 1.0781426429748535,
+            "tail_frames": 11,
+            "tail_positive": 11,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 11,
+            "labeled_tail_positive": 11,
+            "later_frames": 350,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          },
+          {
+            "clear_offset_s": 1.1851422786712646,
+            "tail_frames": 11,
+            "tail_positive": 11,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 11,
+            "labeled_tail_positive": 11,
+            "later_frames": 79,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          }
+        ]
+      }
+    },
+    "labeled-loop-0915.db": {
+      "baseline21": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 7.741935483870968,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "end": 1789514738.0,
+            "detected_frames": 775,
+            "frames": 779,
+            "first_detection_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 6.858537673950195,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 68,
+            "retrigger_after_first_clear_10s": false
+          }
+        ],
+        "warmup_s": null,
+        "active_frames": 843,
+        "score_max": 2.502353435954218,
+        "exit_tail_split": [
+          {
+            "clear_offset_s": 6.858537673950195,
+            "tail_frames": 68,
+            "tail_positive": 68,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 48,
+            "labeled_tail_positive": 48,
+            "later_frames": 572,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          }
+        ]
+      },
+      "hist_floor_only": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 7.741935483870968,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "end": 1789514738.0,
+            "detected_frames": 775,
+            "frames": 779,
+            "first_detection_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 6.858537673950195,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 68,
+            "retrigger_after_first_clear_10s": false
+          }
+        ],
+        "warmup_s": 60.00747275352478,
+        "active_frames": 843,
+        "score_max": 2.504820170559881,
+        "exit_tail_split": [
+          {
+            "clear_offset_s": 6.858537673950195,
+            "tail_frames": 68,
+            "tail_positive": 68,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 48,
+            "labeled_tail_positive": 48,
+            "later_frames": 572,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          }
+        ]
+      },
+      "hist_floor_spread": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 7.741935483870968,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "end": 1789514738.0,
+            "detected_frames": 775,
+            "frames": 779,
+            "first_detection_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "premature_dropout_durations_s": [],
+            "first_clear_offset_s": 6.858537673950195,
+            "clear_within_30s": true,
+            "post_exit_positive_frames_10s": 68,
+            "retrigger_after_first_clear_10s": false
+          }
+        ],
+        "warmup_s": 60.00747275352478,
+        "active_frames": 843,
+        "score_max": 2.504820170559881,
+        "exit_tail_split": [
+          {
+            "clear_offset_s": 6.858537673950195,
+            "tail_frames": 68,
+            "tail_positive": 68,
+            "tail_false_fraction_pct": 100.0,
+            "labeled_tail_frames": 48,
+            "labeled_tail_positive": 48,
+            "later_frames": 572,
+            "later_positive": 0,
+            "later_false_fraction_pct": 0.0
+          }
+        ]
+      }
+    }
+  }
+}

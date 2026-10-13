@@ -117,12 +117,16 @@ mechanism is still one detector, not two.
 """
 
 DEFAULT_STAGES = (
-    "histogram_floor",
+    "recurring_floor",
     "mode_spread",
+    "in_room_gates",
     "run_score",
     "lone_gate_suppression",
     "energy_floor",
     "motion_anchor",
+    "score_hold",
+    "nearest_gate_release",
+    "changepoint_release",
 )
 """The stages the detector runs unless configured otherwise."""
 
@@ -241,6 +245,17 @@ class DetectorConfig:
     cross_n: int = 20
     grace_s: float = 60.0
 
+    # -- Release paths (specs 27 and 28) ---------------------------------------
+    # Fraction of its episode plateau the watched gate's still median must
+    # stay under for ``hold_s`` before the nearest-gate path releases.
+    release_fraction: float = 0.2
+    # How long a gate stays learned in-room after its last arrival-scale
+    # motion: the half-life of the decayed move peak.
+    in_room_half_life_days: float = 7.0
+    # Expected seconds between still-regime changes: the changepoint
+    # detector's constant hazard is one tick over this.
+    changepoint_hazard_s: float = 120.0
+
     @property
     def s_gate_on(self) -> float:
         """Smoothed-residual level at which a gate episode opens."""
@@ -255,6 +270,11 @@ class DetectorConfig:
     def episode_gap_close_s(self) -> float:
         """Seconds a gate must stay under ``s_gate_off`` before its episode ends."""
         return self.hold_s if self.gap_close_s is None else self.gap_close_s
+
+    @property
+    def in_room_half_life_s(self) -> float:
+        """Decay half-life of a gate's learned in-room evidence, in seconds."""
+        return self.in_room_half_life_days * 86400.0
 
     @property
     def stats_half_life_s(self) -> float:

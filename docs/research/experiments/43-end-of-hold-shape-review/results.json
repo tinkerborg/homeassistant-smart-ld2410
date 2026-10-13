@@ -1,0 +1,753 @@
+{
+  "method": "Balanced-stack anchor qualifies entry only. Thereafter, review median z-scored still-profile kurtosis at each 30 s boundary; if occupied-looking, start another 30 s window, else clear. No anchor or per-frame shape refreshes occupancy. Labels evaluate only.",
+  "fixtures": {
+    "labeled-walk-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7040280210157618,
+        "clear_offsets_s": [
+          31.182610034942627,
+          31.18564534187317
+        ]
+      },
+      "window_kurtosis_1_8": {
+        "IN_occupied_fraction": 0.9572446555819477,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          42.9602324962616
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_0": {
+        "IN_occupied_fraction": 0.9572446555819477,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          42.9602324962616
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_1": {
+        "IN_occupied_fraction": 0.9572446555819477,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          42.9602324962616
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_15": {
+        "IN_occupied_fraction": 0.9572446555819477,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          42.9602324962616
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_2": {
+        "IN_occupied_fraction": 0.9572446555819477,
+        "TW_occupied_fraction": 0.7898423817863398,
+        "clear_offsets_s": [
+          null,
+          42.9602324962616
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_15_10s": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.38353765323992994,
+        "clear_offsets_s": [
+          12.848796367645264,
+          17.36054301261902
+        ],
+        "shape_reviews_kept": 5,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_15_20s": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.5569176882661997,
+        "clear_offsets_s": [
+          22.781117916107178,
+          17.155956268310547
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_15_10s_2bad": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.5586690017513135,
+        "clear_offsets_s": [
+          22.883986234664917,
+          27.498002529144287
+        ],
+        "shape_reviews_kept": 7,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_15_10s_3bad": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.7338003502626971,
+        "clear_offsets_s": [
+          32.91938328742981,
+          37.53343892097473
+        ],
+        "shape_reviews_kept": 9,
+        "shape_reviews_cleared": 2
+      },
+      "window_kurtosis_2_0_10s_2bad": {
+        "IN_occupied_fraction": 0.9596199524940617,
+        "TW_occupied_fraction": 0.5586690017513135,
+        "clear_offsets_s": [
+          22.883986234664917,
+          27.498002529144287
+        ],
+        "shape_reviews_kept": 7,
+        "shape_reviews_cleared": 2
+      }
+    },
+    "labeled-loop-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.5612903225806452,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          36.86450147628784
+        ]
+      },
+      "window_kurtosis_1_8": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6532258064516129,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.59481859207153
+        ],
+        "shape_reviews_kept": 3,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_0": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6532258064516129,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.59481859207153
+        ],
+        "shape_reviews_kept": 3,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_1": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6532258064516129,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.59481859207153
+        ],
+        "shape_reviews_kept": 3,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6532258064516129,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.59481859207153
+        ],
+        "shape_reviews_kept": 3,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_2": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6532258064516129,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.59481859207153
+        ],
+        "shape_reviews_kept": 3,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15_10s": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.17258064516129032,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          12.796395063400269
+        ],
+        "shape_reviews_kept": 8,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15_20s": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.33225806451612905,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          22.627432107925415
+        ],
+        "shape_reviews_kept": 4,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15_10s_2bad": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.6596774193548387,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          42.90265703201294
+        ],
+        "shape_reviews_kept": 11,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15_10s_3bad": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.8209677419354838,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          52.937217235565186
+        ],
+        "shape_reviews_kept": 12,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_0_10s_2bad": {
+        "IN_occupied_fraction": 0.9948652118100129,
+        "TW_occupied_fraction": 0.33548387096774196,
+        "EMPTY_occupied_fraction": 0.0,
+        "clear_offsets_s": [
+          22.832249641418457
+        ],
+        "shape_reviews_kept": 9,
+        "shape_reviews_cleared": 1
+      }
+    },
+    "post-deploy-0915": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.1514705882352941,
+        "false_window_occupied_frames": 208,
+        "clear_offsets_s": [
+          36.916391134262085
+        ]
+      },
+      "window_kurtosis_1_8": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.08676470588235294,
+        "false_window_occupied_frames": 76,
+        "clear_offsets_s": [
+          23.713566303253174
+        ],
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_0": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.08676470588235294,
+        "false_window_occupied_frames": 76,
+        "clear_offsets_s": [
+          23.713566303253174
+        ],
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_1": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.2338235294117647,
+        "false_window_occupied_frames": 376,
+        "clear_offsets_s": [
+          53.713948011398315
+        ],
+        "shape_reviews_kept": 1,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.2338235294117647,
+        "false_window_occupied_frames": 376,
+        "clear_offsets_s": [
+          53.713948011398315
+        ],
+        "shape_reviews_kept": 1,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_2": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.2338235294117647,
+        "false_window_occupied_frames": 376,
+        "clear_offsets_s": [
+          53.713948011398315
+        ],
+        "shape_reviews_kept": 1,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15_10s": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.08725490196078431,
+        "false_window_occupied_frames": 77,
+        "clear_offsets_s": [
+          23.87545657157898
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15_20s": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.23431372549019608,
+        "false_window_occupied_frames": 377,
+        "clear_offsets_s": [
+          53.87857532501221
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15_10s_2bad": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.2357843137254902,
+        "false_window_occupied_frames": 380,
+        "clear_offsets_s": [
+          54.133708000183105
+        ],
+        "shape_reviews_kept": 5,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_15_10s_3bad": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.28480392156862744,
+        "false_window_occupied_frames": 480,
+        "clear_offsets_s": [
+          64.15742659568787
+        ],
+        "shape_reviews_kept": 6,
+        "shape_reviews_cleared": 1
+      },
+      "window_kurtosis_2_0_10s_2bad": {
+        "IN_occupied_fraction": 0.9,
+        "TW_occupied_fraction": 0.08725490196078431,
+        "false_window_occupied_frames": 77,
+        "clear_offsets_s": [
+          23.87545657157898
+        ],
+        "shape_reviews_kept": 2,
+        "shape_reviews_cleared": 1
+      }
+    },
+    "new-living-room": {
+      "exact_anchor": {
+        "IN_occupied_fraction": 0.28958000563750824,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 529.4081523418427
+      },
+      "window_kurtosis_1_8": {
+        "IN_occupied_fraction": 0.2784929061354881,
+        "EMPTY_occupied_fraction": 0.17352941176470588,
+        "longest_false_vacancy_s": 535.4500036239624,
+        "shape_reviews_kept": 9,
+        "shape_reviews_cleared": 14
+      },
+      "window_kurtosis_2_0": {
+        "IN_occupied_fraction": 0.33477402987879357,
+        "EMPTY_occupied_fraction": 0.2529411764705882,
+        "longest_false_vacancy_s": 477.3890657424927,
+        "shape_reviews_kept": 31,
+        "shape_reviews_cleared": 7
+      },
+      "window_kurtosis_2_1": {
+        "IN_occupied_fraction": 0.33477402987879357,
+        "EMPTY_occupied_fraction": 0.17352941176470588,
+        "longest_false_vacancy_s": 477.3890657424927,
+        "shape_reviews_kept": 34,
+        "shape_reviews_cleared": 6
+      },
+      "window_kurtosis_2_15": {
+        "IN_occupied_fraction": 0.9557455604622757,
+        "EMPTY_occupied_fraction": 0.17352941176470588,
+        "longest_false_vacancy_s": 42.1580753326416,
+        "shape_reviews_kept": 57,
+        "shape_reviews_cleared": 5
+      },
+      "window_kurtosis_2_2": {
+        "IN_occupied_fraction": 0.9557455604622757,
+        "EMPTY_occupied_fraction": 0.17352941176470588,
+        "longest_false_vacancy_s": 42.1580753326416,
+        "shape_reviews_kept": 67,
+        "shape_reviews_cleared": 4
+      },
+      "window_kurtosis_2_15_10s": {
+        "IN_occupied_fraction": 0.3357136145823546,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 474.9312734603882,
+        "shape_reviews_kept": 104,
+        "shape_reviews_cleared": 10
+      },
+      "window_kurtosis_2_15_20s": {
+        "IN_occupied_fraction": 0.34463966926618433,
+        "EMPTY_occupied_fraction": 0.0,
+        "longest_false_vacancy_s": 467.046927690506,
+        "shape_reviews_kept": 54,
+        "shape_reviews_cleared": 5
+      },
+      "window_kurtosis_2_15_10s_2bad": {
+        "IN_occupied_fraction": 0.34567321244010146,
+        "EMPTY_occupied_fraction": 0.03529411764705882,
+        "longest_false_vacancy_s": 466.6366534233093,
+        "shape_reviews_kept": 117,
+        "shape_reviews_cleared": 5
+      },
+      "window_kurtosis_2_15_10s_3bad": {
+        "IN_occupied_fraction": 0.9607253593911491,
+        "EMPTY_occupied_fraction": 0.1426470588235294,
+        "longest_false_vacancy_s": 37.08822154998779,
+        "shape_reviews_kept": 188,
+        "shape_reviews_cleared": 4
+      },
+      "window_kurtosis_2_0_10s_2bad": {
+        "IN_occupied_fraction": 0.2605468382974725,
+        "EMPTY_occupied_fraction": 0.03529411764705882,
+        "longest_false_vacancy_s": 557.2615237236023,
+        "shape_reviews_kept": 99,
+        "shape_reviews_cleared": 6
+      }
+    },
+    "new-bathroom-walkby": {
+      "exact_anchor": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0
+      },
+      "window_kurtosis_1_8": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_0": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_1": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_15": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_2": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_15_10s": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_15_20s": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_15_10s_2bad": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_15_10s_3bad": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      },
+      "window_kurtosis_2_0_10s_2bad": {
+        "TW_occupied_fraction": 0.0,
+        "EMPTY_occupied_fraction": 0.0,
+        "walkby_occupied_frames": 0,
+        "shape_reviews_kept": 0,
+        "shape_reviews_cleared": 0
+      }
+    },
+    "mixed-living-room": {
+      "exact_anchor": {
+        "known_empty": {
+          "occupied_fraction": 0.09983361064891846,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.2597058823529412,
+          "transitions": 2
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.318,
+          "transitions": 10
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.237563536371969,
+          "transitions": 9
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        }
+      },
+      "window_kurtosis_1_8": {
+        "known_empty": {
+          "occupied_fraction": 0.39767054908485855,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.24813725490196079,
+          "transitions": 10
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.40058333333333335,
+          "transitions": 14
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.2828930922423131,
+          "transitions": 11
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 75,
+        "shape_reviews_cleared": 58
+      },
+      "window_kurtosis_2_0": {
+        "known_empty": {
+          "occupied_fraction": 0.4875207986688852,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.30686274509803924,
+          "transitions": 6
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9448333333333333,
+          "transitions": 4
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.6304474627114407,
+          "transitions": 8
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 188,
+        "shape_reviews_cleared": 31
+      },
+      "window_kurtosis_2_1": {
+        "known_empty": {
+          "occupied_fraction": 0.39767054908485855,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.30686274509803924,
+          "transitions": 6
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9448333333333333,
+          "transitions": 4
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.655445379551704,
+          "transitions": 8
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 215,
+        "shape_reviews_cleared": 26
+      },
+      "window_kurtosis_2_15": {
+        "known_empty": {
+          "occupied_fraction": 0.39767054908485855,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.9548039215686275,
+          "transitions": 4
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9448333333333333,
+          "transitions": 4
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.655445379551704,
+          "transitions": 8
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 246,
+        "shape_reviews_cleared": 24
+      },
+      "window_kurtosis_2_2": {
+        "known_empty": {
+          "occupied_fraction": 0.39767054908485855,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.9548039215686275,
+          "transitions": 4
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9986666666666667,
+          "transitions": 2
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.6568619281726523,
+          "transitions": 6
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 261,
+        "shape_reviews_cleared": 21
+      },
+      "window_kurtosis_2_15_10s": {
+        "known_empty": {
+          "occupied_fraction": 0.07321131447587355,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.307843137254902,
+          "transitions": 10
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.87175,
+          "transitions": 8
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.3600533288892592,
+          "transitions": 8
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 528,
+        "shape_reviews_cleared": 47
+      },
+      "window_kurtosis_2_15_20s": {
+        "known_empty": {
+          "occupied_fraction": 0.06821963394342762,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.317156862745098,
+          "transitions": 4
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9836666666666667,
+          "transitions": 2
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.6149487542704775,
+          "transitions": 8
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 322,
+        "shape_reviews_cleared": 26
+      },
+      "window_kurtosis_2_15_10s_2bad": {
+        "known_empty": {
+          "occupied_fraction": 0.24126455906821964,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.31823529411764706,
+          "transitions": 4
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9929166666666667,
+          "transitions": 2
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.6408632613948838,
+          "transitions": 6
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 700,
+        "shape_reviews_cleared": 24
+      },
+      "window_kurtosis_2_15_10s_3bad": {
+        "known_empty": {
+          "occupied_fraction": 0.3627287853577371,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.96,
+          "transitions": 4
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9999166666666667,
+          "transitions": 2
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.8339305057911841,
+          "transitions": 4
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 863,
+        "shape_reviews_cleared": 18
+      },
+      "window_kurtosis_2_0_10s_2bad": {
+        "known_empty": {
+          "occupied_fraction": 0.24126455906821964,
+          "transitions": 1
+        },
+        "known_occupied": {
+          "occupied_fraction": 0.22941176470588234,
+          "transitions": 4
+        },
+        "isolated_flapping_1200_1220": {
+          "occupied_fraction": 0.9195,
+          "transitions": 5
+        },
+        "isolated_flapping_1230_1250": {
+          "occupied_fraction": 0.5992000666611116,
+          "transitions": 8
+        },
+        "unverified_quiet_1400_1600": {
+          "occupied_fraction": 0.0,
+          "transitions": 0
+        },
+        "shape_reviews_kept": 565,
+        "shape_reviews_cleared": 30
+      }
+    }
+  }
+}

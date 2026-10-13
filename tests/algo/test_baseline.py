@@ -215,7 +215,7 @@ def test_restore_after_gap_discards_stale_open_bucket() -> None:
     before = model.bucket_count
 
     payload = json.loads(json.dumps(model.to_dict()))
-    restored = Baseline.from_dict(payload)
+    restored = Baseline.from_dict(payload, make_config())
     assert restored.bucket_count == before
 
     # Hours pass - an HA restart - before the next sample arrives.
@@ -247,7 +247,7 @@ def test_restore_immediate_continuation_still_closes_open_bucket() -> None:
     assert before == 8
 
     payload = json.loads(json.dumps(model.to_dict()))
-    restored = Baseline.from_dict(payload)
+    restored = Baseline.from_dict(payload, make_config())
 
     # No gap: the very next sample lands in the following bucket, same as it
     # would have without any restart in between.
@@ -356,7 +356,7 @@ def test_persistence_round_trip_preserves_behaviour() -> None:
 
     payload = json.loads(json.dumps(model.to_dict()))
     assert payload["version"] == SCHEMA_VERSION
-    restored = Baseline.from_dict(payload)
+    restored = Baseline.from_dict(payload, make_config())
 
     assert restored.bucket_count == model.bucket_count
     assert restored.ready == model.ready
@@ -384,7 +384,7 @@ def test_from_dict_rejects_unknown_schema_version() -> None:
     payload = make_baseline().to_dict()
     payload["version"] = SCHEMA_VERSION + 1
     with pytest.raises(ValueError, match="unsupported baseline schema version"):
-        Baseline.from_dict(payload)
+        Baseline.from_dict(payload, make_config())
 
 
 def test_from_dict_rejects_previous_schema_versions() -> None:
@@ -430,7 +430,7 @@ def test_from_dict_rejects_mismatched_bucket_series() -> None:
     payload = model.to_dict()
     payload["move"][0]["spreads"].pop()
     with pytest.raises(ValueError, match="mismatched bucket series"):
-        Baseline.from_dict(payload)
+        Baseline.from_dict(payload, make_config())
 
 
 def test_warmup_helper_makes_the_model_ready() -> None:

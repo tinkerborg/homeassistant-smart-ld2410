@@ -1,0 +1,9 @@
+labeled-walk-0915
+original entry [1.693, 0.016] clear [1.078, 1.185] false_window None
+same_gate_balance entry [1.693, 0.016] clear [1.078, 1.185] false_window None
+labeled-loop-0915
+original entry [0.385] clear [6.859] false_window None
+same_gate_balance entry [0.385] clear [6.859] false_window None
+post-deploy-0915
+original entry [0.713] clear [6.916] false_window 984
+same_gate_balance entry [0.713] clear [6.916] false_window 0

@@ -109,6 +109,10 @@ class QuantileFloor(Stage):
         """The learned empty-room level of one channel (0.0 while empty)."""
         return self._channels[channel][gate].value
 
+    def trusted(self, channel: str, gate: int) -> bool:
+        """Whether the channel has closed a bucket yet."""
+        return self._channels[channel][gate].bucket_count > 0
+
     def resize(self, max_buckets: int) -> None:
         """Change the window capacity, truncating the oldest buckets if shrinking."""
         self._max_buckets = max_buckets

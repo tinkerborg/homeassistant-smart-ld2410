@@ -1,0 +1,883 @@
+{
+  "labeled-walk-0915": {
+    "exact_hold0": {
+      "occupied_fraction_in": 0.9596199524940617,
+      "onsets": [
+        1789512653.6932104,
+        1789512708.0158184
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 3.852889667250438,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 1.0781426429748535,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 1.1851422786712646,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      }
+    },
+    "band_core_hold0": {
+      "occupied_fraction_in": 0.9596199524940617,
+      "onsets": [
+        1789512653.6932104,
+        1789512708.0158184
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 8.756567425569177,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 2.25071382522583,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 2.718214750289917,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      }
+    },
+    "band_halo_hold0": {
+      "occupied_fraction_in": 0.9596199524940617,
+      "onsets": [
+        1789512653.6932104,
+        1789512708.0158184
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 8.40630472854641,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 2.1987788677215576,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 2.66676664352417,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      }
+    },
+    "exact_hold30": {
+      "occupied_fraction_in": 0.9596199524940617,
+      "onsets": [
+        1789512653.6932104,
+        1789512708.0158184
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 70.40280210157619,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 31.182610034942627,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 31.18564534187317,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      }
+    },
+    "band_core_hold30": {
+      "occupied_fraction_in": 0.9596199524940617,
+      "onsets": [
+        1789512653.6932104,
+        1789512708.0158184
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 72.3292469352014,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 32.3048632144928,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 32.7203574180603,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      }
+    },
+    "band_halo_hold30": {
+      "occupied_fraction_in": 0.9596199524940617,
+      "onsets": [
+        1789512653.6932104,
+        1789512708.0158184
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 95.96199524940617,
+          "TW": 71.97898423817864,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789512652.0,
+            "entry_offset_s": 1.6932103633880615,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 32.201900243759155,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512708.0
+          },
+          {
+            "start": 1789512708.0,
+            "entry_offset_s": 0.015818357467651367,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 32.7203574180603,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789512844.7191958
+          }
+        ]
+      }
+    }
+  },
+  "labeled-loop-0915": {
+    "exact_hold0": {
+      "occupied_fraction_in": 0.9948652118100129,
+      "onsets": [
+        1789514660.3849833
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 7.741935483870968,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 6.858537673950195,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      }
+    },
+    "band_core_hold0": {
+      "occupied_fraction_in": 0.9948652118100129,
+      "onsets": [
+        1789514660.3849833
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 15.483870967741936,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 11.670243501663208,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      }
+    },
+    "band_halo_hold0": {
+      "occupied_fraction_in": 0.9948652118100129,
+      "onsets": [
+        1789514660.3849833
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 16.29032258064516,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 12.080989122390747,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      }
+    },
+    "exact_hold30": {
+      "occupied_fraction_in": 0.9948652118100129,
+      "onsets": [
+        1789514660.3849833
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 56.12903225806451,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.86450147628784,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      }
+    },
+    "band_core_hold30": {
+      "occupied_fraction_in": 0.9948652118100129,
+      "onsets": [
+        1789514660.3849833
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 63.87096774193548,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 41.67347073554993,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      }
+    },
+    "band_halo_hold30": {
+      "occupied_fraction_in": 0.9948652118100129,
+      "onsets": [
+        1789514660.3849833
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 99.48652118100128,
+          "TW": 64.51612903225806,
+          "EMPTY": 0.0
+        },
+        "visits": [
+          {
+            "start": 1789514660.0,
+            "entry_offset_s": 0.3849833011627197,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 42.08377408981323,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789515015.3990583
+          }
+        ]
+      }
+    }
+  },
+  "post-deploy-0915": {
+    "exact_hold0": {
+      "occupied_fraction_in": 0.9,
+      "onsets": [
+        1789526181.713467,
+        1789526377.456858
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 0.4411764705882353,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 6.915632963180542,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "reported_false_event_occupied": false,
+      "false_window_positive_frames": 0,
+      "false_window_onsets": []
+    },
+    "band_core_hold0": {
+      "occupied_fraction_in": 0.9,
+      "onsets": [
+        1789526181.713467,
+        1789526377.456858
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 1.6666666666666667,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 9.437429189682007,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "reported_false_event_occupied": false,
+      "false_window_positive_frames": 0,
+      "false_window_onsets": []
+    },
+    "band_halo_hold0": {
+      "occupied_fraction_in": 0.9,
+      "onsets": [
+        1789526181.713467,
+        1789526377.456858
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 64.2156862745098,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 140.14513158798218,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "reported_false_event_occupied": true,
+      "false_window_positive_frames": 1150,
+      "false_window_onsets": []
+    },
+    "exact_hold30": {
+      "occupied_fraction_in": 0.9,
+      "onsets": [
+        1789526181.713467,
+        1789526377.456858
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 15.147058823529411,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.916391134262085,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "reported_false_event_occupied": true,
+      "false_window_positive_frames": 208,
+      "false_window_onsets": []
+    },
+    "band_core_hold30": {
+      "occupied_fraction_in": 0.9,
+      "onsets": [
+        1789526181.713467,
+        1789526377.456858
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 16.372549019607842,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 39.44072246551514,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "reported_false_event_occupied": true,
+      "false_window_positive_frames": 233,
+      "false_window_onsets": []
+    },
+    "band_halo_hold30": {
+      "occupied_fraction_in": 0.9,
+      "onsets": [
+        1789526181.713467,
+        1789526377.456858
+      ],
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 64.2156862745098,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 170.24471259117126,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "reported_false_event_occupied": true,
+      "false_window_positive_frames": 1150,
+      "false_window_onsets": []
+    }
+  },
+  "living-room-continuous-occupancy-2026-09-16": {
+    "exact_hold0": {
+      "occupied_fraction_in": 0.16311190453819413,
+      "onsets": [
+        1789572017.5591853,
+        1789572040.2410982,
+        1789572427.31721,
+        1789572717.21198,
+        1789572743.979584,
+        1789572775.268178,
+        1789572859.2721906,
+        1789572896.8622837,
+        1789572958.9751587,
+        1789572976.382288,
+        1789573043.8640745,
+        1789573070.5328515,
+        1789573106.7384207,
+        1789573237.0311437,
+        1789573273.650029,
+        1789573299.2513094,
+        1789574090.3938751,
+        1789574120.1919916,
+        1789574150.8137774,
+        1789574186.54756,
+        1789574199.8592508
+      ],
+      "vacancy_runs_while_present": {
+        "positive_frames": 8907,
+        "runs": 10,
+        "longest_span_s": 559.4118974208832
+      },
+      "occupied_first_3min_fraction": 0.10216546363131594
+    },
+    "band_core_hold0": {
+      "occupied_fraction_in": 0.19393028281499577,
+      "onsets": [
+        1789572017.5591853,
+        1789572040.2410982,
+        1789572427.31721,
+        1789572433.460905,
+        1789572433.5709438,
+        1789572433.7799096,
+        1789572433.9688036,
+        1789572717.21198,
+        1789572743.979584,
+        1789572749.8731441,
+        1789572750.0779526,
+        1789572750.287217,
+        1789572750.6397269,
+        1789572750.8970823,
+        1789572751.101933,
+        1789572751.2441802,
+        1789572751.5114646,
+        1789572751.7518666,
+        1789572752.0233922,
+        1789572752.2282195,
+        1789572752.4724417,
+        1789572752.686662,
+        1789572752.8706436,
+        1789572753.161926,
+        1789572753.355125,
+        1789572753.489877,
+        1789572753.701802,
+        1789572753.880056,
+        1789572754.0715811,
+        1789572754.2762847,
+        1789572754.4813764,
+        1789572754.6360788,
+        1789572754.8410244,
+        1789572755.0959322,
+        1789572755.3003964,
+        1789572755.442837,
+        1789572755.710189,
+        1789572775.268178,
+        1789572783.7006476,
+        1789572783.910858,
+        1789572784.083379,
+        1789572784.2799292,
+        1789572784.4845061,
+        1789572784.8400037,
+        1789572785.6500957,
+        1789572786.5807986,
+        1789572786.7378314,
+        1789572786.9467814,
+        1789572787.3518465,
+        1789572859.2721906,
+        1789572864.3571873,
+        1789572896.8622837,
+        1789572958.9751587,
+        1789572976.382288,
+        1789573043.8640745,
+        1789573070.5328515,
+        1789573106.7384207,
+        1789573237.0311437,
+        1789573299.2513094,
+        1789574090.3938751,
+        1789574120.1919916,
+        1789574150.8137774
+      ],
+      "vacancy_runs_while_present": {
+        "positive_frames": 8579,
+        "runs": 7,
+        "longest_span_s": 560.4358208179474
+      },
+      "occupied_first_3min_fraction": 0.10938367573570239
+    },
+    "band_halo_hold0": {
+      "occupied_fraction_in": 0.20482946537630367,
+      "onsets": [
+        1789572017.5591853,
+        1789572040.2410982,
+        1789572427.31721,
+        1789572717.21198,
+        1789572743.979584,
+        1789572749.8731441,
+        1789572750.0779526,
+        1789572750.287217,
+        1789572750.6397269,
+        1789572750.8970823,
+        1789572751.101933,
+        1789572751.2441802,
+        1789572751.5114646,
+        1789572751.7518666,
+        1789572752.0233922,
+        1789572752.2282195,
+        1789572752.4724417,
+        1789572752.686662,
+        1789572752.8706436,
+        1789572753.161926,
+        1789572753.355125,
+        1789572753.489877,
+        1789572753.701802,
+        1789572753.880056,
+        1789572754.0715811,
+        1789572754.2762847,
+        1789572754.4813764,
+        1789572754.6360788,
+        1789572754.8410244,
+        1789572755.0959322,
+        1789572755.3003964,
+        1789572755.442837,
+        1789572755.710189,
+        1789572775.268178,
+        1789572783.0513425,
+        1789572783.2562969,
+        1789572783.4681752,
+        1789572783.7006476,
+        1789572783.910858,
+        1789572784.083379,
+        1789572784.2799292,
+        1789572784.4845061,
+        1789572784.8400037,
+        1789572785.6500957,
+        1789572786.5807986,
+        1789572786.7378314,
+        1789572786.9467814,
+        1789572787.3518465,
+        1789572859.2721906,
+        1789572864.3566527,
+        1789572864.4679604,
+        1789572896.8622837,
+        1789572958.9751587,
+        1789572976.382288,
+        1789573043.8640745,
+        1789573070.5328515,
+        1789573106.7384207,
+        1789573237.0311437,
+        1789574090.3938751,
+        1789574120.1919916,
+        1789574150.8137774
+      ],
+      "vacancy_runs_while_present": {
+        "positive_frames": 8463,
+        "runs": 6,
+        "longest_span_s": 560.3821845054626
+      },
+      "occupied_first_3min_fraction": 0.10938367573570239
+    },
+    "exact_hold30": {
+      "occupied_fraction_in": 0.28958000563750824,
+      "onsets": [
+        1789572017.5591853,
+        1789572427.31721,
+        1789572717.21198,
+        1789572859.2721906,
+        1789572896.8622837,
+        1789572958.9751587,
+        1789573043.8640745,
+        1789573237.0311437,
+        1789574090.3938751
+      ],
+      "vacancy_runs_while_present": {
+        "positive_frames": 7561,
+        "runs": 3,
+        "longest_span_s": 529.4081523418427
+      },
+      "occupied_first_3min_fraction": 0.3475846751804553
+    },
+    "band_core_hold30": {
+      "occupied_fraction_in": 0.2886404209339472,
+      "onsets": [
+        1789572017.5591853,
+        1789572427.31721,
+        1789572717.21198,
+        1789572859.2721906,
+        1789572896.8622837,
+        1789572958.9751587,
+        1789573043.8640745,
+        1789573237.0311437,
+        1789574090.3938751
+      ],
+      "vacancy_runs_while_present": {
+        "positive_frames": 7571,
+        "runs": 3,
+        "longest_span_s": 530.4316370487213
+      },
+      "occupied_first_3min_fraction": 0.34869516935036093
+    },
+    "band_halo_hold30": {
+      "occupied_fraction_in": 0.2888283378746594,
+      "onsets": [
+        1789572017.5591853,
+        1789572427.31721,
+        1789572717.21198,
+        1789572859.2721906,
+        1789572896.8622837,
+        1789572958.9751587,
+        1789573043.8640745,
+        1789573237.0311437,
+        1789574090.3938751
+      ],
+      "vacancy_runs_while_present": {
+        "positive_frames": 7569,
+        "runs": 3,
+        "longest_span_s": 530.1251428127289
+      },
+      "occupied_first_3min_fraction": 0.34869516935036093
+    }
+  }
+}

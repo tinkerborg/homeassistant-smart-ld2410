@@ -1,0 +1,28 @@
+{
+  "provenance": "reconstructed-0916-user-account-v1",
+  "independent_ground_truth": false,
+  "unlabeled": "Transitions, earlier startup and later activity remain unknown; no wife labels inferred.",
+  "labels": [
+    {
+      "person": "rob",
+      "room": "kitchen",
+      "ts_start": 1789526105.0,
+      "ts_end": 1789526178.0,
+      "note": "reconstructed-0916-user-account-v1; INFERRED, approximate/conservative interval; user reported bathroom visit then stove/kitchen, bathroom cleared, falsely re-entered, eventually cleared. Timing inferred from bathroom and kitchen raw energy, not independently timed ground truth. Do not use for subsecond latency or circular validation. Kitchen activity before the brief bathroom visit; transition edges excluded."
+    },
+    {
+      "person": "rob",
+      "room": "bathroom",
+      "ts_start": 1789526181.0,
+      "ts_end": 1789526188.0,
+      "note": "reconstructed-0916-user-account-v1; INFERRED, approximate/conservative interval; user reported bathroom visit then stove/kitchen, bathroom cleared, falsely re-entered, eventually cleared. Timing inferred from bathroom and kitchen raw energy, not independently timed ground truth. Do not use for subsecond latency or circular validation. Brief strong bathroom-motion interval after kitchen motion subsides; inferred visit, not exact physical entry/exit."
+    },
+    {
+      "person": "rob",
+      "room": "kitchen",
+      "ts_start": 1789526194.0,
+      "ts_end": 1789526325.0,
+      "note": "reconstructed-0916-user-account-v1; INFERRED, approximate/conservative interval; user reported bathroom visit then stove/kitchen, bathroom cleared, falsely re-entered, eventually cleared. Timing inferred from bathroom and kitchen raw energy, not independently timed ground truth. Do not use for subsecond latency or circular validation. Kitchen activity after bathroom visit; includes bathroom clear22:36:44.963, falseentry22:36:49.163, clear22:38:37.654. Interval ends conservatively, not an asserted room departure."
+    }
+  ]
+}

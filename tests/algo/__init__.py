@@ -35,6 +35,20 @@ TEST_BUCKET_S = 1.0
 
 TEST_MIN_BUCKETS = 5
 
+QUANTILE_STAGES = (
+    "quantile_floor",
+    "tail_spread",
+    "run_score",
+    "lone_gate_suppression",
+    "energy_floor",
+    "score_hold",
+)
+"""The windowed-quantile baseline under plain score hold.
+
+The synthetic streams here are scored against what that stack is: a bucketed
+time-quantile floor and a score-held occupancy.
+"""
+
 
 def make_config(**overrides: object) -> DetectorConfig:
     """Return a detector config with a short baseline window for tests.
@@ -52,6 +66,7 @@ def make_config(**overrides: object) -> DetectorConfig:
         "freeze_hold_s": 60.0,
         "min_mad": 1.0,
         "lead_gate_max": -1,
+        "stages": QUANTILE_STAGES,
     }
     values.update(overrides)
     return DetectorConfig(**values)

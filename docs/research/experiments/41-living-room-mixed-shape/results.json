@@ -1,0 +1,149 @@
+{
+  "labels": [
+    [
+      "unlabeled",
+      "living_room",
+      1789567200.0,
+      1789592400.0,
+      "no narrative for this window beyond what living-room-continuous-occupancy-2026-09-16 documents for 11:15-11:58; old LR unit FD:68 until 11:15:27, replacement 68:43 from 11:19:59"
+    ]
+  ],
+  "sensor_id": "68:43:B2:C2:7C:4A",
+  "method": "still gates 2-8 shape, no occupancy labels outside known prior narrative; states are integration output, not ground truth",
+  "periods": {
+    "known_empty_1139_1140": {
+      "frames": 601,
+      "integration_on_fraction": 0.10149750415973377,
+      "centroid_p10_median_p90": [
+        5.086956521739131,
+        5.1875,
+        5.264705882352941
+      ],
+      "centroid_median_when_integration_off": 5.196845504222553,
+      "centroid_median_when_integration_on": 5.074626865671642,
+      "kurtosis_p10_median_p90": [
+        2.215007620844825,
+        2.5428021765362105,
+        3.25167897357078
+      ],
+      "kurtosis_median_when_integration_off": 2.606849663257229,
+      "kurtosis_median_when_integration_on": 2.2764641804434187
+    },
+    "known_occupied_1141_1158": {
+      "frames": 10200,
+      "integration_on_fraction": 0.296078431372549,
+      "centroid_p10_median_p90": [
+        3.9567928334124347,
+        4.153846153846154,
+        4.489822949047168
+      ],
+      "centroid_median_when_integration_off": 4.182322303921569,
+      "centroid_median_when_integration_on": 4.094131137287606,
+      "kurtosis_p10_median_p90": [
+        1.5577855844524975,
+        1.8914626331633828,
+        2.4047914856153834
+      ],
+      "kurtosis_median_when_integration_off": 1.9029763868246503,
+      "kurtosis_median_when_integration_on": 1.8637824147012192
+    },
+    "mostly_living_room_1200_1300": {
+      "frames": 36001,
+      "integration_on_fraction": 0.3267687008694203,
+      "centroid_p10_median_p90": [
+        3.9806763285024154,
+        4.226190476190476,
+        4.56
+      ],
+      "centroid_median_when_integration_off": 4.246753246753247,
+      "centroid_median_when_integration_on": 4.191627198564543,
+      "kurtosis_p10_median_p90": [
+        1.4427286267378179,
+        1.870497812666401,
+        2.4678070950637543
+      ],
+      "kurtosis_median_when_integration_off": 1.8781150764611907,
+      "kurtosis_median_when_integration_on": 1.8452329175424624
+    },
+    "exploratory_1300_1400": {
+      "frames": 35999,
+      "integration_on_fraction": 0.44390121947831884,
+      "centroid_p10_median_p90": [
+        3.9133753280839896,
+        4.397435897435898,
+        5.042887864823348
+      ],
+      "centroid_median_when_integration_off": 4.442528735632184,
+      "centroid_median_when_integration_on": 4.336601621327182,
+      "kurtosis_p10_median_p90": [
+        1.3442969055313856,
+        1.8866667538804693,
+        2.6963251332332465
+      ],
+      "kurtosis_median_when_integration_off": 2.0868400096830677,
+      "kurtosis_median_when_integration_on": 1.650898732414634
+    },
+    "exploratory_1400_1600": {
+      "frames": 72001,
+      "integration_on_fraction": 0.0,
+      "centroid_p10_median_p90": [
+        4.893939393939394,
+        5.0,
+        5.101449275362318
+      ],
+      "centroid_median_when_integration_off": 5.0,
+      "centroid_median_when_integration_on": null,
+      "kurtosis_p10_median_p90": [
+        1.8577387124139872,
+        2.433199411498417,
+        2.994138000537491
+      ],
+      "kurtosis_median_when_integration_off": 2.433199411498417,
+      "kurtosis_median_when_integration_on": null
+    },
+    "exploratory_1600_1700": {
+      "frames": 36001,
+      "integration_on_fraction": 0.17643954334601816,
+      "centroid_p10_median_p90": [
+        3.9035087719298245,
+        4.353448275862069,
+        5.057971014492754
+      ],
+      "centroid_median_when_integration_off": 4.40952380952381,
+      "centroid_median_when_integration_on": 4.037037037037037,
+      "kurtosis_p10_median_p90": [
+        1.6508281537852316,
+        2.1424814147515994,
+        2.8566569088578038
+      ],
+      "kurtosis_median_when_integration_off": 2.1979971453287193,
+      "kurtosis_median_when_integration_on": 1.8200527717062331
+    }
+  },
+  "isolated_flapping": {
+    "1200_1220": {
+      "living_room_transitions": 14,
+      "living_room_on_fraction": 0.4488333333333333,
+      "other_room_on_fraction": {
+        "bathroom": 0.0,
+        "kitchen": 0.0
+      },
+      "centroid_median_lr_on": 4.17705841307815,
+      "centroid_median_lr_off": 4.167647364231076,
+      "kurtosis_median_lr_on": 1.8214274276617726,
+      "kurtosis_median_lr_off": 1.8609401490268378
+    },
+    "1230_1250": {
+      "living_room_transitions": 12,
+      "living_room_on_fraction": 0.33455545371219064,
+      "other_room_on_fraction": {
+        "bathroom": 0.0,
+        "kitchen": 0.0
+      },
+      "centroid_median_lr_on": 4.187683284457478,
+      "centroid_median_lr_off": 4.4,
+      "kurtosis_median_lr_on": 1.914647846369067,
+      "kurtosis_median_lr_off": 1.8497687258966153
+    }
+  }
+}

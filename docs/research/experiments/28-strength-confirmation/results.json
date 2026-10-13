@@ -1,0 +1,199 @@
+{
+  "labeled-walk-0915": {
+    "original": {
+      "rates": {
+        "IN": 95.96199524940617,
+        "TW": 3.852889667250438,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789512652.0,
+          "entry_offset_s": 1.6932103633880615,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 1.0781426429748535,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789512708.0
+        },
+        {
+          "start": 1789512708.0,
+          "entry_offset_s": 0.015818357467651367,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 1.1851422786712646,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789512844.7191958
+        }
+      ],
+      "onsets": [
+        1789512653.6932104,
+        1789512708.0158184
+      ]
+    },
+    "scaled": {
+      "rates": {
+        "IN": 95.72446555819477,
+        "TW": 3.852889667250438,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789512652.0,
+          "entry_offset_s": 1.6932103633880615,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 1.0781426429748535,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789512708.0
+        },
+        {
+          "start": 1789512708.0,
+          "entry_offset_s": 0.11765599250793457,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 1.1851422786712646,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789512844.7191958
+        }
+      ],
+      "onsets": [
+        1789512653.6932104,
+        1789512708.117656
+      ]
+    }
+  },
+  "labeled-loop-0915": {
+    "original": {
+      "rates": {
+        "IN": 99.48652118100128,
+        "TW": 7.741935483870968,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789514660.0,
+          "entry_offset_s": 0.3849833011627197,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 6.858537673950195,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789515015.3990583
+        }
+      ],
+      "onsets": [
+        1789514660.3849833
+      ]
+    },
+    "scaled": {
+      "rates": {
+        "IN": 97.68934531450579,
+        "TW": 7.741935483870968,
+        "EMPTY": 0.0
+      },
+      "visits": [
+        {
+          "start": 1789514660.0,
+          "entry_offset_s": 1.9133551120758057,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 6.858537673950195,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789515015.3990583
+        }
+      ],
+      "onsets": [
+        1789514661.913355
+      ]
+    }
+  },
+  "post-deploy-0915": {
+    "original": {
+      "rates": {
+        "IN": 90.0,
+        "TW": 48.67647058823529,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789526181.0,
+          "entry_offset_s": 0.7134668827056885,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 6.915632963180542,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 984,
+          "observation_end": 1789526379.7457263
+        }
+      ],
+      "onsets": [
+        1789526181.713467,
+        1789526209.1637087,
+        1789526377.456858
+      ],
+      "false_event_window_positive_frames": 984
+    },
+    "scaled": {
+      "rates": {
+        "IN": 88.57142857142857,
+        "TW": 0.4411764705882353,
+        "EMPTY": null
+      },
+      "visits": [
+        {
+          "start": 1789526181.0,
+          "entry_offset_s": 0.8718914985656738,
+          "pre_entry_positive_frames_1s": 0,
+          "dropouts_after_detection": {
+            "positive_frames": 0,
+            "runs": 0,
+            "longest_span_s": 0.0
+          },
+          "first_clear_offset_s": 6.915632963180542,
+          "clear_within_30s": true,
+          "later_kitchen_positive_frames": 0,
+          "observation_end": 1789526379.7457263
+        }
+      ],
+      "onsets": [
+        1789526181.8718915,
+        1789526377.456858
+      ],
+      "false_event_window_positive_frames": 0
+    }
+  }
+}

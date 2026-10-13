@@ -1,0 +1,188 @@
+{
+  "source_db": "/Users/rmk/Repo/homeassistant-smart-ld2410/tests/fixtures/recordings/post-deploy-0915.db",
+  "labels_are_reconstructed": true,
+  "source_event_ts": 1789526209.163709,
+  "variants": {
+    "hold0_original": {
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 48.67647058823529,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 6.915632963180542,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 984,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "onsets_after_22_36_40": [
+        1789526209.1637087,
+        1789526377.456858
+      ],
+      "occupied_at_reported_false_event": true,
+      "positive_frames_in_false_window": 984
+    },
+    "hold0_balanced": {
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 0.4411764705882353,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 6.915632963180542,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "onsets_after_22_36_40": [
+        1789526377.456858
+      ],
+      "occupied_at_reported_false_event": false,
+      "positive_frames_in_false_window": 0
+    },
+    "hold20_original": {
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 64.2156862745098,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 139.5875735282898,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "onsets_after_22_36_40": [
+        1789526377.456858
+      ],
+      "occupied_at_reported_false_event": true,
+      "positive_frames_in_false_window": 1150
+    },
+    "hold20_balanced": {
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 10.245098039215685,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 26.947940349578857,
+            "clear_within_30s": true,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "onsets_after_22_36_40": [
+        1789526377.456858
+      ],
+      "occupied_at_reported_false_event": true,
+      "positive_frames_in_false_window": 108
+    },
+    "hold30_original": {
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 64.2156862745098,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 149.72507119178772,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "onsets_after_22_36_40": [
+        1789526377.456858
+      ],
+      "occupied_at_reported_false_event": true,
+      "positive_frames_in_false_window": 1150
+    },
+    "hold30_balanced": {
+      "assessment": {
+        "rates": {
+          "IN": 90.0,
+          "TW": 15.147058823529411,
+          "EMPTY": null
+        },
+        "visits": [
+          {
+            "start": 1789526181.0,
+            "entry_offset_s": 0.7134668827056885,
+            "pre_entry_positive_frames_1s": 0,
+            "dropouts_after_detection": {
+              "positive_frames": 0,
+              "runs": 0,
+              "longest_span_s": 0.0
+            },
+            "first_clear_offset_s": 36.916391134262085,
+            "clear_within_30s": false,
+            "later_kitchen_positive_frames": 0,
+            "observation_end": 1789526379.7457263
+          }
+        ]
+      },
+      "onsets_after_22_36_40": [
+        1789526377.456858
+      ],
+      "occupied_at_reported_false_event": true,
+      "positive_frames_in_false_window": 208
+    }
+  }
+}

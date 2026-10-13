@@ -1,0 +1,33 @@
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.prefix, expected /Users/rmk/Repo/homeassistant-smart-ld2410/.venv, got /Users/rmk/Repo/homeassistant-smart-ld2410/docs/research/experiments/17-continuous-motion-still/../../../../.venv
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.exec_prefix, expected /Users/rmk/Repo/homeassistant-smart-ld2410/.venv, got /Users/rmk/Repo/homeassistant-smart-ld2410/docs/research/experiments/17-continuous-motion-still/../../../../.venv
+step=1s rows=11319 fixtures=['bathroom-visit-2204-d06e', 'labeled-sessions-0909-d06e', 'stove-case-0913-d06e', 'throughwall-morning-d06e']
+
+WINDOW 10s: windows=5802 IN=1531 TW=4271
+  holdout labeled-sessions-0909-d06e n=493 baseline=0.439 level=0.455 detrended=0.436
+  holdout stove-case-0913-d06e n=2427 baseline=0.804 level=0.806 detrended=0.805
+  span bathroom-visit-2204-d06e:IN:0 n=153
+  span labeled-sessions-0909-d06e:IN:0 n=19
+  span labeled-sessions-0909-d06e:IN:1 n=383
+  span labeled-sessions-0909-d06e:TW:0 n=3
+  span labeled-sessions-0909-d06e:TW:2 n=65
+  span labeled-sessions-0909-d06e:TW:3 n=23
+  span stove-case-0913-d06e:IN:0 n=66
+  span stove-case-0913-d06e:IN:1 n=910
+  span stove-case-0913-d06e:TW:0 n=1451
+  span throughwall-morning-d06e:TW:0 n=2729
+
+WINDOW 30s: windows=5517 IN=1392 TW=4125
+  holdout labeled-sessions-0909-d06e n=391 baseline=0.550 level=0.617 detrended=0.565
+  holdout stove-case-0913-d06e n=2324 baseline=0.742 level=0.724 detrended=0.732
+  span bathroom-visit-2204-d06e:IN:0 n=133
+  span labeled-sessions-0909-d06e:IN:1 n=343
+  span labeled-sessions-0909-d06e:TW:2 n=45
+  span labeled-sessions-0909-d06e:TW:3 n=3
+  span stove-case-0913-d06e:IN:0 n=46
+  span stove-case-0913-d06e:IN:1 n=870
+  span stove-case-0913-d06e:TW:0 n=1408
+  span throughwall-morning-d06e:TW:0 n=2669
+
+HARD LATE STOVE/ISLAND VS ALL TOILET WINDOWS
+  W=10s n=490 IN=402 TW=88 baseline=0.449 level=0.465 detrended=0.445
+  W=30s n=391 IN=343 TW=48 baseline=0.550 level=0.617 detrended=0.565

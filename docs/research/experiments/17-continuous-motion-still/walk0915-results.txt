@@ -1,0 +1,26 @@
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.prefix, expected /Users/rmk/Repo/homeassistant-smart-ld2410/.venv, got /Users/rmk/Repo/homeassistant-smart-ld2410/docs/research/experiments/17-continuous-motion-still/../../../../.venv
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.exec_prefix, expected /Users/rmk/Repo/homeassistant-smart-ld2410/.venv, got /Users/rmk/Repo/homeassistant-smart-ld2410/docs/research/experiments/17-continuous-motion-still/../../../../.venv
+db=labeled-walk-0915.db sensor=D0:6E:81:D2:5D:A6 frames=14958 duration=1498.8s
+strict spans:
+  TW 1789512640.000-1789512652.000 (12.0s)
+  IN 1789512652.000-1789512671.000 (19.0s)
+  TW 1789512671.000-1789512707.000 (36.0s)
+  IN 1789512708.000-1789512731.000 (23.0s)
+  TW 1789512731.000-1789512740.000 (9.0s)
+OLD TRAIN W=10s windows=5802
+W=10s strict windows=50 IN=22 TW=28
+  baseline AUC=1.000 score_IN=[0.897,1.100] score_TW=[0.062,0.497]
+  level AUC=1.000 score_IN=[0.859,1.122] score_TW=[0.018,0.465]
+  first_difference AUC=1.000 score_IN=[0.878,1.106] score_TW=[0.085,0.521]
+  span TW 12.0s windows=2 base=[0.422,0.453] level=[0.336,0.442] diff=[0.427,0.443]
+  span IN 19.0s windows=9 base=[1.058,1.100] level=[0.989,1.122] diff=[1.065,1.106]
+  span TW 36.0s windows=26 base=[0.062,0.497] level=[0.018,0.465] diff=[0.085,0.521]
+  span IN 23.0s windows=13 base=[0.897,1.079] level=[0.859,1.063] diff=[0.878,1.093]
+  span TW 9.0s windows=0 (too short for W=10s)
+W=10s all-timeline known=99 clean=50 transition=49
+  clean baseline AUC=1.000 level AUC=1.000 diff AUC=1.000
+  all-known baseline AUC=0.860 level AUC=0.877 diff AUC=0.856
+OLD TRAIN W=30s windows=5517
+W=30s strict windows=6 IN=0 TW=6
+W=30s all-timeline known=99 clean=6 transition=93
+  all-known baseline AUC=0.489 level AUC=0.501 diff AUC=0.470

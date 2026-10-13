@@ -1,0 +1,75 @@
+{
+  "note": "No humans reported in these periods; cat behavior and upstairs bleed are possible. Old living sensor differs from replacement used in main experiment.",
+  "fixtures": {
+    "cat_bathroom": {
+      "exact_anchor": {
+        "occupied_fraction": 0.0,
+        "episode_count": 0,
+        "longest_episode_s": 0,
+        "episode_durations_s": []
+      },
+      "recent4_20s": {
+        "occupied_fraction": 0.0,
+        "episode_count": 0,
+        "longest_episode_s": 0,
+        "episode_durations_s": []
+      }
+    },
+    "cat_kitchen": {
+      "exact_anchor": {
+        "occupied_fraction": 0.028628548580567775,
+        "episode_count": 1,
+        "longest_episode_s": 35.75529742240906,
+        "episode_durations_s": [
+          35.75529742240906
+        ]
+      },
+      "recent4_20s": {
+        "occupied_fraction": 0.016073570571771292,
+        "episode_count": 1,
+        "longest_episode_s": 19.9840304851532,
+        "episode_durations_s": [
+          19.9840304851532
+        ]
+      }
+    },
+    "overnight_bathroom": {
+      "exact_anchor": {
+        "occupied_fraction": 0.004146798039821764,
+        "episode_count": 2,
+        "longest_episode_s": 70.38077068328857,
+        "episode_durations_s": [
+          48.77640080451965,
+          70.38077068328857
+        ]
+      },
+      "recent4_20s": {
+        "occupied_fraction": 0.03135104347191881,
+        "episode_count": 2,
+        "longest_episode_s": 461.24630904197693,
+        "episode_durations_s": [
+          461.24630904197693,
+          441.18176317214966
+        ]
+      }
+    },
+    "overnight_old_living": {
+      "exact_anchor": {
+        "occupied_fraction": 0.0012256944444444444,
+        "episode_count": 1,
+        "longest_episode_s": 35.12398290634155,
+        "episode_durations_s": [
+          35.12398290634155
+        ]
+      },
+      "recent4_20s": {
+        "occupied_fraction": 0.0006979166666666667,
+        "episode_count": 1,
+        "longest_episode_s": 19.967789888381958,
+        "episode_durations_s": [
+          19.967789888381958
+        ]
+      }
+    }
+  }
+}

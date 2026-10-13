@@ -1,0 +1,645 @@
+{
+  "method": "post-entry 3-12 s robust Gaussian gate envelope; thresholds from training distances only; full-stack balanced entry determines onset",
+  "fixtures": {
+    "labeled-walk-0915": [
+      {
+        "onset": 1789512653.6932104,
+        "pre_entry_still_gates_2_8": [
+          21.0,
+          16.0,
+          17.0,
+          55.0,
+          38.0,
+          8.0,
+          7.0
+        ],
+        "training_still_median_gates_2_8": [
+          100.0,
+          100.0,
+          100.0,
+          65.0,
+          31.0,
+          14.0,
+          10.0
+        ],
+        "training_still_p10_gates_2_8": [
+          100.0,
+          100.0,
+          100.0,
+          53.0,
+          22.0,
+          11.0,
+          9.0
+        ],
+        "training_still_p90_gates_2_8": [
+          100.0,
+          100.0,
+          100.0,
+          73.0,
+          40.0,
+          19.0,
+          11.0
+        ],
+        "features": {
+          "raw_still": {
+            "threshold": 3.4858171988698112,
+            "center_gates_2_8": [
+              100.0,
+              100.0,
+              100.0,
+              65.0,
+              31.0,
+              14.0,
+              10.0
+            ],
+            "inside_after_training_fraction": 0.20754716981132076,
+            "longest_rejected_run_while_inside_s": 4.096225738525391,
+            "accepted_first_30s_after_exit_fraction": 0.0,
+            "distance_median_inside": 12.340265807874616,
+            "distance_median_after_exit": 95.95260620956331
+          },
+          "preentry_subtracted_still": {
+            "threshold": 3.8774726286924115,
+            "center_gates_2_8": [
+              79.0,
+              84.0,
+              83.0,
+              10.0,
+              0.0,
+              6.0,
+              3.0
+            ],
+            "inside_after_training_fraction": 0.4716981132075472,
+            "longest_rejected_run_while_inside_s": 2.7613673210144043,
+            "accepted_first_30s_after_exit_fraction": 0.0,
+            "distance_median_inside": 14.180021741168295,
+            "distance_median_after_exit": 118.13334750411374
+          },
+          "relative_raw_shape": {
+            "threshold": 3.3358998449921167,
+            "center_gates_2_8": [
+              0.5302596654541392,
+              0.5302596654541392,
+              0.5302596654541392,
+              0.3453488001249816,
+              0.16329048189267478,
+              0.07354196526025517,
+              0.052709298786217995
+            ],
+            "inside_after_training_fraction": 0.20754716981132076,
+            "longest_rejected_run_while_inside_s": 4.096225738525391,
+            "accepted_first_30s_after_exit_fraction": 0.0,
+            "distance_median_inside": 8.849350868583343,
+            "distance_median_after_exit": 35.52831843905125
+          },
+          "relative_preentry_subtracted_shape": {
+            "threshold": 3.5304357063325655,
+            "center_gates_2_8": [
+              0.5536129124691238,
+              0.5886517043975494,
+              0.5816439460118643,
+              0.0701603241189948,
+              0.0,
+              0.0419401089084421,
+              0.020999351421544826
+            ],
+            "inside_after_training_fraction": 0.4716981132075472,
+            "longest_rejected_run_while_inside_s": 2.7613673210144043,
+            "accepted_first_30s_after_exit_fraction": 0.0,
+            "distance_median_inside": 8.69913859593461,
+            "distance_median_after_exit": 65.84728761164311
+          }
+        },
+        "cosine_shape": {
+          "raw_still": {
+            "training_fifth_percentile": 0.9970528123251543,
+            "inside_median": 0.9786216593512017,
+            "after_exit_median": 0.9154469985044577,
+            "amplitude_ratio_inside_tenth_percentile": 0.7521106400617734,
+            "amplitude_ratio_inside_median": 0.9016672205213875,
+            "amplitude_ratio_after_exit_ninetieth_percentile": 0.43941303706959156,
+            "pass_rates": {
+              "0.8": {
+                "inside": 1.0,
+                "first30_after_exit": 1.0
+              },
+              "0.9": {
+                "inside": 0.7735849056603774,
+                "first30_after_exit": 0.6976744186046512
+              },
+              "0.95": {
+                "inside": 0.6415094339622641,
+                "first30_after_exit": 0.2292358803986711
+              }
+            }
+          },
+          "preentry_subtracted_still": {
+            "training_fifth_percentile": 0.9971432109149683,
+            "inside_median": 0.993906778658533,
+            "after_exit_median": 0.7812784056121697,
+            "amplitude_ratio_inside_tenth_percentile": 0.7929652610433939,
+            "amplitude_ratio_inside_median": 0.9438258005602294,
+            "amplitude_ratio_after_exit_ninetieth_percentile": 0.3400532613428361,
+            "pass_rates": {
+              "0.8": {
+                "inside": 0.9811320754716981,
+                "first30_after_exit": 0.2292358803986711
+              },
+              "0.9": {
+                "inside": 0.7547169811320755,
+                "first30_after_exit": 0.04983388704318937
+              },
+              "0.95": {
+                "inside": 0.660377358490566,
+                "first30_after_exit": 0.0
+              }
+            }
+          }
+        }
+      },
+      {
+        "onset": 1789512708.0158184,
+        "pre_entry_still_gates_2_8": [
+          12.0,
+          36.0,
+          64.0,
+          33.0,
+          15.0,
+          9.0,
+          7.0
+        ],
+        "training_still_median_gates_2_8": [
+          100.0,
+          100.0,
+          100.0,
+          63.0,
+          28.0,
+          14.0,
+          10.0
+        ],
+        "training_still_p10_gates_2_8": [
+          100.0,
+          100.0,
+          100.0,
+          54.0,
+          24.0,
+          13.0,
+          9.0
+        ],
+        "training_still_p90_gates_2_8": [
+          100.0,
+          100.0,
+          100.0,
+          69.0,
+          31.0,
+          17.0,
+          12.0
+        ],
+        "features": {
+          "raw_still": {
+            "threshold": 3.690241614426474,
+            "center_gates_2_8": [
+              100.0,
+              100.0,
+              100.0,
+              63.0,
+              28.0,
+              14.0,
+              10.0
+            ],
+            "inside_after_training_fraction": 0.6,
+            "longest_rejected_run_while_inside_s": 3.7886130809783936,
+            "accepted_first_30s_after_exit_fraction": 0.0,
+            "distance_median_inside": 2.768387295254001,
+            "distance_median_after_exit": 158.0070240114224
+          },
+          "preentry_subtracted_still": {
+            "threshold": 3.690241614426472,
+            "center_gates_2_8": [
+              88.0,
+              64.0,
+              36.0,
+              30.0,
+              13.0,
+              5.0,
+              3.0
+            ],
+            "inside_after_training_fraction": 0.6,
+            "longest_rejected_run_while_inside_s": 3.7886130809783936,
+            "accepted_first_30s_after_exit_fraction": 0.0,
+            "distance_median_inside": 2.7683872952540005,
+            "distance_median_after_exit": 114.76383896887457
+          },
+          "relative_raw_shape": {
+            "threshold": 3.2987833778857523,
+            "center_gates_2_8": [
+              0.5328504344211471,
+              0.5328504344211471,
+              0.5328504344211471,
+              0.33568386070849215,
+              0.14749104075576472,
+              0.07454741612355284,
+              0.052901548959615435
+            ],
+            "inside_after_training_fraction": 0.6454545454545455,
+            "longest_rejected_run_while_inside_s": 3.7886130809783936,
+            "accepted_first_30s_after_exit_fraction": 0.0,
+            "distance_median_inside": 2.072518635965115,
+            "distance_median_after_exit": 32.564483175417266
+          },
+          "relative_preentry_subtracted_shape": {
+            "threshold": 3.5831773841655927,
+            "center_gates_2_8": [
+              0.7355843967182559,
+              0.5349704703405498,
+              0.3009208895665592,
+              0.2507367566270414,
+              0.1071056786147618,
+              0.04174662114959079,
+              0.02483711520369842
+            ],
+            "inside_after_training_fraction": 0.6272727272727273,
+            "longest_rejected_run_while_inside_s": 3.7886130809783936,
+            "accepted_first_30s_after_exit_fraction": 0.0,
+            "distance_median_inside": 2.51387518554926,
+            "distance_median_after_exit": 99.40885130651772
+          }
+        },
+        "cosine_shape": {
+          "raw_still": {
+            "training_fifth_percentile": 0.9985776324364843,
+            "inside_median": 0.9988562676881843,
+            "after_exit_median": 0.9104264001271567,
+            "amplitude_ratio_inside_tenth_percentile": 0.806062345171841,
+            "amplitude_ratio_inside_median": 0.9915331021526994,
+            "amplitude_ratio_after_exit_ninetieth_percentile": 0.22805860390170424,
+            "pass_rates": {
+              "0.8": {
+                "inside": 1.0,
+                "first30_after_exit": 1.0
+              },
+              "0.9": {
+                "inside": 1.0,
+                "first30_after_exit": 0.61
+              },
+              "0.95": {
+                "inside": 1.0,
+                "first30_after_exit": 0.09666666666666666
+              }
+            }
+          },
+          "preentry_subtracted_still": {
+            "training_fifth_percentile": 0.9962508144267018,
+            "inside_median": 0.9970351599841978,
+            "after_exit_median": 0.0,
+            "amplitude_ratio_inside_tenth_percentile": 0.8598641933236159,
+            "amplitude_ratio_inside_median": 0.9909343972754356,
+            "amplitude_ratio_after_exit_ninetieth_percentile": 0.15922595264612846,
+            "pass_rates": {
+              "0.8": {
+                "inside": 1.0,
+                "first30_after_exit": 0.03666666666666667
+              },
+              "0.9": {
+                "inside": 0.9181818181818182,
+                "first30_after_exit": 0.0
+              },
+              "0.95": {
+                "inside": 0.7818181818181819,
+                "first30_after_exit": 0.0
+              }
+            }
+          }
+        }
+      }
+    ],
+    "labeled-loop-0915": [
+      {
+        "onset": 1789514660.3849833,
+        "pre_entry_still_gates_2_8": [
+          11.0,
+          10.0,
+          9.0,
+          7.0,
+          7.0,
+          7.0,
+          7.0
+        ],
+        "training_still_median_gates_2_8": [
+          100.0,
+          100.0,
+          100.0,
+          52.0,
+          27.0,
+          17.0,
+          11.0
+        ],
+        "training_still_p10_gates_2_8": [
+          100.0,
+          100.0,
+          78.6,
+          40.6,
+          21.0,
+          13.8,
+          10.0
+        ],
+        "training_still_p90_gates_2_8": [
+          100.0,
+          100.0,
+          100.0,
+          64.0,
+          31.0,
+          20.0,
+          14.0
+        ],
+        "features": {
+          "raw_still": {
+            "threshold": 4.57750605283184,
+            "center_gates_2_8": [
+              100.0,
+              100.0,
+              100.0,
+              52.0,
+              27.0,
+              17.0,
+              11.0
+            ],
+            "inside_after_training_fraction": 0.8795731707317073,
+            "longest_rejected_run_while_inside_s": 2.461596965789795,
+            "accepted_first_30s_after_exit_fraction": 0.06,
+            "distance_median_inside": 2.755965738009934,
+            "distance_median_after_exit": 65.47746951900477
+          },
+          "preentry_subtracted_still": {
+            "threshold": 4.57750605283184,
+            "center_gates_2_8": [
+              89.0,
+              90.0,
+              91.0,
+              45.0,
+              20.0,
+              10.0,
+              4.0
+            ],
+            "inside_after_training_fraction": 0.8795731707317073,
+            "longest_rejected_run_while_inside_s": 2.461596965789795,
+            "accepted_first_30s_after_exit_fraction": 0.06,
+            "distance_median_inside": 2.755965738009934,
+            "distance_median_after_exit": 65.47746951900477
+          },
+          "relative_raw_shape": {
+            "threshold": 4.295995385218115,
+            "center_gates_2_8": [
+              0.5449287851858261,
+              0.5449287851858261,
+              0.5367894548962082,
+              0.28287099011156847,
+              0.14732996573350945,
+              0.09214261321999569,
+              0.06367360516834905
+            ],
+            "inside_after_training_fraction": 0.8292682926829268,
+            "longest_rejected_run_while_inside_s": 2.764633893966675,
+            "accepted_first_30s_after_exit_fraction": 0.05,
+            "distance_median_inside": 2.8629971349827263,
+            "distance_median_after_exit": 20.751366515604165
+          },
+          "relative_preentry_subtracted_shape": {
+            "threshold": 4.39695372157848,
+            "center_gates_2_8": [
+              0.5443552348193307,
+              0.5504715857723568,
+              0.5483818597036219,
+              0.2748497326299729,
+              0.12253347056817425,
+              0.06084566871909053,
+              0.0245505059259278
+            ],
+            "inside_after_training_fraction": 0.8185975609756098,
+            "longest_rejected_run_while_inside_s": 4.197558641433716,
+            "accepted_first_30s_after_exit_fraction": 0.05,
+            "distance_median_inside": 2.9433090877399453,
+            "distance_median_after_exit": 34.141808302550146
+          }
+        },
+        "cosine_shape": {
+          "raw_still": {
+            "training_fifth_percentile": 0.9824225669082056,
+            "inside_median": 0.9968775703834607,
+            "after_exit_median": 0.9231627049805116,
+            "amplitude_ratio_inside_tenth_percentile": 0.9007164821971956,
+            "amplitude_ratio_inside_median": 0.9727927136254202,
+            "amplitude_ratio_after_exit_ninetieth_percentile": 0.7884792171874637,
+            "pass_rates": {
+              "0.8": {
+                "inside": 1.0,
+                "first30_after_exit": 1.0
+              },
+              "0.9": {
+                "inside": 1.0,
+                "first30_after_exit": 0.6833333333333333
+              },
+              "0.95": {
+                "inside": 1.0,
+                "first30_after_exit": 0.23333333333333334
+              }
+            }
+          },
+          "preentry_subtracted_still": {
+            "training_fifth_percentile": 0.9770706579644557,
+            "inside_median": 0.9959328685902298,
+            "after_exit_median": 0.7965564813454121,
+            "amplitude_ratio_inside_tenth_percentile": 0.8919058413079426,
+            "amplitude_ratio_inside_median": 0.9732383756726055,
+            "amplitude_ratio_after_exit_ninetieth_percentile": 0.7803463860261614,
+            "pass_rates": {
+              "0.8": {
+                "inside": 1.0,
+                "first30_after_exit": 0.48333333333333334
+              },
+              "0.9": {
+                "inside": 1.0,
+                "first30_after_exit": 0.23333333333333334
+              },
+              "0.95": {
+                "inside": 1.0,
+                "first30_after_exit": 0.14666666666666667
+              }
+            }
+          }
+        },
+        "settled_30_to_60s_shape": {
+          "later_inside_cosine_median": 0.9906176920408518,
+          "later_inside_cosine_tenth_percentile": 0.9853774231811331,
+          "first30_after_exit_cosine_median": 0.8176133717999308,
+          "later_inside_fraction_cosine_ge_0_9": 1.0,
+          "first30_after_exit_fraction_cosine_ge_0_9": 0.22666666666666666
+        }
+      }
+    ],
+    "new-living-room": [
+      {
+        "onset": 1789573237.0311437,
+        "pre_entry_still_gates_2_8": [
+          8.0,
+          7.0,
+          7.0,
+          12.0,
+          16.0,
+          9.0,
+          8.0
+        ],
+        "training_still_median_gates_2_8": [
+          81.5,
+          100.0,
+          100.0,
+          82.5,
+          47.5,
+          24.0,
+          17.0
+        ],
+        "training_still_p10_gates_2_8": [
+          17.0,
+          72.9,
+          100.0,
+          63.9,
+          41.8,
+          21.0,
+          16.0
+        ],
+        "training_still_p90_gates_2_8": [
+          94.0,
+          100.0,
+          100.0,
+          100.0,
+          69.10000000000001,
+          30.0,
+          22.0
+        ],
+        "features": {
+          "raw_still": {
+            "threshold": 4.573503773914037,
+            "center_gates_2_8": [
+              81.5,
+              100.0,
+              100.0,
+              82.5,
+              47.5,
+              24.0,
+              17.0
+            ],
+            "inside_after_training_fraction": 0.04185294397412727,
+            "longest_rejected_run_while_inside_s": 585.162435054779,
+            "accepted_first_30s_after_exit_fraction": null,
+            "distance_median_inside": 14.590839824402513,
+            "distance_median_after_exit": null
+          },
+          "preentry_subtracted_still": {
+            "threshold": 4.573503773914037,
+            "center_gates_2_8": [
+              73.5,
+              93.0,
+              93.0,
+              70.5,
+              31.5,
+              15.0,
+              9.0
+            ],
+            "inside_after_training_fraction": 0.04185294397412727,
+            "longest_rejected_run_while_inside_s": 585.162435054779,
+            "accepted_first_30s_after_exit_fraction": null,
+            "distance_median_inside": 14.571134261004955,
+            "distance_median_after_exit": null
+          },
+          "relative_raw_shape": {
+            "threshold": 4.548035226632056,
+            "center_gates_2_8": [
+              0.4319544085738444,
+              0.522002872077936,
+              0.5248349802839483,
+              0.4310982511844354,
+              0.24907234254781052,
+              0.12478692301566603,
+              0.08961919570402431
+            ],
+            "inside_after_training_fraction": 0.06401598021497194,
+            "longest_rejected_run_while_inside_s": 379.95281958580017,
+            "accepted_first_30s_after_exit_fraction": null,
+            "distance_median_inside": 8.629096959732683,
+            "distance_median_after_exit": null
+          },
+          "relative_preentry_subtracted_shape": {
+            "threshold": 4.550973218547431,
+            "center_gates_2_8": [
+              0.43826477814548315,
+              0.5446661081051456,
+              0.5473003599842803,
+              0.4137794704427773,
+              0.1855683975394209,
+              0.08751601568082704,
+              0.05321727019992955
+            ],
+            "inside_after_training_fraction": 0.04708456197089318,
+            "longest_rejected_run_while_inside_s": 551.663224697113,
+            "accepted_first_30s_after_exit_fraction": null,
+            "distance_median_inside": 11.611491922897816,
+            "distance_median_after_exit": null
+          }
+        },
+        "cosine_shape": {
+          "raw_still": {
+            "training_fifth_percentile": 0.898868266392239,
+            "inside_median": 0.9490250161480377,
+            "after_exit_median": null,
+            "amplitude_ratio_inside_tenth_percentile": 0.27463246831176485,
+            "amplitude_ratio_inside_median": 0.48381116522476164,
+            "amplitude_ratio_after_exit_ninetieth_percentile": null,
+            "pass_rates": {
+              "0.8": {
+                "inside": 1.0,
+                "first30_after_exit": null
+              },
+              "0.9": {
+                "inside": 0.980880814230001,
+                "first30_after_exit": null
+              },
+              "0.95": {
+                "inside": 0.4791210881765433,
+                "first30_after_exit": null
+              }
+            }
+          },
+          "preentry_subtracted_still": {
+            "training_fifth_percentile": 0.8705459188526838,
+            "inside_median": 0.8897613891672849,
+            "after_exit_median": null,
+            "amplitude_ratio_inside_tenth_percentile": 0.1982882519268639,
+            "amplitude_ratio_inside_median": 0.4462960351883167,
+            "amplitude_ratio_after_exit_ninetieth_percentile": null,
+            "pass_rates": {
+              "0.8": {
+                "inside": 0.9941025397127367,
+                "first30_after_exit": null
+              },
+              "0.9": {
+                "inside": 0.4033101873870446,
+                "first30_after_exit": null
+              },
+              "0.95": {
+                "inside": 0.11823456672690955,
+                "first30_after_exit": null
+              }
+            }
+          }
+        },
+        "settled_30_to_60s_shape": {
+          "later_inside_cosine_median": 0.9749775358257378,
+          "later_inside_cosine_tenth_percentile": 0.955577477680145,
+          "first30_after_exit_cosine_median": null,
+          "later_inside_fraction_cosine_ge_0_9": 0.9891358516894249,
+          "first30_after_exit_fraction_cosine_ge_0_9": null
+        }
+      }
+    ]
+  }
+}
