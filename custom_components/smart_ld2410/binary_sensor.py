@@ -86,6 +86,7 @@ class OccupancyBinarySensor(_SmartLD2410BinarySensorEntity):
             "leading_gate": data.leading_gate,
             "ownership": data.ownership,
             "retention_max": data.retention_max,
+            "arrival_bar": data.arrival_bar,
         }
 
 

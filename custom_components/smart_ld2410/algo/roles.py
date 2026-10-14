@@ -6,7 +6,8 @@ the config names them:
 
 * floor and spread provide ``value(channel, gate)``, which residuals are taken
   against; the ceiling provides the level an arrival is measured against, and
-  the room gates say which gates arrival-scale motion has proven in-room.
+  the room gates say which gates arrival-scale motion has proven in-room, and
+  the arrival bar is the raw moving energy an occupant's own motion reaches.
 * a scorer turns a frame's elevations into a score and an active band, and a
   suppression stage says whether a lone hot gate is credible.
 * gate classifiers return a :class:`GateVerdict` per gate, a gate boundary
@@ -39,6 +40,7 @@ ROLE_OWNERSHIP = "ownership"
 ROLE_ARMING = "arming"
 ROLE_HOLD_REFRESHER = "hold_refresher"
 ROLE_ROOM_GATES = "room_gates"
+ROLE_ARRIVAL_BAR = "arrival_bar"
 ROLE_RELEASE = "release"
 
 RANK_SUSTAINED = 0

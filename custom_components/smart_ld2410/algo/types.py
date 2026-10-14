@@ -120,13 +120,12 @@ DEFAULT_STAGES = (
     "recurring_floor",
     "mode_spread",
     "in_room_gates",
+    "arrival_bar",
     "run_score",
     "lone_gate_suppression",
     "energy_floor",
     "motion_anchor",
     "score_hold",
-    "nearest_gate_release",
-    "changepoint_release",
 )
 """The stages the detector runs unless configured otherwise."""
 
@@ -404,6 +403,8 @@ class DetectorOutput:
     """:data:`OWNERSHIP_ARMED` / :data:`OWNERSHIP_DISARMED`, or ``None`` if unowned."""
     retention_max: float = 0.0
     """Highest normalized still-presence retention at the occupancy's gates."""
+    arrival_bar: float | None = None
+    """Raw moving energy the motion anchor requires of a founding gate."""
     episodes: tuple[Episode, ...] = ()
     gate_transitions: tuple[GateTransition, ...] = ()
     boundary_transitions: tuple[BoundaryTransition, ...] = ()
