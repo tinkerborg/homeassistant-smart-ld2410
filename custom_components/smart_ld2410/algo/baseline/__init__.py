@@ -14,6 +14,7 @@ from dataclasses import replace
 from typing import Any
 
 from ..roles import (
+    ROLE_ARRIVAL_BAR,
     ROLE_CEILING,
     ROLE_FLOOR,
     ROLE_ROOM_GATES,
@@ -30,6 +31,7 @@ from ..types import (
     DetectorConfig,
     Frame,
 )
+from .arrival_bar import ARRIVAL_BAR_FALLBACK, ArrivalBar
 from .ceiling import MoveCeiling
 from .floor import QuantileFloor
 from .histogram_floor import HistogramFloor
@@ -38,7 +40,7 @@ from .mode_spread import ModeSpread
 from .recurring_floor import RecurringFloor
 from .spread import TailSpread
 
-SCHEMA_VERSION = 6
+SCHEMA_VERSION = 7
 """Current persisted-state layout.
 
 Versions 1 and 2 stored bucket medians and MADs, neither of which carries the
@@ -50,10 +52,11 @@ ceiling, a gate's energy histograms - simply starts unlearned.
 
 A payload carries whatever the stages that wrote it had learned, so a stage
 whose state is absent starts fresh rather than refusing the payload, which is
-how a version 5 payload loads with no in-room gates learned.
+how a version 5 payload loads with no in-room gates learned and a version 6
+payload with no arrival bar learned.
 """
 
-_READABLE_VERSIONS = frozenset({3, 4, 5, SCHEMA_VERSION})
+_READABLE_VERSIONS = frozenset({3, 4, 5, 6, SCHEMA_VERSION})
 
 STAGES: dict[str, type[Stage]] = {
     "quantile_floor": QuantileFloor,
@@ -63,6 +66,7 @@ STAGES: dict[str, type[Stage]] = {
     "mode_spread": ModeSpread,
     "move_ceiling": MoveCeiling,
     "in_room_gates": InRoomGates,
+    "arrival_bar": ArrivalBar,
 }
 """The baseline stages, by the name a config lists them under."""
 
@@ -71,6 +75,7 @@ class Baseline:
     """The baseline stages of one sensor, and the state they persist together."""
 
     __slots__ = (
+        "_arrival_bar",
         "_bucket_s",
         "_ceiling",
         "_floor",
@@ -99,6 +104,7 @@ class Baseline:
         self._spread: Any = _by_role(stages, ROLE_SPREAD, order)
         self._ceiling: MoveCeiling | None = _by_role(stages, ROLE_CEILING, order)
         self._in_room: InRoomGates | None = _by_role(stages, ROLE_ROOM_GATES, order)
+        self._arrival_bar: ArrivalBar | None = _by_role(stages, ROLE_ARRIVAL_BAR, order)
         if self._floor is None or self._spread is None:
             raise ValueError("residuals need a floor stage and a spread stage")
 
@@ -143,6 +149,13 @@ class Baseline:
         return self._ceiling is not None and self._ceiling.learned
 
     @property
+    def arrival_bar(self) -> float:
+        """Raw moving energy an arrival must reach on this sensor."""
+        return (
+            ARRIVAL_BAR_FALLBACK if self._arrival_bar is None else self._arrival_bar.value
+        )
+
+    @property
     def in_room(self) -> InRoomGates | None:
         """The learned in-room gates, when that stage is listed."""
         return self._in_room
@@ -185,6 +198,8 @@ class Baseline:
             stage.add_frame(frame)
         if self._in_room is not None:
             self._in_room.observe_still(frame, self._still_lit_levels())
+        if self._arrival_bar is not None:
+            self._arrival_bar.observe(frame, self._move_model())
 
     def residuals(self, frame: Frame) -> tuple[tuple[float, ...], tuple[float, ...]]:
         """Return signed z-scores ``(energy - floor) / spread`` for all channels."""
@@ -220,6 +235,9 @@ class Baseline:
             "in_room_gates": None
             if self._in_room is None
             else self._in_room.to_dict(),
+            "arrival_bar": None
+            if self._arrival_bar is None
+            else self._arrival_bar.to_dict(),
         }
 
     @classmethod
@@ -275,6 +293,9 @@ class Baseline:
         in_room = data.get("in_room_gates")
         if in_room is not None and self._in_room is not None:
             self._in_room.restore(in_room)
+        arrival_bar = data.get("arrival_bar")
+        if arrival_bar is not None and self._arrival_bar is not None:
+            self._arrival_bar.restore(arrival_bar)
 
     def _still_lit_levels(self) -> list[float | None]:
         return [
@@ -282,6 +303,14 @@ class Baseline:
             + STILL_LIT_SPREADS * self.spread(gate, CHANNEL_STILL)
             if self._floor.trusted(CHANNEL_STILL, gate)
             else None
+            for gate in range(GATE_COUNT)
+        ]
+
+    def _move_model(self) -> list[tuple[float, float]] | None:
+        if not self.ready:
+            return None
+        return [
+            (self.floor(gate, CHANNEL_MOVE), self.spread(gate, CHANNEL_MOVE))
             for gate in range(GATE_COUNT)
         ]
 

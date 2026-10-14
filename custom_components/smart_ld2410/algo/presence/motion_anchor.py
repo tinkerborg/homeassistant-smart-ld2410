@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from math import isfinite
 from typing import TYPE_CHECKING, Sequence
 
+from ..baseline.arrival_bar import ARRIVAL_BAR_FALLBACK
 from ..roles import ADMIT, ROLE_ENTRY_FILTER, EntryVerdict, Stage, StageEnv
 from ..types import CHANNEL_STILL
 
@@ -66,7 +67,7 @@ class MotionAnchor:
 
     def __init__(
         self,
-        motion_threshold: float = 40.0,
+        motion_threshold: float = ARRIVAL_BAR_FALLBACK,
         retention: float = 0.4,
         max_gap_s: float = 0.55,
     ) -> None:
@@ -234,6 +235,7 @@ class MotionAnchorStage(Stage):
         """Fold this frame into the tracked footprint."""
         frame = context.frame
         baseline = context.baseline
+        self.tracker.motion_threshold = baseline.arrival_bar
         result = self.tracker.update(
             frame.ts_mono,
             frame.move_gates,

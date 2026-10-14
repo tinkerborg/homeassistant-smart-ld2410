@@ -210,6 +210,7 @@ class Detector:
             leading_gate=context.leading_gate,
             ownership=self.presence.state,
             retention_max=self.presence.level,
+            arrival_bar=self.baseline.arrival_bar,
             episodes=episodes,
             gate_transitions=tuple(transitions),
             boundary_transitions=boundary_transitions,
@@ -290,6 +291,7 @@ class Detector:
             gate_classes=self.gates.classes,
             boundary_gate=self.gates.boundary_gate,
             last_in_room_gate=self.gates.last_in_room_gate,
+            arrival_bar=self.baseline.arrival_bar,
         )
 
     def _rebase_deadlines(self, ts_mono: float) -> None:
